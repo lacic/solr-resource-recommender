@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <schema name="items_with_actions" version="1.5">
+    <fields>
+      <!-- Item -->
+      
+	  <!-- Stored fields -->
+      <field name="id" 					type="string" 		indexed="true" stored="true" required="true"  multiValued="false" />
+      <field name="name" 				type="text_general" indexed="true" stored="true" required="false" multiValued="false" termVectors="true"/> 
+      <field name="description" 		type="text_general" indexed="true" stored="true" required="false" multiValued="false"  termVectors="true" />
+      <field name="preceedingItemId" 	type="string" 		indexed="true" stored="true" required="false" multiValued="false" />
+      <field name="tags" 				type="text_general" indexed="true" stored="true" required="false" multiValued="true"  termVectors="true"  />
+      <field name="manufacturer" 		type="text_ws" 		indexed="true" stored="true" required="false" multiValued="false" termVectors="true" /> 
+      <field name="collection" 			type="text_ws" 		indexed="true" stored="true" required="false" multiValued="true"  termVectors="true" omitNorms="true" />
+      
+      <!--  Indexed fields -->
+      <field name="language" 			type="string" indexed="true" stored="false" required="false" multiValued="false" />  
+      <field name="price"  				type="double" indexed="true" stored="false"  />
+      <field name="currency" 			type="string" indexed="true" stored="false" required="false" multiValued="false" />
+      <field name="validFrom" 			type="date"   indexed="true" stored="false"/>
+      <field name="validTo" 			type="date"   indexed="true" stored="false"/>
+      <field name="ageRating" 			type="string" indexed="true" stored="false" required="false" multiValued="false" />
+      <field name="clientId" 			type="string" indexed="true" stored="false" required="false" multiValued="false" />
+      <field name="categoryIdClient" 	type="string" indexed="true" stored="false" required="false" multiValued="true" />
+      <field name="categoryIdApp" 		type="string" indexed="true" stored="false" required="false" multiValued="true" />
+      
+      <!-- Customer actions -->
+      
+      <!-- Stored fields -->
+      <field name="users_purchased" 		type="string" indexed="true" stored="true" required="false" multiValued="true" termVectors="true"/> 
+	  <field name="users_viewed" 			type="string" indexed="true" stored="true" required="false" multiValued="true" termVectors="true"/> 
+	  <field name="users_marked_favorite" 	type="string" indexed="true" stored="true" required="false" multiValued="true" termVectors="true"/> 
+      
+      <!-- Indexed fields -->
+      <field name="user_count_purchased" 		type="int" indexed="true" stored="false" required="false" multiValued="false" />
+      <field name="user_count_viewed" 			type="int" indexed="true" stored="false" required="false" multiValued="false" />
+      <field name="user_count_marked_favorite" 	type="int" indexed="true" stored="false" required="false" multiValued="false" />
+ 
+      <!-- For getting random items.  Note that multiple calls to the same URL will return the same sorting order. -->
+      <dynamicField name="random*" type="random" indexed="true" stored="false"/>
+        
+      <field name="_version_" type="long"     indexed="true"  stored="true"/> <!-- Has to be here for solr -->
+    </fields>
+<uniqueKey>id</uniqueKey>
+ <solrQueryParser defaultOperator="AND"/>
+   <!-- Copy the price into a currency enabled field (default USD) 
+   <copyField source="price" dest="price_c"/>
+-->
+  <types>
+
+	<fieldType name="random" class="solr.RandomSortField" />
+
+	<fieldType name="string" class="solr.StrField" sortMissingLast="true" />
+	<fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0" />
+	<fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0" />
+	<fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" positionIncrementGap="0" />
+	<fieldType name="date" class="solr.TrieDateField" precisionStep="0" positionIncrementGap="0" />
+	
+	<fieldType name="text_ws" class="solr.TextField" positionIncrementGap="100">
+		<analyzer>
+			<tokenizer class="solr.WhitespaceTokenizerFactory" />
+		</analyzer>
+	</fieldType>
+	
+	<fieldType name="text_general" class="solr.TextField" positionIncrementGap="100">
+		<analyzer type="index">
+			<tokenizer class="solr.StandardTokenizerFactory" />
+			<filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+			<filter class="solr.LowerCaseFilterFactory" />
+		</analyzer>
+		<analyzer type="query">
+			<tokenizer class="solr.StandardTokenizerFactory" />
+			<filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+			<filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true" />
+			<filter class="solr.LowerCaseFilterFactory" />
+		</analyzer>
+	</fieldType>
+
+ </types>
+</schema>

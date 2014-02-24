@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <schema name="social_stream" version="1.5">
+    <fields>
+      <field name="id" 			  	type="string" indexed="true" stored="true" required="true"  multiValued="false" />
+      <field name="action_type"   	type="string" indexed="true" stored="false" required="true" multiValued="false" />
+      <field name="source" 		  	type="string" indexed="true" stored="true" required="true" multiValued="false" /> 
+      <field name="target_user" 	type="string" indexed="true" stored="true" required="true" multiValued="false" />
+      <field name="target_action"	type="string" indexed="true" stored="true" required="true" multiValued="false" />
+      <field name="datasource" 		type="string" indexed="true" stored="false" required="true" multiValued="false" />
+      <field name="content" 		type="text_general" indexed="true" stored="true" required="false" multiValued="false"  termVectors="true" />
+      <field name="timestamp"		type="date"   indexed="true" stored="true"/>
+      
+      <field name="_version_" type="long"     indexed="true"  stored="true"/> <!-- Has to be here for solr -->
+    </fields>
+<uniqueKey>id</uniqueKey>
+ <solrQueryParser defaultOperator="AND"/>
+   <!-- Copy the price into a currency enabled field (default USD) 
+   <copyField source="price" dest="price_c"/>
+-->
+  <types>
+
+	<fieldType name="string" class="solr.StrField" sortMissingLast="true" />
+	<fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0" />
+	<fieldType name="date" class="solr.TrieDateField" precisionStep="0" positionIncrementGap="0" />
+	
+	<fieldType name="text_general" class="solr.TextField" positionIncrementGap="100">
+		<analyzer type="index">
+			<tokenizer class="solr.StandardTokenizerFactory" />
+			<filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+			<filter class="solr.LowerCaseFilterFactory" />
+		</analyzer>
+		<analyzer type="query">
+			<tokenizer class="solr.StandardTokenizerFactory" />
+			<filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+			<filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true" />
+			<filter class="solr.LowerCaseFilterFactory" />
+		</analyzer>
+	</fieldType>
+
+	
+ </types>
+</schema>
