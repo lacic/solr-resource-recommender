@@ -14,7 +14,6 @@ public class MP_Job extends RecommenderEvaluator implements Callable<List<Metric
 	private List<String> users;
 
 	public MP_Job(List<String> users, String jobDescription) {
-		super(SolrServiceContainer.getInstance().getRecommendService().getSolrServer());
 		this.users = users;
 		this.jobDescription = jobDescription;
 	}

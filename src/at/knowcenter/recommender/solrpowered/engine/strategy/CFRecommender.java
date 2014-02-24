@@ -35,7 +35,7 @@ public class CFRecommender implements RecommendStrategy {
 	private ContentFilter contentFilter;
 
 	@Override
-	public RecommendResponse recommend(RecommendQuery query, Integer maxReuslts, SolrServer solrServer){
+	public RecommendResponse recommend(RecommendQuery query, Integer maxReuslts){
 		ModifiableSolrParams solrParams = new ModifiableSolrParams();
 		QueryResponse response = null;
 		RecommendResponse searchResponse = new RecommendResponse();
@@ -51,7 +51,7 @@ public class CFRecommender implements RecommendStrategy {
 					if (alreadyBoughtProducts != null) {
 						query.setProductIds(alreadyBoughtProducts);
 					} else {
-						List<String> viewedItems = getViewedItems(query, solrServer, solrParams, response);
+						List<String> viewedItems = getViewedItems(query, solrParams, response);
 						query.setProductIds(viewedItems);
 					}
 				}
@@ -161,12 +161,12 @@ public class CFRecommender implements RecommendStrategy {
 	 * @return
 	 */
 	private List<String> getViewedItems(RecommendQuery query,
-			SolrServer solrServer, ModifiableSolrParams solrParams,
+			ModifiableSolrParams solrParams,
 			QueryResponse response) {
 		createQueryForViewedItems(query, solrParams);
 		
 		try {
-			response = solrServer.query(solrParams);
+			response = SolrServiceContainer.getInstance().getRecommendService().getSolrServer().query(solrParams);
 		} catch (SolrServerException e) {
 			e.printStackTrace();
 		}

@@ -17,7 +17,6 @@ public class UB_InterestsCustomerGroups_Job extends UB_Strategy_Job implements C
 
 
 	public UB_InterestsCustomerGroups_Job(List<String> users, String jobDescription) {
-		super(SolrServiceContainer.getInstance().getUserService().getSolrServer());
 		this.users = users;
 		this.jobDescription = jobDescription;
 	}

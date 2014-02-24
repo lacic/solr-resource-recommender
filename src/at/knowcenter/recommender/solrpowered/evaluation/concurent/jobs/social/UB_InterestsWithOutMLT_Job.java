@@ -3,13 +3,10 @@ package at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.social;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import org.apache.solr.client.solrj.SolrServer;
 
 import at.knowcenter.recommender.solrpowered.engine.filtering.ContentFilter;
 import at.knowcenter.recommender.solrpowered.engine.strategy.StrategyType;
-import at.knowcenter.recommender.solrpowered.evaluation.RecommenderEvaluator;
 import at.knowcenter.recommender.solrpowered.evaluation.metrics.MetricsExporter;
-import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
 
 public class UB_InterestsWithOutMLT_Job extends UB_Strategy_Job implements Callable<List<MetricsExporter>>{
 
@@ -17,7 +14,6 @@ public class UB_InterestsWithOutMLT_Job extends UB_Strategy_Job implements Calla
 
 
 	public UB_InterestsWithOutMLT_Job(List<String> users, String jobDescription) {
-		super(SolrServiceContainer.getInstance().getUserService().getSolrServer());
 		this.users = users;
 		this.jobDescription = jobDescription;
 	}

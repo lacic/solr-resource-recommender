@@ -17,7 +17,6 @@ public class SocialStream_Job extends UB_Strategy_Job implements Callable<List<M
 
 
 	public SocialStream_Job(List<String> users, String jobDescription) {
-		super(SolrServiceContainer.getInstance().getUserService().getSolrServer());
 		this.users = users;
 		this.jobDescription = jobDescription;
 	}

@@ -154,7 +154,7 @@ public abstract class SolrService<Q, I, R extends SolrResponse<?>> {
 		}
 	}
 	
-	protected QueryResponse findElementById(String id, SolrServer solrServer) {
+	public QueryResponse findElementById(String id, SolrServer solrServer) {
 		QueryResponse response = null;
 		ModifiableSolrParams solrParams = new ModifiableSolrParams();
 		solrParams.set("q", "id:(\"" + id + "\")");

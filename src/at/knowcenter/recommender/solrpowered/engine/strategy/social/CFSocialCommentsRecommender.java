@@ -38,7 +38,7 @@ public class CFSocialCommentsRecommender implements RecommendStrategy {
 	private ContentFilter contentFilter;
 
 	@Override
-	public RecommendResponse recommend(RecommendQuery query, Integer maxReuslts, SolrServer solrServer){
+	public RecommendResponse recommend(RecommendQuery query, Integer maxReuslts){
 		ModifiableSolrParams solrParams = new ModifiableSolrParams();
 		QueryResponse response = null;
 		RecommendResponse searchResponse = new RecommendResponse();
@@ -96,7 +96,7 @@ public class CFSocialCommentsRecommender implements RecommendStrategy {
 			
 			solrParams = getSTEP2Params(query, maxReuslts, users, boostings);
 			// TODO Facet for confidence value
-			response = solrServer.query(solrParams);
+			response = SolrServiceContainer.getInstance().getRecommendService().getSolrServer().query(solrParams);
 			// fill response object
 			List<CustomerAction> beans = response.getBeans(CustomerAction.class);
 			searchResponse.setResultItems(RecommendationQueryUtils.extractRecommendationIds(beans));

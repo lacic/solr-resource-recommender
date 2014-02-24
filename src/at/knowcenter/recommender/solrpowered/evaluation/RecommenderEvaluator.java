@@ -11,6 +11,7 @@ import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.params.ModifiableSolrParams;
 
+import at.knowcenter.recommender.solrpowered.engine.RecommenderEngine;
 import at.knowcenter.recommender.solrpowered.engine.filtering.ContentFilter;
 import at.knowcenter.recommender.solrpowered.engine.filtering.FriendsEvaluation;
 import at.knowcenter.recommender.solrpowered.engine.strategy.RecommendStrategy;
@@ -33,7 +34,7 @@ import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendServ
  * @author elacic
  *
  */
-public class RecommenderEvaluator extends RecommendService{
+public class RecommenderEvaluator extends RecommenderEngine{
 
 	private List<String> removedOwnProducts;
 	private double precision;
@@ -45,15 +46,6 @@ public class RecommenderEvaluator extends RecommendService{
 	protected int minimalPurchasedCount = 1;
 	protected String jobDescription = "";
 
-	
-	public RecommenderEvaluator(String address, Integer port, String collection) {
-		super(address, port, collection);
-	}
-	
-	public RecommenderEvaluator(SolrServer solrServer) {
-		super(solrServer);
-	}
-	
 	
 	@Override
 	protected List<String> initUsersOwnProductsFiltering(String userID) {
@@ -108,7 +100,7 @@ public class RecommenderEvaluator extends RecommendService{
 		
 		for (String product : recommendations) {
 			QueryResponse findElementById = 
-					findElementById(product, SolrServiceContainer.getInstance().getItemService().getSolrServer());
+					SolrServiceContainer.getInstance().getRecommendService().findElementById(product, SolrServiceContainer.getInstance().getItemService().getSolrServer());
 			recommendedItems.addAll(findElementById.getBeans(Item.class));
 		}
 		
@@ -411,13 +403,13 @@ public class RecommenderEvaluator extends RecommendService{
 	protected void appendMetrics(MetricsExporter mCalc, int k, String userID,
 			List<String> recommendations, List<String> alreadyBoughtProducts) {
 		QueryResponse findElementById = 
-				findElementsById(recommendations, SolrServiceContainer.getInstance().getItemService().getSolrServer());
+				SolrServiceContainer.getInstance().getRecommendService().findElementsById(recommendations, SolrServiceContainer.getInstance().getItemService().getSolrServer());
 		
 		
 		List<Item> fetchedAlreadyBoughtItems = new ArrayList<Item>();
 		if (alreadyBoughtProducts.size() <= 2500) {
 			QueryResponse alreadyBoughtItems = 
-					findElementsById(alreadyBoughtProducts, SolrServiceContainer.getInstance().getItemService().getSolrServer());
+					SolrServiceContainer.getInstance().getRecommendService().findElementsById(alreadyBoughtProducts, SolrServiceContainer.getInstance().getItemService().getSolrServer());
 			fetchedAlreadyBoughtItems.addAll(alreadyBoughtItems.getBeans(Item.class));
 		} else {
 			int fetchIteration = 2500;
@@ -426,11 +418,11 @@ public class RecommenderEvaluator extends RecommendService{
 			while (fetchOffset < alreadyBoughtProducts.size()) {
 				QueryResponse alreadyBoughtItems = null;
 				if (fetchOffset + fetchIteration < alreadyBoughtProducts.size()) {
-					alreadyBoughtItems = findElementsById(
+					alreadyBoughtItems = SolrServiceContainer.getInstance().getRecommendService().findElementsById(
 							alreadyBoughtProducts.subList(fetchOffset, fetchOffset + fetchIteration), 
 							SolrServiceContainer.getInstance().getItemService().getSolrServer());
 				} else {
-					alreadyBoughtItems = findElementsById(
+					alreadyBoughtItems = SolrServiceContainer.getInstance().getRecommendService().findElementsById(
 							alreadyBoughtProducts.subList(fetchOffset, alreadyBoughtProducts.size()), 
 							SolrServiceContainer.getInstance().getItemService().getSolrServer());
 				}
@@ -473,7 +465,7 @@ public class RecommenderEvaluator extends RecommendService{
 		solrParams.set("facet.mincount", minimalPurchasedCount );
 	
 		try {
-			response = solrServer.query(solrParams);
+			response = SolrServiceContainer.getInstance().getRecommendService().getSolrServer().query(solrParams);
 		} catch (SolrServerException e) {
 			e.printStackTrace();
 		}

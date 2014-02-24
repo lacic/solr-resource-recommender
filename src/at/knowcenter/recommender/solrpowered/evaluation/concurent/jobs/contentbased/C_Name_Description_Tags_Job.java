@@ -13,7 +13,6 @@ public class C_Name_Description_Tags_Job extends C_Strategy_Job implements Calla
 	private List<String> users;
 
 	public C_Name_Description_Tags_Job(List<String> users) {
-		super(SolrServiceContainer.getInstance().getRecommendService().getSolrServer());
 		this.users = users;
 	}
 	

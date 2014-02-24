@@ -1,9 +1,5 @@
 package at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,16 +11,12 @@ import at.knowcenter.recommender.solrpowered.engine.strategy.StrategyType;
 import at.knowcenter.recommender.solrpowered.engine.utils.RecommendationQueryUtils;
 import at.knowcenter.recommender.solrpowered.evaluation.RecommenderEvaluator;
 import at.knowcenter.recommender.solrpowered.evaluation.metrics.MetricsExporter;
-import at.knowcenter.recommender.solrpowered.model.CustomerAction;
-import at.knowcenter.recommender.solrpowered.model.CustomerAction.ACTION;
-import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
 
 public class CF_CFcat_C_Job extends RecommenderEvaluator implements Callable<List<MetricsExporter>>{
 
 	private List<String> users;
 
 	public CF_CFcat_C_Job(List<String> users, String jobDescription) {
-		super(SolrServiceContainer.getInstance().getRecommendService().getSolrServer());
 		this.jobDescription = jobDescription;
 		this.users = users;
 //		this.simulatedUpdatesCount = simulatedUpdateCount;

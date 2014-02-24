@@ -17,7 +17,6 @@ public class C_Job extends RecommenderEvaluator implements Callable<List<Metrics
 	private List<String> users;
 
 	public C_Job(List<String> users, String jobDescription) {
-		super(SolrServiceContainer.getInstance().getRecommendService().getSolrServer());
 		this.jobDescription = jobDescription;
 		this.users = users;
 	}

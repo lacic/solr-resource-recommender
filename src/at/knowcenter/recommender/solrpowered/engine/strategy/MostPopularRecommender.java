@@ -12,6 +12,7 @@ import org.apache.solr.common.params.ModifiableSolrParams;
 import at.knowcenter.recommender.solrpowered.engine.filtering.ContentFilter;
 import at.knowcenter.recommender.solrpowered.engine.utils.RecommendationQueryUtils;
 import at.knowcenter.recommender.solrpowered.model.CustomerAction;
+import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendQuery;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendResponse;
 
@@ -28,7 +29,7 @@ public class MostPopularRecommender implements RecommendStrategy {
 
 
 	@Override
-	public RecommendResponse recommend(RecommendQuery query, Integer maxReuslts, SolrServer solrServer){
+	public RecommendResponse recommend(RecommendQuery query, Integer maxReuslts){
 		productsToFilter = new ArrayList<String>();
 
 		String queryString = "*:*";
@@ -63,7 +64,7 @@ public class MostPopularRecommender implements RecommendStrategy {
 			solrParams.set("rows", maxReuslts);
 			
 
-			response = solrServer.query(solrParams);
+			response = SolrServiceContainer.getInstance().getRecommendService().getSolrServer().query(solrParams);
 			// fill response object
 			List<String> extractedRecommendations = 
 					RecommendationQueryUtils.extractRecommendationIds(

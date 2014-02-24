@@ -19,6 +19,7 @@ import at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.social.So
 import at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.social.UB_InterestsGroups_Social_Job;
 import at.knowcenter.recommender.solrpowered.evaluation.metrics.MetricsExporter;
 import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
+import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendService;
 import at.knowcenter.recommender.solrpowered.services.impl.item.ItemService;
 import at.knowcenter.recommender.solrpowered.services.impl.social.SocialActionService;
 import at.knowcenter.recommender.solrpowered.services.impl.social.reversed.OwnSocialActionService;
@@ -100,23 +101,26 @@ public class ConcurentRecommenderEvaluator {
 	private void initEvaluation() {
 		int port = 8984;
 		String address = "localhost";
+		RecommenderEvaluator recommenderEval = new RecommenderEvaluator();
+		
 		UserService userService = new UserService(address, port, "collection3");
-		RecommenderEvaluator recommenderService = new RecommenderEvaluator(address, port, "collection2");
+		RecommendService recService = new RecommendService(address, port, "collection2");
 		ItemService itemService = new ItemService(address, port, "collection1");
+		
 		SocialActionService socialService = new SocialActionService(address, port, "bn_social_action");
 		OwnSocialActionService ownSocialService = new OwnSocialActionService(address, port, "bn_own_social_action");
 		SocialStreamService socialStreamService = new SocialStreamService(address, port, "bn_social_stream");
 		
 		SolrServiceContainer.getInstance().setUserService(userService);
-		SolrServiceContainer.getInstance().setRecommendService(recommenderService);
+		SolrServiceContainer.getInstance().setRecommendService(recService);
 		SolrServiceContainer.getInstance().setItemService(itemService);
 		SolrServiceContainer.getInstance().setSocialActionService(socialService);
 		SolrServiceContainer.getInstance().setOwnSocialActionService(ownSocialService);
 		SolrServiceContainer.getInstance().setSocialStreamService(socialStreamService);
 		
-		users = recommenderService.getAllSocialStreamUsers();
+		users = recommenderEval.getAllSocialStreamUsers();
 		
-		List<String> allUsers = recommenderService.getAllUsers();
+		List<String> allUsers = recommenderEval.getAllUsers();
 		
 		users.retainAll(allUsers);
 		

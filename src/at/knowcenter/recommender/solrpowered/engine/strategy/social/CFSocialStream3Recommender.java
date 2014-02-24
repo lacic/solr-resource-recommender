@@ -53,7 +53,7 @@ public class CFSocialStream3Recommender implements RecommendStrategy {
 	private List<String> productsToFilter;
 
 	@Override
-	public RecommendResponse recommend(RecommendQuery query, Integer maxReuslts, SolrServer solrServer){
+	public RecommendResponse recommend(RecommendQuery query, Integer maxReuslts){
 		productsToFilter = new ArrayList<String>();
 		QueryResponse response = null;
 		RecommendResponse searchResponse = new RecommendResponse();

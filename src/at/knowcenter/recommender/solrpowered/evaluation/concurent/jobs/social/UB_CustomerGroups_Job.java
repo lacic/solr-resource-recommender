@@ -17,7 +17,6 @@ public class UB_CustomerGroups_Job extends UB_Strategy_Job implements Callable<L
 
 
 	public UB_CustomerGroups_Job(List<String> users, String jobDescription) {
-		super(SolrServiceContainer.getInstance().getUserService().getSolrServer());
 		this.users = users;
 		this.jobDescription = jobDescription;
 	}

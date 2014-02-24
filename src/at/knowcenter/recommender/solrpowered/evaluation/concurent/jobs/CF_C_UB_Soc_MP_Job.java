@@ -28,7 +28,6 @@ public class CF_C_UB_Soc_MP_Job extends RecommenderEvaluator implements Callable
 	private List<String> users;
 
 	public CF_C_UB_Soc_MP_Job(List<String> users, String jobDescription, int simulatedUpdateCount) {
-		super(SolrServiceContainer.getInstance().getRecommendService().getSolrServer());
 		this.jobDescription = jobDescription;
 		this.users = users;
 //		this.simulatedUpdatesCount = simulatedUpdateCount;

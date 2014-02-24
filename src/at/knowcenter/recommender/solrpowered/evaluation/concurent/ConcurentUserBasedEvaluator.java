@@ -21,6 +21,7 @@ import at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.social.UB
 import at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.social.UB_Interests_Job;
 import at.knowcenter.recommender.solrpowered.evaluation.metrics.MetricsExporter;
 import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
+import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendService;
 import at.knowcenter.recommender.solrpowered.services.impl.item.ItemService;
 import at.knowcenter.recommender.solrpowered.services.impl.user.UserService;
 
@@ -104,14 +105,16 @@ public class ConcurentUserBasedEvaluator {
 	private void initEvaluation() {
 		String url = "192.168.111.32";
 		int port = 8984;
+		RecommenderEvaluator recommenderEval = new RecommenderEvaluator();
+		
 		UserService userService = new UserService(url, port, "collection3");
-		RecommenderEvaluator recommenderService = new RecommenderEvaluator(url, port, "collection2");
+		RecommendService recService = new RecommendService(url, port, "collection2");
 		ItemService itemService = new ItemService(url, port, "collection1");
 		SolrServiceContainer.getInstance().setUserService(userService);
-		SolrServiceContainer.getInstance().setRecommendService(recommenderService);
+		SolrServiceContainer.getInstance().setRecommendService(recService);
 		SolrServiceContainer.getInstance().setItemService(itemService);
 		
-		users = recommenderService.getAllUsers();
+		users = recommenderEval.getAllUsers();
 		System.out.println("User Size " + users.size());
 	}
 	

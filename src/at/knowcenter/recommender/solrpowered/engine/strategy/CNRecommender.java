@@ -41,7 +41,7 @@ public class CNRecommender implements RecommendStrategy {
 	private ContentFilter contentFilter;
 
 	@Override
-	public RecommendResponse recommend(RecommendQuery query, Integer maxReuslts, SolrServer solrServer){
+	public RecommendResponse recommend(RecommendQuery query, Integer maxReuslts){
 		List<Item> recommendations = new ArrayList<Item>();
 		RecommendResponse searchResponse = new RecommendResponse();
 		searchResponse.setElapsedTime(0);

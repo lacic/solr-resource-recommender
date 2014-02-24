@@ -50,7 +50,7 @@ public class CFSocialStream4Recommender implements RecommendStrategy {
 	private ContentFilter contentFilter;
 
 	@Override
-	public RecommendResponse recommend(RecommendQuery query, Integer maxReuslts, SolrServer solrServer){
+	public RecommendResponse recommend(RecommendQuery query, Integer maxReuslts){
 		QueryResponse response = null;
 		RecommendResponse searchResponse = new RecommendResponse();
 		

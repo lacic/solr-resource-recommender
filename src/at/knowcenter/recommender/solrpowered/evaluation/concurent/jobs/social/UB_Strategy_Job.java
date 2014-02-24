@@ -13,10 +13,6 @@ import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
 
 public abstract class UB_Strategy_Job extends RecommenderEvaluator{
 
-	public UB_Strategy_Job(SolrServer solrServer) {
-		super(solrServer);
-	}
-
 	protected abstract List<String> getUsers();
 	
 	protected void evaluate(ContentFilter cf, List<MetricsExporter> metricsCalcs, StrategyType strategy) {

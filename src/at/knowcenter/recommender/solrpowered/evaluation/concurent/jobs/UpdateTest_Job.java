@@ -28,7 +28,6 @@ public class UpdateTest_Job extends RecommenderEvaluator implements Callable<Lis
 	private int updateCount ;
 
 	public UpdateTest_Job(String jobDescription, int updateCount) {
-		super(SolrServiceContainer.getInstance().getRecommendService().getSolrServer());
 		this.jobDescription = jobDescription;
 		this.updateCount = updateCount;
 	}

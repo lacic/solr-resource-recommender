@@ -3,6 +3,12 @@ package at.knowcenter.recommender.solrpowered.services.common;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * 
+ * @author Emanuel Lacic
+ *
+ * @param <T>
+ */
 public abstract class SolrQuery<T extends Serializable> {
 
 	protected String query;

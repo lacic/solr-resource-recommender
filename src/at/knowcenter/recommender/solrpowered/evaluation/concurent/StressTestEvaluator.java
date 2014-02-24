@@ -17,6 +17,7 @@ import at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.*;
 import at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.contentbased.C_Name_Description_Job;
 import at.knowcenter.recommender.solrpowered.evaluation.metrics.MetricsExporter;
 import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
+import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendService;
 import at.knowcenter.recommender.solrpowered.services.impl.item.ItemService;
 import at.knowcenter.recommender.solrpowered.services.impl.user.UserService;
 
@@ -111,14 +112,16 @@ public class StressTestEvaluator {
 
 	private void initEvaluation() {
 		int port = 8983;
+		RecommenderEvaluator recommenderEval = new RecommenderEvaluator();
+		
 		UserService userService = new UserService("localhost", port, "collection3");
-		RecommenderEvaluator recommenderService = new RecommenderEvaluator("localhost", port, "collection2");
+		RecommendService recService = new RecommendService("localhost", port, "collection2");
 		ItemService itemService = new ItemService("localhost", port, "collection1");
 		SolrServiceContainer.getInstance().setUserService(userService);
-		SolrServiceContainer.getInstance().setRecommendService(recommenderService);
+		SolrServiceContainer.getInstance().setRecommendService(recService);
 		SolrServiceContainer.getInstance().setItemService(itemService);
 		
-		users = recommenderService.getAllUsers();
+		users = recommenderEval.getAllUsers();
 		System.out.println("User Size " + users.size());
 	}
 	

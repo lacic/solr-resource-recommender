@@ -13,7 +13,6 @@ public class C_Name_Tags_Job extends C_Strategy_Job implements Callable<List<Met
 	private List<String> users;
 
 	public C_Name_Tags_Job(List<String> users) {
-		super(SolrServiceContainer.getInstance().getRecommendService().getSolrServer());
 		this.users = users;
 	}
 	

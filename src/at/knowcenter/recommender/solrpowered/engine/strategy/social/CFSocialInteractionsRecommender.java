@@ -42,7 +42,7 @@ public class CFSocialInteractionsRecommender implements RecommendStrategy {
 	private ContentFilter contentFilter;
 
 	@Override
-	public RecommendResponse recommend(RecommendQuery query, Integer maxReuslts, SolrServer solrServer){
+	public RecommendResponse recommend(RecommendQuery query, Integer maxReuslts){
 		ModifiableSolrParams solrParams = new ModifiableSolrParams();
 		QueryResponse response = null;
 		RecommendResponse searchResponse = new RecommendResponse();

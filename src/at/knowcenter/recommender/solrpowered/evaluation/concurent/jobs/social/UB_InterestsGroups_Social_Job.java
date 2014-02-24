@@ -21,7 +21,6 @@ public class UB_InterestsGroups_Social_Job extends RecommenderEvaluator implemen
 
 
 	public UB_InterestsGroups_Social_Job(List<String> users, String jobDescription) {
-		super(SolrServiceContainer.getInstance().getUserService().getSolrServer());
 		this.users = users;
 		this.jobDescription = jobDescription;
 	}

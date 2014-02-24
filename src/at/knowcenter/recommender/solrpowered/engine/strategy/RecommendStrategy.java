@@ -12,7 +12,7 @@ import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendResp
 
 public interface RecommendStrategy {
 	
-	public RecommendResponse recommend(RecommendQuery query, Integer maxReuslts, SolrServer solrServer);
+	public RecommendResponse recommend(RecommendQuery query, Integer maxReuslts);
 	
 	public void setAlreadyBoughtProducts(List<String> alreadyBoughtProducts);
 	

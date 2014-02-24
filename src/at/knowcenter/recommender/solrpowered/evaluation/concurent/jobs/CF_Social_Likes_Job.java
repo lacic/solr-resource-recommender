@@ -15,7 +15,6 @@ public class CF_Social_Likes_Job extends RecommenderEvaluator implements Callabl
 	private List<String> users;
 
 	public CF_Social_Likes_Job(List<String> users, String jobDescription) {
-		super(SolrServiceContainer.getInstance().getRecommendService().getSolrServer());
 		this.users = users;
 		this.jobDescription = jobDescription;
 	}

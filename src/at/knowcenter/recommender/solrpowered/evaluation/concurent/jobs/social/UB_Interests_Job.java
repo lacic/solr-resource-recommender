@@ -17,7 +17,6 @@ public class UB_Interests_Job extends UB_Strategy_Job implements Callable<List<M
 
 
 	public UB_Interests_Job(List<String> users, String jobDescription) {
-		super(SolrServiceContainer.getInstance().getUserService().getSolrServer());
 		this.users = users;
 		this.jobDescription = jobDescription;
 	}

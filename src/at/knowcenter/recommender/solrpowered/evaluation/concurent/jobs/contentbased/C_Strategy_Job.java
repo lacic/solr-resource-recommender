@@ -13,10 +13,6 @@ import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
 
 public abstract class C_Strategy_Job extends RecommenderEvaluator{
 
-	public C_Strategy_Job(SolrServer solrServer) {
-		super(solrServer);
-	}
-
 	protected abstract List<String> getUsers();
 	
 	protected void evaluate_C_Weighted(ContentFilter cf, List<MetricsExporter> metricsCalcs, StrategyType strategy) {

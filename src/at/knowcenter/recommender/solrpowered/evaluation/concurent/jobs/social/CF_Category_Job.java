@@ -19,7 +19,6 @@ public class CF_Category_Job extends RecommenderEvaluator implements Callable<Li
 
 
 	public CF_Category_Job(List<String> users, String jobDescription) {
-		super(SolrServiceContainer.getInstance().getUserService().getSolrServer());
 		this.users = users;
 		this.jobDescription = jobDescription;
 	}

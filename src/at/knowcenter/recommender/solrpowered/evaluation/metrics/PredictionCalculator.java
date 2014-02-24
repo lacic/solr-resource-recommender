@@ -45,21 +45,7 @@ public class PredictionCalculator{
 	}
 	
 	public double getMRR() {
-		double sum = 0.0;
-		if (this.predictionData.size() != 0 && this.realData.size() != 0) {
-			for (String val : this.realData) {
-				int index = 0;
-				if ((index = this.predictionData.indexOf(val)) != -1) {
-					sum += (1.0 / (index + 1));
-				} else {
-					sum += 0.0;
-				}
-			}
-		}
-		if (this.realData.size() == 0) {
-			return 0.0;
-		}
-		return sum / this.realData.size();
+		return MRR.calculateMRR(realData, predictionData);
 	}
 	
 	public double getMAP() {
@@ -79,36 +65,9 @@ public class PredictionCalculator{
 	* @return the NDCG for the given data
 	*/
 	public double getNDCG() {
-		double dcg = 0;
-		double idcg = computeIDCG(realData.size());
-		
-		if (idcg == 0) {
-			return 0;
-		}
-
-		for (int i = 0; i < predictionData.size(); i++) {
-			String predictedItem = predictionData.get(i);
-
-			if (!realData.contains(predictedItem))
-				continue;
-
-			// compute NDCG part
-			int rank = i + 1;
-			dcg += Math.log(2) / Math.log(rank + 1);
-		}
-
-		return dcg / idcg;
+		return NDCG.calculateNDCG(realData, predictionData);
 	}
 	
-	private double computeIDCG(int n) {
-		double idcg = 0;
-
-		for (int i = 0; i < n; i++){
-			idcg += Math.log(2) / Math.log(i + 2);
-		}
-	
-		return idcg;
-	  }
 
 	private double getPrecisionK(int k) {
 		if (k != 0 && k <= this.predictionData.size()) {
