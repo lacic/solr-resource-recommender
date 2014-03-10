@@ -38,7 +38,25 @@ If you wish, you can download the solr-resource-recommender-framework-1.0-SNAPSH
 
 ## How to use
 
-Once you have set up the framework inside your project
+Once you have set up the framework inside your project use the provided SolrServiceContainer to find needed Solr services to upload the data needed for making recommendations:
+
+```
+...
+SolrServiceContainer.getInstance().getUserService().updateDocument(new Customer());
+SolrServiceContainer.getInstance().getItemService().updateDocument(new Item());
+```
+
+After you have initially imported your data into Solr, only thing needed is to call the RecommenderEngine to generate recommendations based on a user-ID and/or product-ID. Additional parameters are n (the number of returned recommendations) and a content filter (used for narrowing down the wanted recommendation results, e.g., recommendations suited only for users of 18 years or older).
+
+```
+RecommenderOperations engine = new RecommenderEngine();
+
+String userID = "my_unique_user";
+String productID = null;
+Integer recCount = 10;
+
+List<String> recommendedResourceIds = engine.getRecommendations(userID, productID, recCount);
+```
 
 
 **Example:**
