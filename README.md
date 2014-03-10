@@ -18,17 +18,27 @@ Please cite [the papers](https://github.com/lacic/solr-resource-recommender#refe
 
 The source-code can be directly checked-out through this repository. The code/solr-resource-recommender-framework/ folder contains a maven project to edit. The built and deployed solr-resource-recommender-framework-1.0-SNAPSHOT.jar file can be downloaded from the root project folder. 
 
-## How-to-use
+## Installation
 
-### Installation using Maven
+### Using Maven
 
-The framework is built and deployed via [Maven](http://maven.apache.org/). To install it, check out this repository and run mvn install; it is then available to other projects by depending directly on it as above (consult pom.xml for the version to use). The source code can also be checked out and used in most Java IDEs.
+The framework is built and deployed via [Maven](http://maven.apache.org/). To install it, check out this repository and run mvn clean install in the code/solr-resource-recommender-framework/ folder. 
 
-### Using the provided .jar
+```
+$ git clone https://github.com/lacic/solr-resource-recommender.git solr-resource-recommender
+$ cd solr-resource-recommender/code/solr-resource-recommender-framework
+$ mvn clean install
+```
 
-If you wish, you can download the solr-resource-recommender-framework-1.0-SNAPSHOT.jar and add it to your projects build path. Take note the depended libraries which are needed for the framework and which can be found in the [pom.xml](https://github.com/lacic/solr-resource-recommender/blob/master/code/solr-resource-recommender-framework/pom.xml) file
+After that, it is available to other projects by depending directly on it (consult pom.xml for the version to use). The source code can also be checked out and used in most Java IDEs.
 
-## Input format
+### Using the provided .jar file
+
+If you wish, you can download the solr-resource-recommender-framework-1.0-SNAPSHOT.jar and add it to your projects build path. Take note of the depended libraries which are needed for the framework and which can be found in the [pom.xml](https://github.com/lacic/solr-resource-recommender/blob/master/code/solr-resource-recommender-framework/pom.xml) file.
+
+## How to use
+
+Once you have set up the framework inside your project
 
 
 **Example:**
