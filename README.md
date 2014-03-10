@@ -64,7 +64,7 @@ List<String> recommendedResourceIds = engine.getRecommendations(userID, productI
 
 **Example:**
 
-Currently, the available recommendation algorithms that could be passed to the getRecommendations method are:
+Currently, the available recommendation algorithms that could be passed to the ```getRecommendations``` method are:
 
 * ```CollaborativeFiltering``` Item-Item Collaborative Filtering.
 
