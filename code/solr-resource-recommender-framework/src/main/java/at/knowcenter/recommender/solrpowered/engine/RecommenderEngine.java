@@ -161,8 +161,8 @@ public class RecommenderEngine implements RecommenderOperations{
 		initUsersOwnProductsFiltering(userID);
 		
 		RecommendQuery query = createQuery(userID, productID);
-		RecommendResponse searchResponse = SolrServiceContainer.getInstance().getRecommendService().search(query, n);
-
+		RecommendResponse searchResponse = recommendStrategy.recommend(query, n);
+				
 		setRecommendStrategy(StrategyType.CollaborativeFiltering);
 		
 		return searchResponse.getResultItems();

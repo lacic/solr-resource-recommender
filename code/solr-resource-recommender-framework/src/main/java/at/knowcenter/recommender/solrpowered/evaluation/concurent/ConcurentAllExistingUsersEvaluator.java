@@ -56,8 +56,8 @@ public class ConcurentAllExistingUsersEvaluator {
 			
 			List<String> userPartition= users.subList(i * partitionSize, offset);
 
-//			jobs.add(new CF_C_MP_Job(userPartition, "job_" + i));
-			jobs.add(new CF_C_Job(userPartition,"job_" + i));
+			jobs.add(new MP_Job(userPartition, "job_" + i));
+//			jobs.add(new CF_C_Job(userPartition,"job_" + i));
 //			jobs.add(new C_MP_Job(userPartition, "job_" + i));
 //			jobs.add(new CF_MP_Job(userPartition, "job_" + i));
 //			jobs.add(new CF_Job(userPartition,"job_" + i));
@@ -96,7 +96,7 @@ public class ConcurentAllExistingUsersEvaluator {
 	    executor.shutdown();
 	    
 	    for (List<MetricsExporter> metrics : metricExporterMap.values()) {
-	    	for (int n = 1; n <= 15; n++) {
+	    	for (int n = 1; n <= 10; n++) {
 				MetricsExporter mCalc = metrics.get(n - 1);
 				mCalc.exportCalculatedMetricsAverage(users.size());
 			}

@@ -29,7 +29,7 @@ public class MP_Job extends RecommenderEvaluator implements Callable<List<Metric
 		List<MetricsExporter> metricsCalcs = new ArrayList<MetricsExporter>();
 		
 		for (int n = 1; n <= resultSize; n++) {
-			MetricsExporter mCalc = new MetricsExporter("./evaluation_data/");
+			MetricsExporter mCalc = new MetricsExporter("/tmp/");
 			mCalc.setAlgorithmName("8_MP");
 			metricsCalcs.add(mCalc);
 		}
