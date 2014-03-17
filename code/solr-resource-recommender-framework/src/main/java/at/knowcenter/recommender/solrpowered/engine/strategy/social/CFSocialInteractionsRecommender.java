@@ -134,7 +134,7 @@ public class CFSocialInteractionsRecommender implements RecommendStrategy {
 				public int compare(String a, String b) {
 					if (userInteractionMap.get(a) > userInteractionMap.get(b)) {
 			            return -1;
-			        } else if (userInteractionMap.get(a) == userInteractionMap.get(b)){
+			        } else if (userInteractionMap.get(a).equals(userInteractionMap.get(b))){
 			        	return 0;
 			        } else {
 			            return 1;
@@ -205,11 +205,18 @@ public class CFSocialInteractionsRecommender implements RecommendStrategy {
 		for (String user : userInteractionMap.keySet()) {
 			if (userOccurenceCount >= maxUserOccurence) { break; }
 			
+			try {
+				
 			purchaseQueryBuilder.append("\"" + user + "\"^" + userInteractionMap.get(user) + " OR ");
 			markedAsFavoriteQueryBuilder.append("\"" + user + "\"^" + (userInteractionMap.get(user) / 2) + " OR ");
 			viewedQueryBuilder.append("\"" + user + "\"^" + (userInteractionMap.get(user) / 3) + " OR ");
-			
 			userOccurenceCount++;
+			} catch(Exception ex) {
+				ex.printStackTrace();
+				System.out.println(userInteractionMap);
+				System.out.println(user);
+				System.out.println(userInteractionMap.get(user));
+			}
 		}
 		
 		

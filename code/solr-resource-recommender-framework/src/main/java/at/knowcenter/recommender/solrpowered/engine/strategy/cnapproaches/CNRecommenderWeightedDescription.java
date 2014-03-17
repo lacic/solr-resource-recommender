@@ -41,12 +41,13 @@ public class CNRecommenderWeightedDescription extends CNRecommender {
 		params.set("q", query);
 		params.set("fq", filterQuery);
 		params.set("mlt", "true");
-		params.set("mlt.fl", "tags,collection,name,description");
+		params.set("mlt.fl", "description");
 		params.set("mlt", "true");
 		params.set("mlt.count", maxResultCount);
 		params.set("mlt.mindf", "1");
 		params.set("mlt.mintf", "1");
-		params.set("mlt.qf","description^3.0");
+		params.set("mlt.minwl", "4");
+		params.set("mlt.maxqt", "15");
 		return params;
 	}
 

@@ -90,6 +90,7 @@ public class RecommendationQueryUtils {
 		int userOccurenceCount = 0;
 		long maxUserCount = 0;
 		long userCountSum = 0;
+		
 		for (Count userOccurence : userOccurences) {
 			if ( ! userOccurence.getName().equals(currentUser)) {
 				if (userOccurenceCount >= maxUserOccurence) {
@@ -103,6 +104,7 @@ public class RecommendationQueryUtils {
 				userOccurenceCount++;
 			}
 		}
+		
 		if (contentFilter != null && contentFilter.getFriendsEvaluationMethod() != FriendsEvaluation.NOTHING) {
 			if (contentFilter.getCustomer() != null && contentFilter.getCustomer().getFriendOf() != null) {
 				for (String friend : contentFilter.getCustomer().getFriendOf()) {

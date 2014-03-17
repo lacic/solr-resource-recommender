@@ -106,7 +106,7 @@ public class CF_C_UB_Soc_MP_Job extends RecommenderEvaluator implements Callable
 			List<String> cfRecommendations = getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(StrategyType.CollaborativeFiltering));
 			List<String> cfCatRecommendations = getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(StrategyType.CF_Categories));
 			List<String> cbRecommendations = getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(StrategyType.ContentBased));
-			List<String> ubRecommendations = getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(StrategyType.UB_InterestsWithOutMLT));
+			List<String> ubRecommendations = getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(StrategyType.UB_WithOutMLT));
 			List<String> socialRecommendations = getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(StrategyType.CF_Social));
 			List<String> mpRecommendations = getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(StrategyType.MostPopular));
 			

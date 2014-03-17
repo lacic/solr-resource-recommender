@@ -519,7 +519,7 @@ public class RecommenderEvaluator extends RecommenderEngine{
 		
 		String queryString = "*:*";
 		solrParams.set("q", queryString);
-		solrParams.set("rows", 70000);
+		solrParams.set("rows", 80000);
 		solrParams.set("fl", "id");
 	
 		try {

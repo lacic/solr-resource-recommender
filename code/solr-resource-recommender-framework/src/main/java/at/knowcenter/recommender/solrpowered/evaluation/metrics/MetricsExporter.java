@@ -82,7 +82,7 @@ public class MetricsExporter {
 //		System.out.println("Users:" + size + " Users without recommendations: " + usersThatDidNotGetRecommended + " %: " + (usersThatDidNotGetRecommended / size) * 100.0);
 //		size = size - usersThatDidNotGetRecommended;
 		try {
-			File file = new File(outputDirectoryPath + algName + "_avg.txt");
+			File file = new File("/home/elacic/PhD/Projects/BlancNoir/evaluation/general_eval_data/" + algName + "_avg.txt");
 			FileWriter writer = new FileWriter(file, true);
 			
 			BufferedWriter bw = new BufferedWriter(writer);		

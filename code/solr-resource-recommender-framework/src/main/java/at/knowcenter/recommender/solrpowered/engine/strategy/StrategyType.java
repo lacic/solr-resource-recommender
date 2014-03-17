@@ -26,10 +26,13 @@ public enum StrategyType {
 	UB_Interests, 
 	UB_CustomerGroups,
 	UB_InterestsCustomerGroup, 
-	UB_InterestsWithOutMLT, 
+	UB_WithOutMLT, 
 	CF_Social_Likes,
 	CF_Social_Comments, 
 	CF_Categories, 
-	SocialStream
+	SocialStream, 
+	CFPurchWithSocCommonNeighborhoodRecommender,
+	CFPurchWithSocCommonNeighborhoodSummedRecommender,
+	CFPurchWithSocCommonNeighborhoodReplacedRecommender, UB_WithOutMLTInterests, UB_WithOutMLTGroups
 
 }

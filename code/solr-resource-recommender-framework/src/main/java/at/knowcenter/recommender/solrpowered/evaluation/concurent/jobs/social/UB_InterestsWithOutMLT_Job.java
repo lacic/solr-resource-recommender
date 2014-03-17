@@ -21,11 +21,11 @@ public class UB_InterestsWithOutMLT_Job extends UB_Strategy_Job implements Calla
 	@Override
 	public List<MetricsExporter> call() throws Exception {
 		ContentFilter cf = new ContentFilter();
-		List<MetricsExporter> metricsCalcs = initMetricCalcs("13_" + StrategyType.UB_InterestsWithOutMLT.name());
+		List<MetricsExporter> metricsCalcs = initMetricCalcs("13_" + StrategyType.UB_WithOutMLT.name());
 		
 		System.out.println("Evaluation over " + users.size() + " users");
 		
-		evaluate(cf, metricsCalcs, StrategyType.UB_InterestsWithOutMLT);
+		evaluate(cf, metricsCalcs, StrategyType.UB_WithOutMLT);
 		
 		return metricsCalcs;
 	}

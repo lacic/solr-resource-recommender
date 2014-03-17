@@ -39,6 +39,11 @@ import at.knowcenter.recommender.solrpowered.engine.strategy.social.UserBasedCus
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.UserBasedInterestsCustomerGroupRecommender;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.UserBasedInterestsRecommender;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.UserBasedRecommenderWithoutMLT;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.UserBasedWithoutMLTGroupRecommender;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.UserBasedWithoutMLTInterestsRecommender;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.combined.CFPurchWithSocCommonNeighborhoodRecommender;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.combined.CFPurchWithSocCommonNeighborhoodReplacedRecommender;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.combined.CFPurchWithSocCommonNeighborhoodSummedRecommender;
 import at.knowcenter.recommender.solrpowered.engine.utils.RecommendationQueryUtils;
 import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendQuery;
@@ -80,12 +85,24 @@ public class RecommenderEngine implements RecommenderOperations{
 		recommendStrategies.put(StrategyType.CF_Own_Social, new CFOwnSocialRecommender());
 		recommendStrategies.put(StrategyType.CF_Social_Likes, new CFSocialLikesRecommender());
 		recommendStrategies.put(StrategyType.CF_Social_Comments, new CFSocialCommentsRecommender());
+		
 		recommendStrategies.put(StrategyType.UB_Interests, new UserBasedInterestsRecommender());
 		recommendStrategies.put(StrategyType.UB_CustomerGroups, new UserBasedCustomerGroupsRecommender());
 		recommendStrategies.put(StrategyType.UB_InterestsCustomerGroup, new UserBasedInterestsCustomerGroupRecommender());
-		recommendStrategies.put(StrategyType.UB_InterestsWithOutMLT, new UserBasedRecommenderWithoutMLT());
+		recommendStrategies.put(StrategyType.UB_WithOutMLT, new UserBasedRecommenderWithoutMLT());
+		
+		recommendStrategies.put(StrategyType.UB_WithOutMLTInterests, new UserBasedWithoutMLTInterestsRecommender());
+		recommendStrategies.put(StrategyType.UB_WithOutMLTGroups, new UserBasedWithoutMLTGroupRecommender());
+		
+		
 		recommendStrategies.put(StrategyType.CF_Categories, new CFCategoryRecommender());
 		recommendStrategies.put(StrategyType.SocialStream, new CFSocialStream3Recommender());
+		recommendStrategies.put(StrategyType.CFPurchWithSocCommonNeighborhoodRecommender, 
+				new CFPurchWithSocCommonNeighborhoodRecommender());
+		recommendStrategies.put(StrategyType.CFPurchWithSocCommonNeighborhoodSummedRecommender, 
+				new CFPurchWithSocCommonNeighborhoodSummedRecommender());
+		recommendStrategies.put(StrategyType.CFPurchWithSocCommonNeighborhoodReplacedRecommender, 
+				new CFPurchWithSocCommonNeighborhoodReplacedRecommender());
 		setRecommendStrategy(StrategyType.CollaborativeFiltering);
 	}
 	
@@ -251,7 +268,7 @@ public class RecommenderEngine implements RecommenderOperations{
 				Double streamWeight = 0.0008;
 				
 				List<String> cbRecommendations = getRecommendations(userID, productID, n, contentFilter, StrategyType.ContentBased);
-				List<String> ubRecommendations = getRecommendations(userID, productID, n, contentFilter, StrategyType.UB_InterestsWithOutMLT);
+				List<String> ubRecommendations = getRecommendations(userID, productID, n, contentFilter, StrategyType.UB_WithOutMLT);
 				List<String> socialRecommendations = getRecommendations(userID, productID, n, contentFilter, StrategyType.CF_Social);
 				List<String> streamRecommendations = getRecommendations(userID, productID, n, contentFilter, StrategyType.SocialStream);
 

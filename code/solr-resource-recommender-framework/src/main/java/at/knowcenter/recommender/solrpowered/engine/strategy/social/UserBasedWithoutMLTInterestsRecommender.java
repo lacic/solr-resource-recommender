@@ -21,7 +21,7 @@ import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendQuery;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendResponse;
 
-public class UserBasedRecommenderWithoutMLT implements RecommendStrategy {
+public class UserBasedWithoutMLTInterestsRecommender implements RecommendStrategy {
 
 	public static int MAX_USER_OCCURENCE_COUNT = 60;
 	private List<String> alreadyBoughtProducts;
@@ -59,25 +59,15 @@ public class UserBasedRecommenderWithoutMLT implements RecommendStrategy {
 			
 			if (contentFilter.getCustomer() != null && contentFilter.getCustomer().getInterests() != null) {
 				for (String interest : contentFilter.getCustomer().getInterests()) {
-					queryBuilder.append("\"" + interest + "\" OR ");
+					if (!interest.contains("\\")) {
+						queryBuilder.append("\"" + interest + "\" OR ");
+					}
 				}
 				queryBuilder.replace(queryBuilder.length() - 3, queryBuilder.length(), ")");
 			} else {
 				queryBuilder.append("\"\")");
 			}
 
-			queryBuilder.append(" OR customergroup:(");
-			
-			if (contentFilter.getCustomer() != null && contentFilter.getCustomer().getCustomergroup() != null) {
-				for (String customerGroup : contentFilter.getCustomer().getCustomergroup()) {
-					queryBuilder.append("\"" + customerGroup + "\" OR ");
-				}
-				queryBuilder.replace(queryBuilder.length() - 3, queryBuilder.length(), ")");
-			} else {
-				queryBuilder.append("\"\")");
-			}
-			
-			
 			solrParams = new ModifiableSolrParams();
 			
 			solrParams.set("q", queryBuilder.toString());

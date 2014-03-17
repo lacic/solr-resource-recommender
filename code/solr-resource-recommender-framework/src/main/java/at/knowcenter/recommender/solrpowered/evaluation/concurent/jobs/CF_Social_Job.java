@@ -35,7 +35,7 @@ public class CF_Social_Job extends RecommenderEvaluator implements Callable<List
 			metricsCalcs.add(mCalc);
 		}
 		
-		System.out.println("Evaluation over " + users.size() + " users");
+//		System.out.println("Evaluation over " + users.size() + " users");
 		
 		evaluate_CF_Social(users, cf, metricsCalcs);
 		return metricsCalcs;

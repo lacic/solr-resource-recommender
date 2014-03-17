@@ -52,7 +52,7 @@ public class UB_InterestsGroups_Social_Job extends RecommenderEvaluator implemen
 			Double ubWeight = 0.0103;
 			Double socWeight = 0.0214;
 			
-			List<String> ubRecommendations = getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(StrategyType.UB_InterestsWithOutMLT));
+			List<String> ubRecommendations = getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(StrategyType.UB_WithOutMLT));
 			List<String> socialRecommendations = getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(StrategyType.CF_Social));
 			
 			Map<String, Double> occurencesMap = new HashMap<String, Double>();

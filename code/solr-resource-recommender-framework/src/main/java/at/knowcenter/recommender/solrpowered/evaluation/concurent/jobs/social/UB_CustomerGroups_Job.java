@@ -24,11 +24,11 @@ public class UB_CustomerGroups_Job extends UB_Strategy_Job implements Callable<L
 	@Override
 	public List<MetricsExporter> call() throws Exception {
 		ContentFilter cf = new ContentFilter();
-		List<MetricsExporter> metricsCalcs = initMetricCalcs("11_" + StrategyType.UB_CustomerGroups.name());
+		List<MetricsExporter> metricsCalcs = initMetricCalcs("11_" + StrategyType.UB_WithOutMLTGroups.name());
 		
 		System.out.println("Evaluation over " + users.size() + " users");
 		
-		evaluate(cf, metricsCalcs, StrategyType.UB_CustomerGroups);
+		evaluate(cf, metricsCalcs, StrategyType.UB_WithOutMLTGroups);
 		
 		return metricsCalcs;
 	}
