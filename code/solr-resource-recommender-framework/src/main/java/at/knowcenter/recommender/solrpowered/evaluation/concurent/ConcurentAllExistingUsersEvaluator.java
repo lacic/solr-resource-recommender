@@ -64,7 +64,8 @@ public class ConcurentAllExistingUsersEvaluator {
 			
 			List<String> userPartition= users.subList(i * partitionSize, offset);
 
-			jobs.add(new MP_Job(userPartition, "mp_" + i));
+			jobs.add(new CF_C_UB_Soc_MP_Job(userPartition, "all_", 0));
+//			jobs.add(new MP_Job(userPartition, "mp_" + i));
 //			jobs.add(new UB_Interests_Job(userPartition, "interests_" + i));
 //			jobs.add(new UB_CustomerGroups_Job(userPartition, "groups_" + i));
 //			jobs.add(new SocialStream_Job(userPartition, "soc_stream_job_" + i));
@@ -131,7 +132,7 @@ public class ConcurentAllExistingUsersEvaluator {
 		
 		
 		users = socialUsers;
-//		users.addAll(allUsers.subList(0, socialUsers.size() * 0));
+//		users.addAll(allUsers.subList(0, socialUsers.size() * 1));
 		
 		System.out.println("User Size " + users.size());
 	}

@@ -102,12 +102,15 @@ public class CF_C_UB_Soc_MP_Job extends RecommenderEvaluator implements Callable
 			Double ubWeight = 0.0103;
 			Double socWeight = 0.0214;
 			Double mpWeight = 0.0054;
+			Double socStreamWeight = 0.0011;
+
 			
 			List<String> cfRecommendations = getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(StrategyType.CollaborativeFiltering));
 			List<String> cfCatRecommendations = getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(StrategyType.CF_Categories));
 			List<String> cbRecommendations = getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(StrategyType.ContentBased));
 			List<String> ubRecommendations = getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(StrategyType.UB_WithOutMLT));
 			List<String> socialRecommendations = getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(StrategyType.CF_Social));
+			List<String> socialStreamRecommendations = getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(StrategyType.SocialStream));
 			List<String> mpRecommendations = getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(StrategyType.MostPopular));
 			
 			Map<String, Double> occurencesMap = new HashMap<String, Double>();
@@ -117,6 +120,7 @@ public class CF_C_UB_Soc_MP_Job extends RecommenderEvaluator implements Callable
 			RecommendationQueryUtils.fillWeightedMap(occurencesMap, cbRecommendations, cbWeight);
 			RecommendationQueryUtils.fillWeightedMap(occurencesMap, ubRecommendations, ubWeight);
 			RecommendationQueryUtils.fillWeightedMap(occurencesMap, socialRecommendations, socWeight);
+			RecommendationQueryUtils.fillWeightedMap(occurencesMap, socialStreamRecommendations, socStreamWeight);
 			RecommendationQueryUtils.fillWeightedMap(occurencesMap, mpRecommendations, mpWeight);
 			
 			List<String> sortedAndTrimedRecommendations = RecommendationQueryUtils.extractCrossRankedProducts(occurencesMap);
