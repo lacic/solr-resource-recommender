@@ -51,14 +51,17 @@ public class UB_InterestsGroups_Social_Job extends RecommenderEvaluator implemen
 			
 			Double ubWeight = 0.0103;
 			Double socWeight = 0.0214;
+			Double socStreamWeight = 0.0011;
 			
 			List<String> ubRecommendations = getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(StrategyType.UB_WithOutMLT));
 			List<String> socialRecommendations = getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(StrategyType.CF_Social));
-			
+			List<String> socialStreamRecommendations = getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(StrategyType.SocialStream));
+
 			Map<String, Double> occurencesMap = new HashMap<String, Double>();
 			
 			RecommendationQueryUtils.fillWeightedMap(occurencesMap, ubRecommendations, ubWeight);
 			RecommendationQueryUtils.fillWeightedMap(occurencesMap, socialRecommendations, socWeight);
+			RecommendationQueryUtils.fillWeightedMap(occurencesMap, socialStreamRecommendations, socStreamWeight);
 			
 			List<String> sortedAndTrimedRecommendations = RecommendationQueryUtils.extractCrossRankedProducts(occurencesMap);
 			List<String> recommendations = new ArrayList<String>();

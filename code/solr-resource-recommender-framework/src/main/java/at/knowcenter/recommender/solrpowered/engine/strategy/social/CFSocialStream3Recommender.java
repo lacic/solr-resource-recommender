@@ -78,7 +78,8 @@ public class CFSocialStream3Recommender implements RecommendStrategy {
 			
 			ModifiableSolrParams params = new ModifiableSolrParams();
 			params.set("q", socialStreamQueryBuilder.toString());
-			params.set("fq", "content:[* TO *] AND (action_type:(\"COMMENT\") OR action_type:(\"WALLPOST\"))");
+//			params.set("fq", "content:[* TO *] AND (action_type:(\"COMMENT\") OR action_type:(\"WALLPOST\"))");
+			params.set("fq", "content:[* TO *] AND action_type:(\"WALLPOST\")");
 			params.set("rows", 10);
 			params.set("sort", "timestamp desc");
 			response = SolrServiceContainer.getInstance().getSocialStreamService().getSolrServer().query(params);

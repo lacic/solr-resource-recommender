@@ -1,7 +1,7 @@
 package at.knowcenter.recommender.solrpowered.evaluation.concurent;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,8 +11,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import at.knowcenter.recommender.solrpowered.configuration.ConfigUtils;
-import at.knowcenter.recommender.solrpowered.engine.strategy.StrategyType;
 import at.knowcenter.recommender.solrpowered.evaluation.RecommenderEvaluator;
 import at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.*;
 import at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.contentbased.C_Description_Job;
@@ -20,6 +18,7 @@ import at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.contentba
 import at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.contentbased.C_Name_Job;
 import at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.social.SocialStream_Job;
 import at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.social.UB_CustomerGroups_Job;
+import at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.social.UB_InterestsGroups_Social_Job;
 import at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.social.UB_Interests_Job;
 import at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.social.combined.CFPurchWithSocCommonNeighborhoodRecommender_Job;
 import at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.social.combined.CFPurchWithSocCommonNeighborhoodReplacedRecommender_Job;
@@ -64,15 +63,19 @@ public class ConcurentAllExistingUsersEvaluator {
 			
 			List<String> userPartition= users.subList(i * partitionSize, offset);
 
-			jobs.add(new CF_C_UB_Soc_MP_Job(userPartition, "all_", 0));
-//			jobs.add(new MP_Job(userPartition, "mp_" + i));
-//			jobs.add(new UB_Interests_Job(userPartition, "interests_" + i));
-//			jobs.add(new UB_CustomerGroups_Job(userPartition, "groups_" + i));
-//			jobs.add(new SocialStream_Job(userPartition, "soc_stream_job_" + i));
-//			jobs.add(new C_Name_Job(userPartition));
-//			jobs.add(new C_Description_Job(userPartition));
-//			jobs.add(new CF_Job(userPartition,"job_" + i));
-//			jobs.add(new CF_Social_Job(userPartition, "soc_int_job_" + i));
+			jobs.add(new CF_C_UB_Soc_MP_Job(userPartition, "all_" + i, 0));
+			
+			jobs.add(new CF_CFcat_C_Job(userPartition, "all_" + i));
+			jobs.add(new UB_InterestsGroups_Social_Job(userPartition, "all_" + i));
+			
+			jobs.add(new MP_Job(userPartition, "mp_" + i));
+			jobs.add(new UB_Interests_Job(userPartition, "interests_" + i));
+			jobs.add(new UB_CustomerGroups_Job(userPartition, "groups_" + i));
+			jobs.add(new SocialStream_Job(userPartition, "soc_stream_job_" + i));
+			jobs.add(new C_Name_Job(userPartition));
+			jobs.add(new C_Description_Job(userPartition));
+			jobs.add(new CF_Job(userPartition,"job_" + i));
+			jobs.add(new CF_Social_Job(userPartition, "soc_int_job_" + i));
 		}
 		
 		Map<String, List<MetricsExporter>> metricExporterMap = new HashMap<String, List<MetricsExporter>>();
@@ -130,9 +133,13 @@ public class ConcurentAllExistingUsersEvaluator {
 		System.out.println(allUsers.size());
 		System.out.println(socialUsers.size());
 		
+		Collections.shuffle(socialUsers);
+		Collections.shuffle(allUsers);
+
+		int toRemove = (int) (socialUsers.size() * 0.0);
 		
-		users = socialUsers;
-//		users.addAll(allUsers.subList(0, socialUsers.size() * 1));
+		users = socialUsers.subList(0, socialUsers.size() - toRemove);
+		users.addAll(allUsers.subList(0, toRemove));
 		
 		System.out.println("User Size " + users.size());
 	}

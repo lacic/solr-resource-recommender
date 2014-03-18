@@ -91,7 +91,7 @@ public class CF_CFcat_C_Job extends RecommenderEvaluator implements Callable<Lis
 			
 			List<String> cfRecommendations = getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(StrategyType.CollaborativeFiltering));
 			List<String> cfCatRecommendations = getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(StrategyType.CF_Categories));
-			List<String> cbRecommendations = getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(StrategyType.CN_WeightNameDescription));
+			List<String> cbRecommendations = getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(StrategyType.ContentBased));
 
 			Map<String, Double> occurencesMap = new HashMap<String, Double>();
 			
