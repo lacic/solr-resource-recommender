@@ -65,17 +65,19 @@ public class ConcurentAllExistingUsersEvaluator {
 
 			jobs.add(new CF_C_UB_Soc_MP_Job(userPartition, "all_" + i, 0));
 			
-			jobs.add(new CF_CFcat_C_Job(userPartition, "all_" + i));
+//			jobs.add(new CF_CFcat_C_Job(userPartition, "all_" + i));
 			jobs.add(new UB_InterestsGroups_Social_Job(userPartition, "all_" + i));
 			
-			jobs.add(new MP_Job(userPartition, "mp_" + i));
-			jobs.add(new UB_Interests_Job(userPartition, "interests_" + i));
-			jobs.add(new UB_CustomerGroups_Job(userPartition, "groups_" + i));
+//			jobs.add(new MP_Job(userPartition, "mp_" + i));
+//			jobs.add(new UB_Interests_Job(userPartition, "interests_" + i));
+//			jobs.add(new UB_CustomerGroups_Job(userPartition, "groups_" + i));
 			jobs.add(new SocialStream_Job(userPartition, "soc_stream_job_" + i));
-			jobs.add(new C_Name_Job(userPartition));
-			jobs.add(new C_Description_Job(userPartition));
-			jobs.add(new CF_Job(userPartition,"job_" + i));
+//			jobs.add(new C_Name_Job(userPartition));
+//			jobs.add(new C_Description_Job(userPartition));
+//			jobs.add(new CF_Job(userPartition,"job_" + i));
 			jobs.add(new CF_Social_Job(userPartition, "soc_int_job_" + i));
+			jobs.add(new CF_Social_Likes_Job(userPartition, "likes_"+i));
+			jobs.add(new CF_Social_Comments_Job(userPartition, "comments_"+i));
 		}
 		
 		Map<String, List<MetricsExporter>> metricExporterMap = new HashMap<String, List<MetricsExporter>>();

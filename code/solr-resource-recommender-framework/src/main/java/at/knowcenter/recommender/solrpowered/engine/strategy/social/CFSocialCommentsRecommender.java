@@ -1,11 +1,14 @@
 package at.knowcenter.recommender.solrpowered.engine.strategy.social;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -63,9 +66,6 @@ public class CFSocialCommentsRecommender implements RecommendStrategy {
 			response = SolrServiceContainer.getInstance().getSocialActionService().getSolrServer().query(solrParams);
 			step1ElapsedTime = response.getElapsedTime();
 			
-			List<String> users = new ArrayList<String>();
-			List<Double> boostings = new ArrayList<Double>();
-			
 			List<SocialAction> socialUsers = response.getBeans(SocialAction.class);
 			
 			if (socialUsers.size() == 0) {
@@ -82,19 +82,52 @@ public class CFSocialCommentsRecommender implements RecommendStrategy {
 				firstUser = null;
 			}
 			
-			for (SocialAction socialUser : socialUsers) {
-				if (firstUser != null) {
-					double jaccardSimilarity = calcJaccardSimilarity(firstUser, socialUser);
-					boostings.add(jaccardSimilarity);
-				} else {
-					boostings.add(1.0);
+			final Map<String, Integer> userInteractionMap = new HashMap<String, Integer>();
+
+			if (firstUser != null && firstUser.getUsersThatCommentedOnMyPost() != null) {
+				for(String userCommentedOnCurrentUser : firstUser.getUsersThatCommentedOnMyPost()) {
+					Integer userInteraction = userInteractionMap.get(userCommentedOnCurrentUser);
+					if (userInteraction == null) {
+						userInteraction = 0;
+					}
+					
+					userInteractionMap.put(userCommentedOnCurrentUser, userInteraction + 1);
 				}
-				
-				users.add(socialUser.getUserId());
 			}
 			
+			for (SocialAction socialUser : socialUsers) {
+				Integer userInteraction = userInteractionMap.get(socialUser.getUserId());
+				if (userInteraction == null) {
+					userInteraction = 0;
+				}
+				
+				if (socialUser.getUsersThatCommentedOnMyPost() != null) {
+					userInteraction += Collections.frequency(socialUser.getUsersThatCommentedOnMyPost(), query.getUser());
+				}
+				
+				userInteractionMap.put(socialUser.getUserId(), userInteraction);
+			}
 			
-			solrParams = getSTEP2Params(query, maxReuslts, users, boostings);
+			Comparator<String> interactionCountComparator = new Comparator<String>() {
+
+				
+				@Override
+				public int compare(String a, String b) {
+					if (userInteractionMap.get(a) > userInteractionMap.get(b)) {
+			            return -1;
+			        } else if (userInteractionMap.get(a).equals(userInteractionMap.get(b))){
+			        	return 0;
+			        } else {
+			            return 1;
+			        }
+				}
+				
+			};
+			
+	        TreeMap<String,Integer> sorted_map = new TreeMap<String,Integer>(interactionCountComparator);
+	        sorted_map.putAll(userInteractionMap);
+	        
+			solrParams = getSTEP2Params(query, maxReuslts, sorted_map);
 			// TODO Facet for confidence value
 			response = SolrServiceContainer.getInstance().getRecommendService().getSolrServer().query(solrParams);
 			// fill response object
@@ -137,10 +170,10 @@ public class CFSocialCommentsRecommender implements RecommendStrategy {
 	}
 
 	private ModifiableSolrParams getSTEP2Params(
-			RecommendQuery query, Integer maxReuslts, List<String> users, List<Double> boostings) {
+			RecommendQuery query, Integer maxReuslts, Map<String, Integer> userInteractionMap) {
 		ModifiableSolrParams solrParams = new ModifiableSolrParams();
 		
-		String queryString = createQueryToFindProdLikedBySimilarSocialUsers(users, boostings, contentFilter, MAX_USER_OCCURENCE_COUNT);
+		String queryString = createQueryToFindProdLikedBySimilarSocialUsers(userInteractionMap, contentFilter, MAX_USER_OCCURENCE_COUNT);
 		
 		String filterQueryString = 
 				RecommendationQueryUtils.buildFilterForContentBasedFiltering(contentFilter);
@@ -167,7 +200,7 @@ public class CFSocialCommentsRecommender implements RecommendStrategy {
 	}
 	
 	public static String createQueryToFindProdLikedBySimilarSocialUsers(
-			List<String> users, List<Double> boostings, ContentFilter contentFilter, int maxUserOccurence) {
+			Map<String, Integer> userInteractionMap, ContentFilter contentFilter, int maxUserOccurence) {
 		StringBuilder purchaseQueryBuilder = new StringBuilder();
 		StringBuilder markedAsFavoriteQueryBuilder = new StringBuilder();
 		StringBuilder viewedQueryBuilder = new StringBuilder();
@@ -178,12 +211,12 @@ public class CFSocialCommentsRecommender implements RecommendStrategy {
 		//  max users
 		int userOccurenceCount = 0;
 		
-		for (String user : users) {
+		for (String user : userInteractionMap.keySet()) {
 			if (userOccurenceCount >= maxUserOccurence) { break; }
 			
-			purchaseQueryBuilder.append("\"" + user + "\"^" + boostings.get(userOccurenceCount) + " OR ");
-			markedAsFavoriteQueryBuilder.append("\"" + user + "\"^" + boostings.get(userOccurenceCount) / 2 + " OR ");
-			viewedQueryBuilder.append("\"" + user + "\"^" + (boostings.get(userOccurenceCount) / 3) + " OR ");
+			purchaseQueryBuilder.append("\"" + user + "\"^" + userInteractionMap.get(user) + " OR ");
+			markedAsFavoriteQueryBuilder.append("\"" + user + "\"^" + (userInteractionMap.get(user) / 2) + " OR ");
+			viewedQueryBuilder.append("\"" + user + "\"^" + (userInteractionMap.get(user) / 3) + " OR ");
 			
 			userOccurenceCount++;
 		}

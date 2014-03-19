@@ -96,7 +96,8 @@ public class CFSocialStream3Recommender implements RecommendStrategy {
 			
 			
 			
-			params = initMLTParams("-" + socialStreamQueryBuilder.toString(), maxReuslts, streamBuilder.toString());
+			String mltFilterQuery = "-" + socialStreamQueryBuilder.toString() + "AND action_type:(\"WALLPOST\")"; 
+			params = initMLTParams(mltFilterQuery, maxReuslts, streamBuilder.toString());
 			MoreLikeThisRequest mltRequest = new MoreLikeThisRequest(params);
 			NamedList<Object> resLists = SolrServiceContainer.getInstance().getSocialStreamService().getSolrServer().request(mltRequest);
 
