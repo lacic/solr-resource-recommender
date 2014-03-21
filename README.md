@@ -1,10 +1,11 @@
-SocRecSearch - Social Resource Recommender Framework using Apache Solr
+SocRecSearch - Towards a Scalable Social Recommender Engine for
+Online Marketplaces: The Case of Apache Solr
 =========================
 
-This project aims at providing a simple to use and extend resource recommendation system.
-
 ## Description
-The aim of this work is to provide the community with a simple to use, generic resource-recommender framework to evaluate different resource-recommender algorithms, based on marketplace and social data, with a set of well-known std. IR metrics such as MAP, MRR, P@k, R@k, F1@k, nDCG, Diversity, User Coverage.
+Recent research has unveiled the importance of online social networks for improving the quality of recommenders in several domains, what has encouraged the research community to investigate ways to better exploit the social information for recommendations. However, there is a lack of work that offers details of frameworks that allow an easy integration of social data with traditional recommendation algorithms in order to yield a straight-forward and scalable implementation of new and existing systems. Furthermore, it is rare to find details of performance evaluations of recommender systems such as hardware and software specifications or benchmarking results of server loading tests.
+
+In this paper we intend to bridge this gap by presenting the details of a social recommender engine for online marketplaces built upon the well-known search engine Apache Solr. We describe our architecture and also share implementation details to facilitate the re-use of our approach by people implementing recommender systems. In addition, we evaluate our framework from two perspectives: (a) recommendation algorithms and data sources, and (b) system performance under server stress tests. Using a dataset from the SecondLife virtual world that has both trading and social interactions, we contribute to research in social recommenders by showing how certain social features allow to improve recommendations in online marketplaces. On the platform implementation side, our evaluation results can serve as a baseline to people searching for performance references in terms of scalability, model training and testing trade-offs, real-time server performance and the impact of model updates in a production system.
 
 
 
@@ -66,20 +67,20 @@ List<String> recommendedResourceIds = engine.getRecommendations(userID, productI
 
 Currently, the available recommendation algorithms that could be passed to the ```getRecommendations``` method are:
 
-* ```CollaborativeFiltering``` Item-Item Collaborative Filtering.
+* ```CollaborativeFiltering``` Item-based Collaborative Filtering.
 
-* ```ContentBased``` Content Based approach.
+* ```ContentBased``` Content-based approach.
 
 * ```MostPopular``` Most popular purchases. 
 
-* ```CF_Social``` User-User Collaborative Filtering user interactions. 
+* ```CF_Social``` User-based Collaborative Filtering utilizing user interactions. 
 
-* ```SocialStream``` User-User Collaborative Filtering using the social stream content. 
+* ```SocialStream``` User-based Collaborative Filtering utilizing the social stream content. 
 
 ## References
 * Lacic, E., Kowald, D., Parra, D., Kahr, M., & Trattner, C. (2014). [Towards a Scalable Social Recommender Engine for Online Marketplaces: The Case of Apache Solr](http://www.christophtrattner.info/pubs/ws12srs11.pdf), In Proceedings of the ACM World Wide Web Conference companion (WWW 2014). ACM.
 
 ## Contact
-* Emanuel Lacić, Know-Center, Graz University of Technology, elacic@know-center.at
+* Emanuel Lacic, Graz University of Technology, elacic@know-center.at
 * Christoph Trattner, Know-Center, Graz University of Technology, ctrattner@know-center.at
 
