@@ -25,8 +25,8 @@ The source-code can be directly checked-out through this repository. The code/so
 The framework is built and deployed via [Maven](http://maven.apache.org/). To install it, check out this repository and run mvn clean install in the code/solr-resource-recommender-framework/ folder. 
 
 ```
-$ git clone https://github.com/lacic/solr-resource-recommender.git solr-resource-recommender
-$ cd solr-resource-recommender/code/solr-resource-recommender-framework
+$ git clone https://github.com/learning-layers/SocRec.git soc-rec
+$ cd soc-rec/code/solr-resource-recommender-framework
 $ mvn clean install
 ```
 
@@ -34,7 +34,7 @@ After that, it is available to other projects by depending directly on it (consu
 
 ### Using the provided .jar file
 
-If you wish, you can download the solr-resource-recommender-framework-1.0-SNAPSHOT.jar and add it to your projects build path. Take note of the depended libraries which are needed for the framework and which can be found in the [pom.xml](https://github.com/lacic/solr-resource-recommender/blob/master/code/solr-resource-recommender-framework/pom.xml) file.
+If you wish, you can download the solr-resource-recommender-framework-1.0-SNAPSHOT.jar and add it to your projects build path. Take note of the depended libraries which are needed for the framework and which can be found in the [pom.xml](https://github.com/learning-layers/SocRec/blob/master/code/solr-resource-recommender-framework/pom.xml) file.
 
 ## How to use
 
