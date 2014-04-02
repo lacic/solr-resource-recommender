@@ -1,4 +1,4 @@
-Resource Recommender Framework using Apache Solr
+Social Resource Recommender Framework using Apache Solr
 =========================
 
 This project aims at providing a simple to use and extend resource recommendation system.
@@ -59,22 +59,6 @@ List<String> recommendedResourceIds = engine.getRecommendations(userID, productI
 ```
 
 
-**Example:**
-
-
-**Example:**
-
-Currently, the available recommendation algorithms that could be passed to the ```getRecommendations``` method are:
-
-* ```CollaborativeFiltering``` Item-Item Collaborative Filtering.
-
-* ```ContentBased``` Content Based approach.
-
-* ```MostPopular``` Most popular purchases. 
-
-* ```CF_Social``` User-User Collaborative Filtering user interactions. 
-
-* ```SocialStream``` User-User Collaborative Filtering using the social stream content. 
 
 ## References
 * Lacic, E., Kowald, D., Parra, D., Kahr, M., & Trattner, C. (2014). [Towards a Scalable Social Recommender Engine for Online Marketplaces: The Case of Apache Solr](http://www.christophtrattner.info/pubs/ws12srs11.pdf), In Proceedings of the ACM World Wide Web Conference companion (WWW 2014). ACM.
