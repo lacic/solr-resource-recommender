@@ -1,11 +1,9 @@
-Resource Recommender Framework using Apache Solr
+SocRecSearch - Towards a Scalable Social Recommender Engine for Online Marketplaces: The Case of Apache Solr
 =========================
 
-This project aims at providing a simple to use and extend resource recommendation system.
-
 ## Description
-The aim of this work is to provide the community with a simple to use, generic resource-recommender framework to evaluate different resource-recommender algorithms, based on marketplace and social data, with a set of well-known std. IR metrics such as MAP, MRR, P@k, R@k, F1@k, nDCG, Diversity, User Coverage.
-
+Recent research has unveiled the importance of online social networks for improving the quality of recommenders in several domains, what has encouraged the research community to investigate ways to better exploit the social information for recommendations. However, there is a lack of work that offers details of frameworks that allow an easy integration of social data with traditional recommendation algorithms in order to yield a straight-forward and scalable implementation of new and existing systems. With SocRecSearch we intend to bridge this gap. In particular with SocRecSearch we introduce a novel social recommender engine for online marketplaces that is built upon the well-know search engine Apache Solr. The framework offers a set of content and collaborative filtering approaches hybrid approaches to recommend items (e.g., products) to user not only in a personalized manner but also utilizing social data from the users social networks such as Facebook, Google+, or Twitter. To the best of our knowledge SocRecSearch is the first open source recommender engine for online marketplaces that relies on
+std. search software such as Apache Solr and is able to utilize social data from user to increase the recommender accuracy.
 
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
@@ -66,20 +64,20 @@ List<String> recommendedResourceIds = engine.getRecommendations(userID, productI
 
 Currently, the available recommendation algorithms that could be passed to the ```getRecommendations``` method are:
 
-* ```CollaborativeFiltering``` Item-Item Collaborative Filtering.
+* ```CollaborativeFiltering``` Item-based Collaborative Filtering.
 
-* ```ContentBased``` Content Based approach.
+* ```ContentBased``` Content-based approach.
 
 * ```MostPopular``` Most popular purchases. 
 
-* ```CF_Social``` User-User Collaborative Filtering user interactions. 
+* ```CF_Social``` User-based Collaborative Filtering utilizing user interactions. 
 
-* ```SocialStream``` User-User Collaborative Filtering using the social stream content. 
+* ```SocialStream``` User-based Collaborative Filtering utilizing the social stream content. 
 
 ## References
 * Lacic, E., Kowald, D., Parra, D., Kahr, M., & Trattner, C. (2014). [Towards a Scalable Social Recommender Engine for Online Marketplaces: The Case of Apache Solr](http://www.christophtrattner.info/pubs/ws12srs11.pdf), In Proceedings of the ACM World Wide Web Conference companion (WWW 2014). ACM.
 
 ## Contact
-* Emanuel Lacić, Know-Center, Graz University of Technology, elacic@know-center.at
+* Emanuel Lacic, Graz University of Technology, elacic@know-center.at
 * Christoph Trattner, Know-Center, Graz University of Technology, ctrattner@know-center.at
 
