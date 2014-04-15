@@ -49,6 +49,16 @@ public class SocialAction implements Serializable  {
 	@Field("users_that_liked_me")
 	private List<String> usersThatLikedMe;
 	
+	@Field("users_that_posted_on_my_wall_count")
+	private Integer usersThatPostedOnMyWallCount = 0;
+	@Field("users_that_posted_on_my_wall")
+	private List<String> usersThatPostedOnMyWall;
+	
+	@Field("users_that_posted_a_snapshot_to_me_count")
+	private Integer usersThatPostedASnapshopToMeCount = 0;
+	@Field("users_that_posted_a_snapshot_to_me")
+	private List<String> usersThatPostedASnapshopToMe;
+	
 	@Field("id")
 	private String userId;	
 	
@@ -142,7 +152,7 @@ public class SocialAction implements Serializable  {
 
 	@Override
 	public String toString() {
-		return "SocialAction [userId=" + userId + "usersThatLikedMe=" + usersThatLikedMe + ", usersThatCommentedOnMyPost="
+		return "SocialAction [userId=" + userId + " usersThatLikedMe=" + usersThatLikedMe + ", usersThatCommentedOnMyPost="
 				+ usersThatCommentedOnMyPost + ", itemId=" + userId ;
 	}
 	
@@ -167,6 +177,91 @@ public class SocialAction implements Serializable  {
 			usersThatCommentedOnMyPostCount = usersThatCommentedOnMyPost.size();
 		}
 	}
+
+
+	public Integer getUsersThatPostedOnMyWallCount() {
+		return usersThatPostedOnMyWallCount;
+	}
+
+
+	public void setUsersThatPostedOnMyWallCount(Integer usersThatPostedOnMyWallCount) {
+		this.usersThatPostedOnMyWallCount = usersThatPostedOnMyWallCount;
+	}
+
+
+	public List<String> getUsersThatPostedOnMyWall() {
+		return usersThatPostedOnMyWall;
+	}
+
+
+	public void setUsersThatPostedOnMyWall(List<String> usersThatPostedOnMyWall) {
+		if (usersThatPostedOnMyWall == null){
+			this.usersThatPostedOnMyWallCount = 0;
+			this.usersThatPostedOnMyWall = null;
+			return;
+		}
+		
+		if (usersThatPostedOnMyWall.size() == 1 && usersThatPostedOnMyWall.get(0).equals("")){
+			usersThatPostedOnMyWall = new ArrayList<String>();
+		}
+		
+		this.usersThatPostedOnMyWallCount = usersThatPostedOnMyWall.size();
+		this.usersThatPostedOnMyWall = usersThatPostedOnMyWall;
+	}
 	
+	public void addUserThatPostedOnMyWall(String userThatPostedOnMyWall) {
+		if (userThatPostedOnMyWall != null) {
+			if (usersThatPostedOnMyWall == null){
+				this.usersThatPostedOnMyWall = new ArrayList<String>();
+			}
+			
+			usersThatPostedOnMyWall.add(userThatPostedOnMyWall);
+			usersThatPostedOnMyWallCount = usersThatPostedOnMyWall.size();
+		}
+	}
+
+
+	public Integer getUsersThatPostedASnapshopToMeCount() {
+		return usersThatPostedASnapshopToMeCount;
+	}
+
+
+	public void setUsersThatPostedASnapshopToMeCount(
+			Integer usersThatPostedASnapshopToMeCount) {
+		this.usersThatPostedASnapshopToMeCount = usersThatPostedASnapshopToMeCount;
+	}
+
+
+	public List<String> getUsersThatPostedASnapshopToMe() {
+		return usersThatPostedASnapshopToMe;
+	}
+
+
+	public void setUsersThatPostedASnapshopToMe(
+			List<String> usersThatPostedASnapshopToMe) {
+		if (usersThatPostedASnapshopToMe == null){
+			this.usersThatPostedASnapshopToMeCount = 0;
+			this.usersThatPostedASnapshopToMe = null;
+			return;
+		}
+		
+		if (usersThatPostedASnapshopToMe.size() == 1 && usersThatPostedASnapshopToMe.get(0).equals("")){
+			usersThatPostedASnapshopToMe = new ArrayList<String>();
+		}
+		
+		this.usersThatPostedASnapshopToMeCount = usersThatPostedASnapshopToMe.size();
+		this.usersThatPostedASnapshopToMe = usersThatPostedASnapshopToMe;
+	}
+	
+	public void addUserThatPostedASnapshopToMe(String userThatPostedASnapshopToMe) {
+		if (userThatPostedASnapshopToMe != null) {
+			if (usersThatPostedASnapshopToMe == null){
+				this.usersThatPostedASnapshopToMe = new ArrayList<String>();
+			}
+			
+			usersThatPostedASnapshopToMe.add(userThatPostedASnapshopToMe);
+			usersThatPostedASnapshopToMeCount = usersThatPostedASnapshopToMe.size();
+		}
+	}
     
 }

@@ -67,7 +67,7 @@ public abstract class SolrService<Q, I, R extends SolrResponse<?>> {
 	 * If there are already documents with the same ids they will be overwritten
 	 * @param searchItem
 	 */
-	public abstract void updateDocuments(List<I> searchItems, SearchServerBulkMessage searchServerBulkUpload);
+	public abstract void writeDocuments(List<I> searchItems, SearchServerBulkMessage searchServerBulkUpload);
 		
 	/**
 	 * Updates/adds a list of Documents as beans to the index in an own thread
@@ -115,7 +115,12 @@ public abstract class SolrService<Q, I, R extends SolrResponse<?>> {
 	/**
 	 * This removes an search entry by its id
 	 */
-	public abstract void removeElementById(String id, String language);
+	public abstract void removeElementById(String id);
+	
+	/**
+	 * This removes an search entry by its ids
+	 */
+	public abstract void removeElementByIds(List<String> id);
 	
 	/**
 	 * This removes an search entry by its id
@@ -123,6 +128,20 @@ public abstract class SolrService<Q, I, R extends SolrResponse<?>> {
 	protected void removeElementById(String id, SolrServer solrServer){
 		try {
 			solrServer.deleteById(id);
+			solrServer.commit();
+		} catch (SolrServerException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * This removes an search entry by its id
+	 */
+	protected void removeElementByIds(List<String> ids, SolrServer solrServer){
+		try {
+			solrServer.deleteById(ids);
 			solrServer.commit();
 		} catch (SolrServerException e) {
 			e.printStackTrace();
@@ -171,18 +190,22 @@ public abstract class SolrService<Q, I, R extends SolrResponse<?>> {
 	public QueryResponse findElementsById(List<String> ids, SolrServer solrServer) {
 		QueryResponse response = null;
 		ModifiableSolrParams solrParams = new ModifiableSolrParams();
-		StringBuilder queryBuilder = new StringBuilder();
+		StringBuilder queryBuilder = new StringBuilder("id:(");
 		for (String id : ids) {
-			queryBuilder.append("id:(\"" + id + "\") OR ");
+			queryBuilder.append(id + " OR ");
 		}
 		if (ids != null && ids.size() > 0) {
-			queryBuilder.replace(queryBuilder.length() - 3, queryBuilder.length(), "");
+			queryBuilder.replace(queryBuilder.length() - 3, queryBuilder.length(), ")");
+		} else {
+			queryBuilder.append("\"\")");
 		}
+		
 		solrParams.set("q", queryBuilder.toString());
 
 		try {
 			response = solrServer.query(solrParams);
-		} catch (SolrServerException e) {
+		} catch (Exception e) {
+			System.out.println(solrParams);
 			e.printStackTrace();
 		}
 		

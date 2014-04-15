@@ -98,7 +98,7 @@ public class OwnSocialActionService  extends SolrService<SocialActionQuery, Soci
 	 * if there are already documents with the same ids they will be overwritten
 	 * @param searchItem
 	 */
-	public void updateDocuments(List<SocialAction> socialActions, SearchServerBulkMessage searchServerBulkUpload) {
+	public void writeDocuments(List<SocialAction> socialActions, SearchServerBulkMessage searchServerBulkUpload) {
 		long start = System.nanoTime();
 		
 		Map<String, OwnSocialAction> userSocialActionToStoreMap = new HashMap<String, OwnSocialAction>();
@@ -151,11 +151,11 @@ public class OwnSocialActionService  extends SolrService<SocialActionQuery, Soci
 	
 
 	@Override
-	public void removeElementById(String id, String language) {
-		if (language != null) {
-			id += "_" + language;
-		}
+	public void removeElementById(String id) {
 		removeElementById(id, solrServer);
-		
+	}
+	@Override
+	public void removeElementByIds(List<String> ids) {
+		removeElementByIds(ids, solrServer);
 	}
 }

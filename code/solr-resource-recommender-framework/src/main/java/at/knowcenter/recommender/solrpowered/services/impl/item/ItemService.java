@@ -285,7 +285,7 @@ public class ItemService extends SolrService<ItemQuery, Item, ItemResponse>{
 	 * if there are already documents with the same ids they will be overwritten
 	 * @param searchItem
 	 */
-	public void updateDocuments(List<Item> searchItems, SearchServerBulkMessage searchServerBulkUpload) {
+	public void writeDocuments(List<Item> searchItems, SearchServerBulkMessage searchServerBulkUpload) {
 		for (Item item : searchItems) {
 			ItemQuery q = new ItemQuery();
 			q.setQuery("id:" + item.getItemId());
@@ -519,11 +519,12 @@ public class ItemService extends SolrService<ItemQuery, Item, ItemResponse>{
 	}
 
 	@Override
-	public void removeElementById(String id, String language) {
-		if (language != null) {
-			id += "_" + language;
-		}
+	public void removeElementById(String id) {
 		removeElementById(id, solrServer);
-		
+	}
+	
+	@Override
+	public void removeElementByIds(List<String> ids) {
+		removeElementByIds(ids, solrServer);
 	}
 }

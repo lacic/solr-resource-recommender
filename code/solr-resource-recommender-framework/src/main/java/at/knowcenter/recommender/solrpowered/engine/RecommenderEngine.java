@@ -14,38 +14,45 @@ import at.knowcenter.recommender.solrpowered.configuration.ConfigUtils;
 import at.knowcenter.recommender.solrpowered.configuration.RecommenderModule;
 import at.knowcenter.recommender.solrpowered.engine.filtering.ContentFilter;
 import at.knowcenter.recommender.solrpowered.engine.filtering.PrecedingItemEvaluation;
-import at.knowcenter.recommender.solrpowered.engine.strategy.CFRecommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.CNRecommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.MostPopularRecommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.PrecedingItemBasedRecommender;
 import at.knowcenter.recommender.solrpowered.engine.strategy.RecommendStrategy;
 import at.knowcenter.recommender.solrpowered.engine.strategy.StrategyType;
-import at.knowcenter.recommender.solrpowered.engine.strategy.cnapproaches.CNRecommenderWeightedDescription;
-import at.knowcenter.recommender.solrpowered.engine.strategy.cnapproaches.CNRecommenderWeightedDescriptionName;
-import at.knowcenter.recommender.solrpowered.engine.strategy.cnapproaches.CNRecommenderWeightedDescriptionNameTags;
-import at.knowcenter.recommender.solrpowered.engine.strategy.cnapproaches.CNRecommenderWeightedDescriptionTags;
-import at.knowcenter.recommender.solrpowered.engine.strategy.cnapproaches.CNRecommenderWeightedName;
-import at.knowcenter.recommender.solrpowered.engine.strategy.cnapproaches.CNRecommenderWeightedNameDescription;
-import at.knowcenter.recommender.solrpowered.engine.strategy.cnapproaches.CNRecommenderWeightedNameDescriptionTags;
-import at.knowcenter.recommender.solrpowered.engine.strategy.cnapproaches.CNRecommenderWeightedNameTags;
-import at.knowcenter.recommender.solrpowered.engine.strategy.cnapproaches.CNRecommenderWeightedTags;
-import at.knowcenter.recommender.solrpowered.engine.strategy.social.CFCategoryRecommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.social.CFOwnSocialRecommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.social.CFSocialCommentsRecommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.social.CFSocialInteractionsRecommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.social.CFSocialLikesRecommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.social.CFSocialStream3Recommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.social.UserBasedCustomerGroupsRecommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.social.UserBasedInterestsCustomerGroupRecommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.social.UserBasedInterestsRecommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.social.UserBasedRecommenderWithoutMLT;
-import at.knowcenter.recommender.solrpowered.engine.strategy.social.UserBasedWithoutMLTGroupRecommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.social.UserBasedWithoutMLTInterestsRecommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.social.combined.CFPurchWithSocCommonNeighborhoodRecommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.social.combined.CFPurchWithSocCommonNeighborhoodReplacedRecommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.social.combined.CFPurchWithSocCommonNeighborhoodSummedRecommender;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.MPReviewBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.MostPopularRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.PrecedingItemBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cb.NameDescriptionBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cb.DescriptionBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cb.NameBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cb.TagsBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cb.combinations.DescriptionNameWeightedBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cb.combinations.DescriptionNameTagsWeightedBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cb.combinations.DescriptionTagsWeightedBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cb.combinations.NameDescriptionWeightedBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cb.combinations.NameDescriptionTagsWeightedBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cb.combinations.NameTagsWeightedBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.CategoryBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.PurchasesBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.ReviewBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.GroupWithoutMLTRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.InterestsWithoutMLTRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.OwnSocialRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.CommentsBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.InteractionsBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.LikesBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.SnapshotBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.UserBasedRecommenderWithoutMLT;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.WallpostBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.combined.CFPurchWithSocCommonNeighborhoodRecommender;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.combined.CFPurchWithSocCommonNeighborhoodReplacedRecommender;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.combined.CFPurchWithSocCommonNeighborhoodSummedRecommender;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cn.BiographyBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cn.GroupBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cn.InterestsAndGroupBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cn.InterestsBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cn.RealBiographyBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cn.SocialStream3Rec;
 import at.knowcenter.recommender.solrpowered.engine.utils.RecommendationQueryUtils;
 import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
+import at.knowcenter.recommender.solrpowered.services.cleaner.DataFetcher;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendQuery;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendResponse;
 
@@ -68,42 +75,55 @@ public class RecommenderEngine implements RecommenderOperations{
 	 */
 	private void initStrategies() {
 		recommendStrategies = new HashMap<StrategyType, RecommendStrategy>();
-		recommendStrategies.put(StrategyType.CollaborativeFiltering, new CFRecommender());
-		recommendStrategies.put(StrategyType.ContentBased, new CNRecommender());
-		recommendStrategies.put(StrategyType.MostPopular, new MostPopularRecommender());
-		recommendStrategies.put(StrategyType.PrecedingItemBased, new PrecedingItemBasedRecommender());
-		recommendStrategies.put(StrategyType.CN_WeightName, new CNRecommenderWeightedName());
-		recommendStrategies.put(StrategyType.CN_WeightDescription, new CNRecommenderWeightedDescription());
-		recommendStrategies.put(StrategyType.CN_WeightTags, new CNRecommenderWeightedTags());
-		recommendStrategies.put(StrategyType.CN_WeightNameDescription, new CNRecommenderWeightedNameDescription());
-		recommendStrategies.put(StrategyType.CN_WeightDescriptionName, new CNRecommenderWeightedDescriptionName());
-		recommendStrategies.put(StrategyType.CN_WeightNameTags, new CNRecommenderWeightedNameTags());
-		recommendStrategies.put(StrategyType.CN_WeightDescriptionTags, new CNRecommenderWeightedDescriptionTags());
-		recommendStrategies.put(StrategyType.CN_WeightDescriptionNameTags, new CNRecommenderWeightedDescriptionNameTags());
-		recommendStrategies.put(StrategyType.CN_WeightNameDescriptionTags, new CNRecommenderWeightedNameDescriptionTags());
-		recommendStrategies.put(StrategyType.CF_Social, new CFSocialInteractionsRecommender());
-		recommendStrategies.put(StrategyType.CF_Own_Social, new CFOwnSocialRecommender());
-		recommendStrategies.put(StrategyType.CF_Social_Likes, new CFSocialLikesRecommender());
-		recommendStrategies.put(StrategyType.CF_Social_Comments, new CFSocialCommentsRecommender());
+		recommendStrategies.put(StrategyType.CollaborativeFiltering, new PurchasesBasedRec());
+		recommendStrategies.put(StrategyType.ContentBased, new NameDescriptionBasedRec());
+		recommendStrategies.put(StrategyType.MostPopular, new MostPopularRec());
+		recommendStrategies.put(StrategyType.PrecedingItemBased, new PrecedingItemBasedRec());
+		recommendStrategies.put(StrategyType.CN_WeightName, new NameBasedRec());
+		recommendStrategies.put(StrategyType.CN_WeightDescription, new DescriptionBasedRec());
+		recommendStrategies.put(StrategyType.CN_WeightTags, new TagsBasedRec());
+		recommendStrategies.put(StrategyType.CN_WeightNameDescription, new NameDescriptionWeightedBasedRec());
+		recommendStrategies.put(StrategyType.CN_WeightDescriptionName, new DescriptionNameWeightedBasedRec());
+		recommendStrategies.put(StrategyType.CN_WeightNameTags, new NameTagsWeightedBasedRec());
+		recommendStrategies.put(StrategyType.CN_WeightDescriptionTags, new DescriptionTagsWeightedBasedRec());
+		recommendStrategies.put(StrategyType.CN_WeightDescriptionNameTags, new DescriptionNameTagsWeightedBasedRec());
+		recommendStrategies.put(StrategyType.CN_WeightNameDescriptionTags, new NameDescriptionTagsWeightedBasedRec());
+		recommendStrategies.put(StrategyType.CF_Social, new InteractionsBasedRec());
+		recommendStrategies.put(StrategyType.CF_Own_Social, new OwnSocialRec());
+		recommendStrategies.put(StrategyType.CF_Social_Likes, new LikesBasedRec());
+		recommendStrategies.put(StrategyType.CF_Social_Comments, new CommentsBasedRec());
 		
-		recommendStrategies.put(StrategyType.UB_Interests, new UserBasedInterestsRecommender());
-		recommendStrategies.put(StrategyType.UB_CustomerGroups, new UserBasedCustomerGroupsRecommender());
-		recommendStrategies.put(StrategyType.UB_InterestsCustomerGroup, new UserBasedInterestsCustomerGroupRecommender());
+		recommendStrategies.put(StrategyType.UB_Interests_MLT, new InterestsBasedRec());
+		recommendStrategies.put(StrategyType.UB_CustomerGroups, new GroupBasedRec());
+		recommendStrategies.put(StrategyType.UB_InterestsCustomerGroup, new InterestsAndGroupBasedRec());
 		recommendStrategies.put(StrategyType.UB_WithOutMLT, new UserBasedRecommenderWithoutMLT());
 		
-		recommendStrategies.put(StrategyType.UB_WithOutMLTInterests, new UserBasedWithoutMLTInterestsRecommender());
-		recommendStrategies.put(StrategyType.UB_WithOutMLTGroups, new UserBasedWithoutMLTGroupRecommender());
+		recommendStrategies.put(StrategyType.UB_WithOutMLTInterests, new InterestsWithoutMLTRec());
+		recommendStrategies.put(StrategyType.UB_WithOutMLTGroups, new GroupWithoutMLTRec());
 		
 		
-		recommendStrategies.put(StrategyType.CF_Categories, new CFCategoryRecommender());
-		recommendStrategies.put(StrategyType.SocialStream, new CFSocialStream3Recommender());
+		recommendStrategies.put(StrategyType.CF_Categories, new CategoryBasedRec());
+		recommendStrategies.put(StrategyType.SocialStream, new SocialStream3Rec());
 		recommendStrategies.put(StrategyType.CFPurchWithSocCommonNeighborhoodRecommender, 
 				new CFPurchWithSocCommonNeighborhoodRecommender());
 		recommendStrategies.put(StrategyType.CFPurchWithSocCommonNeighborhoodSummedRecommender, 
 				new CFPurchWithSocCommonNeighborhoodSummedRecommender());
 		recommendStrategies.put(StrategyType.CFPurchWithSocCommonNeighborhoodReplacedRecommender, 
 				new CFPurchWithSocCommonNeighborhoodReplacedRecommender());
+		recommendStrategies.put(StrategyType.MostPopular_Review, new MPReviewBasedRec());
+		recommendStrategies.put(StrategyType.CF_Review, new ReviewBasedRec());
+		
+		recommendStrategies.put(StrategyType.BiographyBasedMLT, new BiographyBasedRec());
+		recommendStrategies.put(StrategyType.RealBiographyBasedMLT, new RealBiographyBasedRec());
+		
+		recommendStrategies.put(StrategyType.WallPostInteraction, new WallpostBasedRec());
+		recommendStrategies.put(StrategyType.SnapshotInteraction, new SnapshotBasedRec());
+
 		setRecommendStrategy(StrategyType.CollaborativeFiltering);
+	}
+	
+	public RecommendStrategy getApproach(StrategyType type) {
+		return recommendStrategies.get(type);
 	}
 	
 	/**
@@ -215,9 +235,10 @@ public class RecommenderEngine implements RecommenderOperations{
 		List<String> alreadyBoughtProducts = null;
 		// STEP 0 - get products from a user
 		if (userID != null ) {
-			QueryResponse response = SolrServiceContainer.getInstance().getRecommendService().findItemsFromUser(userID, "users_purchased", SolrServiceContainer.getInstance().getRecommendService().getSolrServer());
-
-			alreadyBoughtProducts = RecommendationQueryUtils.createUserProductsList(response);
+//			QueryResponse response = SolrServiceContainer.getInstance().getRecommendService().findItemsFromUser(userID, "users_purchased", SolrServiceContainer.getInstance().getRecommendService().getSolrServer());
+//
+//			alreadyBoughtProducts = RecommendationQueryUtils.createUserProductsList(response);
+			alreadyBoughtProducts = DataFetcher.getRatedProductsFromUser(userID);
 			for (RecommendStrategy strategy : getRecommendStrategies()) {
 				strategy.setAlreadyPurchasedResources(alreadyBoughtProducts);
 			}

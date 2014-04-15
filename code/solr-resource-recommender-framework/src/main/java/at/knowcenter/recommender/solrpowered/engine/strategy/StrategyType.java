@@ -23,7 +23,7 @@ public enum StrategyType {
 	CN_WeightDescriptionNameTags, 
 	CF_Social, 
 	CF_Own_Social, 
-	UB_Interests, 
+	UB_Interests_MLT, 
 	UB_CustomerGroups,
 	UB_InterestsCustomerGroup, 
 	UB_WithOutMLT, 
@@ -33,6 +33,6 @@ public enum StrategyType {
 	SocialStream, 
 	CFPurchWithSocCommonNeighborhoodRecommender,
 	CFPurchWithSocCommonNeighborhoodSummedRecommender,
-	CFPurchWithSocCommonNeighborhoodReplacedRecommender, UB_WithOutMLTInterests, UB_WithOutMLTGroups
+	CFPurchWithSocCommonNeighborhoodReplacedRecommender, UB_WithOutMLTInterests, UB_WithOutMLTGroups, CF_Physical_Region_Distance, CF_Review, MostPopular_Review, BiographyBasedMLT, RealBiographyBasedMLT, WallPostInteraction, SnapshotInteraction
 
 }

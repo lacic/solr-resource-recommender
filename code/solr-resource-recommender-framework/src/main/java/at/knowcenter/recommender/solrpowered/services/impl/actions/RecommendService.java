@@ -9,36 +9,37 @@ import java.util.Map;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.ModifiableSolrParams;
 
 import at.knowcenter.recommender.solrpowered.engine.RecommenderOperations;
 import at.knowcenter.recommender.solrpowered.engine.filtering.ContentFilter;
 import at.knowcenter.recommender.solrpowered.engine.filtering.PrecedingItemEvaluation;
-import at.knowcenter.recommender.solrpowered.engine.strategy.CFRecommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.CNRecommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.MostPopularRecommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.PrecedingItemBasedRecommender;
 import at.knowcenter.recommender.solrpowered.engine.strategy.RecommendStrategy;
 import at.knowcenter.recommender.solrpowered.engine.strategy.StrategyType;
-import at.knowcenter.recommender.solrpowered.engine.strategy.cnapproaches.CNRecommenderWeightedDescription;
-import at.knowcenter.recommender.solrpowered.engine.strategy.cnapproaches.CNRecommenderWeightedDescriptionName;
-import at.knowcenter.recommender.solrpowered.engine.strategy.cnapproaches.CNRecommenderWeightedDescriptionNameTags;
-import at.knowcenter.recommender.solrpowered.engine.strategy.cnapproaches.CNRecommenderWeightedDescriptionTags;
-import at.knowcenter.recommender.solrpowered.engine.strategy.cnapproaches.CNRecommenderWeightedName;
-import at.knowcenter.recommender.solrpowered.engine.strategy.cnapproaches.CNRecommenderWeightedNameDescription;
-import at.knowcenter.recommender.solrpowered.engine.strategy.cnapproaches.CNRecommenderWeightedNameDescriptionTags;
-import at.knowcenter.recommender.solrpowered.engine.strategy.cnapproaches.CNRecommenderWeightedNameTags;
-import at.knowcenter.recommender.solrpowered.engine.strategy.cnapproaches.CNRecommenderWeightedTags;
-import at.knowcenter.recommender.solrpowered.engine.strategy.social.CFCategoryRecommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.social.CFOwnSocialRecommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.social.CFSocialCommentsRecommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.social.CFSocialInteractionsRecommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.social.CFSocialLikesRecommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.social.CFSocialStream3Recommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.social.UserBasedCustomerGroupsRecommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.social.UserBasedInterestsCustomerGroupRecommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.social.UserBasedInterestsRecommender;
-import at.knowcenter.recommender.solrpowered.engine.strategy.social.UserBasedRecommenderWithoutMLT;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.MostPopularRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.PrecedingItemBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cb.NameDescriptionBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cb.DescriptionBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cb.NameBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cb.TagsBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cb.combinations.DescriptionNameWeightedBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cb.combinations.DescriptionNameTagsWeightedBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cb.combinations.DescriptionTagsWeightedBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cb.combinations.NameDescriptionWeightedBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cb.combinations.NameDescriptionTagsWeightedBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cb.combinations.NameTagsWeightedBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.CategoryBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.PurchasesBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.OwnSocialRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.CommentsBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.InteractionsBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.LikesBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.UserBasedRecommenderWithoutMLT;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cn.GroupBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cn.InterestsAndGroupBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cn.InterestsBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cn.SocialStream3Rec;
 import at.knowcenter.recommender.solrpowered.engine.utils.RecommendationQueryUtils;
 import at.knowcenter.recommender.solrpowered.engine.utils.SolrUtils;
 import at.knowcenter.recommender.solrpowered.model.CustomerAction;
@@ -103,7 +104,7 @@ public class RecommendService extends SolrService<RecommendQuery, CustomerAction
 	}
 
 	@Override
-	public void updateDocuments(List<CustomerAction> searchItems,
+	public void writeDocuments(List<CustomerAction> searchItems,
 			SearchServerBulkMessage searchServerBulkUpload) {
 		long start = System.nanoTime();
 		Map<String, CustomerAction> caToStoreMap = new HashMap<String, CustomerAction>();
@@ -196,7 +197,32 @@ public class RecommendService extends SolrService<RecommendQuery, CustomerAction
 
 
 	@Override
-	public void removeElementById(String id, String language) {
+	public void removeElementById(String id) {
 		removeElementById(id, solrServer);
+	}
+	@Override
+	public void removeElementByIds(List<String> ids) {
+		removeElementByIds(ids, solrServer);
+	}
+	
+	public void deleteAllSolrData() {
+	    try {
+	    	solrServer.deleteByQuery("*:*", 500);
+	    } catch (SolrServerException e) {
+	      throw new RuntimeException("Failed to delete data in Solr. "
+	          + e.getMessage(), e);
+	    } catch (IOException e) {
+	      throw new RuntimeException("Failed to delete data in Solr. "
+	          + e.getMessage(), e);
+	    }
+	}
+	
+	public void write(List<CustomerAction> searchItems) {
+		try {
+			solrServer.addBeans(searchItems);
+			solrServer.commit();
+		} catch (SolrServerException | IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -61,7 +61,7 @@ public class Customer implements Serializable {
 	@Field("active")
 	private boolean active = true;
 	
-    private Sex sex;
+    private Sex sex = Sex.EMPTY;
     @Field("dateofbirth")
     private Date dateOfBirth; 
     @Field("zip")
@@ -82,12 +82,23 @@ public class Customer implements Serializable {
     private String work;
     @Field("language")
     private String language;
+    
     @Field("interests")
     private List<String> interests;
+    @Field("interests_content")
+    private String interestsContent;
+    @Field("biography")
+    private String biography;
+    @Field("real_biography")
+    private String realBiography;
     
     @Field("purchased_categories")
     private List<String> purchasedCategories;
 	
+
+    @Field("favorite_regions")
+    private List<String> favoriteRegions;
+    
     @Field("score")
     private Float score;
     //__________________________________________________________________________
@@ -100,28 +111,6 @@ public class Customer implements Serializable {
 		this.purchasedCategories = purchasedCategories;
 	}
 	
-    /*
-    @Field("firstName")
-    private String firstName;
-    @Field("secondName")
-    private String secondName;
-    @Field("lastName")
-    private String lastName;
-    @Field("age")
-    private Integer age;
-    @Field("languages")
-    private List<String> languages;
-    private List<Address> addresses;
-    private List<CustomerContact> contacts;
-    private List<CustomerGroup>groups;
-    private enum DEVICE_TYPE {PC, PHONE, TABLET}
-    List<DEVICE_TYPE>devices;
-    @Field("tags")
-	private List<String>tags;
-    private List<String>searchTerms;
-    */
-    //__________________________________________________________________________
-    
 
 	public Customer(){    	
     }
@@ -304,5 +293,38 @@ public class Customer implements Serializable {
 				+ language + "]";
 	}
 
+	public String getInterestsContent() {
+		return interestsContent;
+	}
+
+	public void setInterestsContent(String interestsContent) {
+		this.interestsContent = interestsContent;
+	}
+
+	public String getBiography() {
+		return biography;
+	}
+
+	public void setBiography(String biography) {
+		this.biography = biography;
+	}
+
+	public String getRealBiography() {
+		return realBiography;
+	}
+
+	public void setRealBiography(String realBiography) {
+		this.realBiography = realBiography;
+	}
+
+	public List<String> getFavoriteRegions() {
+		return favoriteRegions;
+	}
+
+	public void setFavoriteRegions(List<String> favoriteRegions) {
+		this.favoriteRegions = favoriteRegions;
+	}
+
+	
 } // end class Customer
 
