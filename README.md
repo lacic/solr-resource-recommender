@@ -57,22 +57,7 @@ List<String> recommendedResourceIds = engine.getRecommendations(userID, productI
 ```
 
 
-**Example:**
 
-
-**Example:**
-
-Currently, the available recommendation algorithms that could be passed to the ```getRecommendations``` method are:
-
-* ```CollaborativeFiltering``` Item-based Collaborative Filtering.
-
-* ```ContentBased``` Content-based approach.
-
-* ```MostPopular``` Most popular purchases. 
-
-* ```CF_Social``` User-based Collaborative Filtering utilizing user interactions. 
-
-* ```SocialStream``` User-based Collaborative Filtering utilizing the social stream content. 
 
 ## References
 * Lacic, E., Kowald, D., Parra, D., Kahr, M., & Trattner, C. (2014). [Towards a Scalable Social Recommender Engine for Online Marketplaces: The Case of Apache Solr](http://www.christophtrattner.info/pubs/ws12srs11.pdf), In Proceedings of the ACM World Wide Web Conference companion (WWW 2014). ACM.
