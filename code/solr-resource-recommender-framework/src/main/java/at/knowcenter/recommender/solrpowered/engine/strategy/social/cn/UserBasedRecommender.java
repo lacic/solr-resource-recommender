@@ -63,7 +63,7 @@ public abstract class UserBasedRecommender implements RecommendStrategy {
 			response = SolrServiceContainer.getInstance().getUserService().getSolrServer().query(solrParams);
 			step1ElapsedTime = response.getElapsedTime();
 			
-			Map<String, Float> customerScoringMap = new HashMap<String, Float>();
+			Map<String, Double> customerScoringMap = new HashMap<String, Double>();
 			
 			
 			if(response != null){
@@ -80,7 +80,7 @@ public abstract class UserBasedRecommender implements RecommendStrategy {
 					for (SolrDocument solrDocument : mltsPerDoc) {
 						customerScoringMap.put(
 								RecommendationQueryUtils.serializeSolrDocToId(solrDocument),
-								RecommendationQueryUtils.serializeSolrDocForScore(solrDocument));
+								(double)RecommendationQueryUtils.serializeSolrDocForScore(solrDocument));
 					}
 				}
 			}
@@ -108,7 +108,7 @@ public abstract class UserBasedRecommender implements RecommendStrategy {
 	
 	protected abstract ModifiableSolrParams createMLTParams(String query, String filterQuery, int maxResultCount);
 
-	private ModifiableSolrParams getSTEP2Params(RecommendQuery query, Integer maxReuslts, Map<String, Float> customerScoringMap) {
+	private ModifiableSolrParams getSTEP2Params(RecommendQuery query, Integer maxReuslts, Map<String, Double> customerScoringMap) {
 		ModifiableSolrParams solrParams = new ModifiableSolrParams();
 		
 		String queryString = RecommendationQueryUtils.createQueryToFindProdLikedBySimilarSocialUsers(customerScoringMap, contentFilter, MAX_USER_OCCURENCE_COUNT);

@@ -215,7 +215,7 @@ public class RecommendationQueryUtils {
 	
 	
 	public static String createQueryToFindProdLikedBySimilarSocialUsers(
-			Map<String, Float> userInteractionMap, ContentFilter contentFilter, int maxUserOccurence) {
+			Map<String, Double> userInteractionMap, ContentFilter contentFilter, int maxUserOccurence) {
 		String query = createQueryToFindProdLikedBySimilarUsers(
 				userInteractionMap, contentFilter, ReviewBasedRec.USERS_RATED_5_FIELD, maxUserOccurence, 1.0);
 		query += " OR " + createQueryToFindProdLikedBySimilarUsers(
@@ -231,7 +231,7 @@ public class RecommendationQueryUtils {
 	}
 	
 	private static String createQueryToFindProdLikedBySimilarUsers(
-			Map<String, Float> userInteractionMap, 
+			Map<String, Double> userInteractionMap, 
 			ContentFilter contentFilter,
 			String usersFieldName,
 			int maxUserOccurence,

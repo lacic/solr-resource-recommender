@@ -38,7 +38,7 @@ import at.knowcenter.recommender.solrpowered.services.impl.item.ItemQuery;
  * @author elacic
  *
  */
-public class NeighborhodOverlapBasedRec implements RecommendStrategy {
+public class InterestsNeighborhodOverlapBasedRec implements RecommendStrategy {
 
 	public static int MAX_USER_OCCURENCE_COUNT = 60;
 	private List<String> alreadyBoughtProducts;

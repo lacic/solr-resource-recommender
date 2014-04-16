@@ -87,7 +87,7 @@ public class UserBasedRecommenderWithoutMLT implements RecommendStrategy {
 			response = SolrServiceContainer.getInstance().getUserService().getSolrServer().query(solrParams);
 			step1ElapsedTime = response.getElapsedTime();
 			
-			Map<String, Float> customerScoringMap = new HashMap<String, Float>();
+			Map<String, Double> customerScoringMap = new HashMap<String, Double>();
 			
 			searchResponse.setNumFound(response.getResults().getNumFound()-1);
 			searchResponse.setElapsedTime(response.getElapsedTime());
@@ -95,7 +95,7 @@ public class UserBasedRecommenderWithoutMLT implements RecommendStrategy {
 			List<Customer> resLists = response.getBeans(Customer.class);
 
 			for (Customer customer : resLists) {
-				customerScoringMap.put(customer.getId(), customer.getScore());
+				customerScoringMap.put(customer.getId(), (double)customer.getScore());
 			}
 
 			solrParams = getSTEP2Params(query, maxReuslts, customerScoringMap);
@@ -118,7 +118,7 @@ public class UserBasedRecommenderWithoutMLT implements RecommendStrategy {
 		return searchResponse;
 	}
 	
-	private ModifiableSolrParams getSTEP2Params(RecommendQuery query, Integer maxReuslts, Map<String, Float> customerScoringMap) {
+	private ModifiableSolrParams getSTEP2Params(RecommendQuery query, Integer maxReuslts, Map<String, Double> customerScoringMap) {
 		ModifiableSolrParams solrParams = new ModifiableSolrParams();
 		
 		String queryString = RecommendationQueryUtils.createQueryToFindProdLikedBySimilarSocialUsers(customerScoringMap, contentFilter, MAX_USER_OCCURENCE_COUNT);
