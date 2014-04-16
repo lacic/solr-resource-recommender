@@ -1,4 +1,4 @@
-package at.knowcenter.recommender.solrpowered.engine.strategy.location.cf;
+package at.knowcenter.recommender.solrpowered.engine.strategy.location.cb;
 
 import java.util.ArrayList;
 import java.util.List;

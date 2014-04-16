@@ -33,6 +33,6 @@ public enum StrategyType {
 	SocialStream, 
 	CFPurchWithSocCommonNeighborhoodRecommender,
 	CFPurchWithSocCommonNeighborhoodSummedRecommender,
-	CFPurchWithSocCommonNeighborhoodReplacedRecommender, UB_WithOutMLTInterests, UB_WithOutMLTGroups, CF_Physical_Region_Distance, CF_Review, MostPopular_Review, BiographyBasedMLT, RealBiographyBasedMLT, WallPostInteraction, SnapshotInteraction
+	CFPurchWithSocCommonNeighborhoodReplacedRecommender, UB_WithOutMLTInterests, UB_WithOutMLTGroups, CF_Physical_Region_Distance, CF_Review, MostPopular_Review, BiographyBasedMLT, RealBiographyBasedMLT, WallPostInteraction, SnapshotInteraction, CF_Loc_CN, CF_Soc_Network_CN, CF_Soc_Network_Jaccard, CF_Soc_Network_NeighOverlap, CF_Soc_Network_AdamicAdar, CF_Soc_Network_PrefAttachment
 
 }

@@ -44,6 +44,11 @@ import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.WallpostB
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.combined.CFPurchWithSocCommonNeighborhoodRecommender;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.combined.CFPurchWithSocCommonNeighborhoodReplacedRecommender;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.combined.CFPurchWithSocCommonNeighborhoodSummedRecommender;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.network.AdamicAdarBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.network.CommonNeighborBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.network.JaccardBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.network.NeighborhodOverlapBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.network.PrefAttachmentBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cn.BiographyBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cn.GroupBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cn.InterestsAndGroupBasedRec;
@@ -118,7 +123,12 @@ public class RecommenderEngine implements RecommenderOperations{
 		
 		recommendStrategies.put(StrategyType.WallPostInteraction, new WallpostBasedRec());
 		recommendStrategies.put(StrategyType.SnapshotInteraction, new SnapshotBasedRec());
-
+		recommendStrategies.put(StrategyType.CF_Soc_Network_CN, new CommonNeighborBasedRec());
+		recommendStrategies.put(StrategyType.CF_Soc_Network_Jaccard, new JaccardBasedRec());
+		recommendStrategies.put(StrategyType.CF_Soc_Network_NeighOverlap, new NeighborhodOverlapBasedRec());
+		recommendStrategies.put(StrategyType.CF_Soc_Network_AdamicAdar, new AdamicAdarBasedRec());
+		recommendStrategies.put(StrategyType.CF_Soc_Network_PrefAttachment, new PrefAttachmentBasedRec());
+		
 		setRecommendStrategy(StrategyType.CollaborativeFiltering);
 	}
 	
