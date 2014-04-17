@@ -96,16 +96,23 @@ public class ConcurentAllExistingUsersEvaluator {
 //			jobs.add(new CommonStrategyJob(userPartition, "AdamicAdar" + i, StrategyType.CF_Soc_Network_AdamicAdar, 12));
 //			jobs.add(new CommonStrategyJob(userPartition, "PrefAttach" + i, StrategyType.CF_Soc_Network_PrefAttachment, 13));
 
-			jobs.add(new CommonStrategyJob(userPartition, "GroupJaccard" + i, StrategyType.CF_Soc_Group_Jaccard, 14));
-			jobs.add(new CommonStrategyJob(userPartition, "GroupOverlap" + i, StrategyType.CF_Soc_Group_Overlap, 15));
-			jobs.add(new CommonStrategyJob(userPartition, "GroupAdar" + i, StrategyType.CF_Soc_Group_AdemicAdar, 16));
-			jobs.add(new CommonStrategyJob(userPartition, "GroupPrefAttach" + i, StrategyType.CF_Soc_Group_PrefAttach, 17));
+//			jobs.add(new CommonStrategyJob(userPartition, "GroupJaccard" + i, StrategyType.CF_Soc_Group_Jaccard, 14));
+//			jobs.add(new CommonStrategyJob(userPartition, "GroupOverlap" + i, StrategyType.CF_Soc_Group_Overlap, 15));
+//			jobs.add(new CommonStrategyJob(userPartition, "GroupAdar" + i, StrategyType.CF_Soc_Group_AdemicAdar, 16));
+//			jobs.add(new CommonStrategyJob(userPartition, "GroupPrefAttach" + i, StrategyType.CF_Soc_Group_PrefAttach, 17));
 
-			jobs.add(new CommonStrategyJob(userPartition, "InterestsJaccard" + i, StrategyType.CF_Soc_Interests_Jaccard, 18));
-			jobs.add(new CommonStrategyJob(userPartition, "InterestsOverlap" + i, StrategyType.CF_Soc_Interests_Overlap, 19));
-			jobs.add(new CommonStrategyJob(userPartition, "InterestsAdar" + i, StrategyType.CF_Soc_Interests_AdemicAdar, 20));
-			jobs.add(new CommonStrategyJob(userPartition, "InterestsPrefAttach" + i, StrategyType.CF_Soc_Interests_PrefAttach, 21));
+//			jobs.add(new CommonStrategyJob(userPartition, "InterestsJaccard" + i, StrategyType.CF_Soc_Interests_Jaccard, 18));
+//			jobs.add(new CommonStrategyJob(userPartition, "InterestsOverlap" + i, StrategyType.CF_Soc_Interests_Overlap, 19));
+//			jobs.add(new CommonStrategyJob(userPartition, "InterestsAdar" + i, StrategyType.CF_Soc_Interests_AdemicAdar, 20));
+//			jobs.add(new CommonStrategyJob(userPartition, "InterestsPrefAttach" + i, StrategyType.CF_Soc_Interests_PrefAttach, 21));
 			
+//			jobs.add(new CommonStrategyJob(userPartition, "SellerCN" + i, StrategyType.CF_Market_Seller_CN, 20));
+//			jobs.add(new CommonStrategyJob(userPartition, "SellerJaccard" + i, StrategyType.CF_Market_Seller_Jaccard, 21));
+//			jobs.add(new CommonStrategyJob(userPartition, "SellerPrefAtt" + i, StrategyType.CF_Market_Seller_PrefAtt, 22));
+//			jobs.add(new CommonStrategyJob(userPartition, "SellerOverlap" + i, StrategyType.CF_Market_Seller_Overlap, 23));
+//			jobs.add(new CommonStrategyJob(userPartition, "SellerAdar" + i, StrategyType.CF_Market_Seller_AdamicAdar, 24));
+			jobs.add(new CommonStrategyJob(userPartition, "SellerSummed" + i, StrategyType.CF_Market_Seller_AdamicAdar, 25));
+
 			//			jobs.add(new CF_C_UB_Soc_MP_Job(userPartition, "all_" + i, 0));
 			
 //			jobs.add(new CF_CFcat_C_Job(userPartition, "all_" + i));

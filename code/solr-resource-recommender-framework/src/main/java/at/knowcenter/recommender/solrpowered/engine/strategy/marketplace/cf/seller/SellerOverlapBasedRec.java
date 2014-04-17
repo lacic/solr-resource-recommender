@@ -1,4 +1,4 @@
-package at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf;
+package at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.seller;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -34,7 +34,7 @@ import at.knowcenter.recommender.solrpowered.services.impl.item.ItemQuery;
  * @author elacic
  *
  */
-public class SellerBasedRec implements RecommendStrategy {
+public class SellerOverlapBasedRec implements RecommendStrategy {
 
 	public static final String USERS_RATED_1_FIELD = "users_rated_1";
 	public static final String USERS_RATED_2_FIELD = "users_rated_2";
@@ -70,20 +70,25 @@ public class SellerBasedRec implements RecommendStrategy {
 			// find sellers
 			List<Resource> purchasedResources = findPurchasedResources(query.getProductIds());
 
-			Set<String> sellersPurchasedFrom = new HashSet<String>();
+			List<String> sellersPurchasedFrom = new ArrayList<String>();
 
 			for (Resource res : purchasedResources) {
 				sellersPurchasedFrom.add(res.getSeller());
 			}
 			
-			Set<String> otherUsers = fetchUsersFromSellers(sellersPurchasedFrom, query.getUser());
-			Map<String, Set<String>> userSellerMap = fetchUserSellerMapping(otherUsers, query.getUser());
+			Set<String> otherUsers = fetchUsersFromSellers(new HashSet<String>(sellersPurchasedFrom), query.getUser());
+			Map<String, List<String>> userSellerMap = fetchUserSellerMapping(otherUsers, query.getUser());
 			
 			final Map<String, Double> commonNeighborMap = new HashMap<String, Double>();
 			for (String commonUser : userSellerMap.keySet()) {
-				Set<String> sellers = userSellerMap.get(commonUser);
-				sellers.retainAll(sellersPurchasedFrom);
-				commonNeighborMap.put(commonUser, (double) sellers.size());
+				List<String> sellers = userSellerMap.get(commonUser);
+				
+				Set<String> intersection = new HashSet<String>(sellers);
+				intersection.retainAll(sellersPurchasedFrom);
+				
+				sellers.addAll(sellersPurchasedFrom);
+				
+				commonNeighborMap.put(commonUser, intersection.size() / (double) sellers.size());				
 			}
 			
 			Comparator<String> interactionCountComparator = new Comparator<String>() {
@@ -196,8 +201,8 @@ public class SellerBasedRec implements RecommendStrategy {
 	}
 
 
-	private Map<String, Set<String>> fetchUserSellerMapping(Set<String> otherUsers, String currentUser) {
-		Map<String, Set<String>> userSellersMapping = new HashMap<String, Set<String>>();
+	private Map<String, List<String>> fetchUserSellerMapping(Set<String> otherUsers, String currentUser) {
+		Map<String, List<String>> userSellersMapping = new HashMap<String, List<String>>();
 		ModifiableSolrParams solrParams = new ModifiableSolrParams();
 		
 		StringBuilder rated5Builder = new StringBuilder(USERS_RATED_5_FIELD + ":(");
@@ -271,15 +276,15 @@ public class SellerBasedRec implements RecommendStrategy {
 	}
 
 
-	private void fillSellersForUsers(Map<String, Set<String>> userSellersMapping, String seller, 
+	private void fillSellersForUsers(Map<String, List<String>> userSellersMapping, String seller, 
 			List<String> usersThatPurchased, String currentUser, Set<String> otherUsers) {
 		
 		for (String purchasingUser :usersThatPurchased) {
 			if ((! purchasingUser.equals(currentUser)) && otherUsers.contains(purchasingUser)) {
-				Set<String> sellers = userSellersMapping.get(purchasingUser);
+				List<String> sellers = userSellersMapping.get(purchasingUser);
 				
 				if (sellers == null) {
-					sellers = new HashSet<String>();
+					sellers = new ArrayList<String>();
 				}
 				
 				sellers.add(seller);
@@ -316,15 +321,15 @@ public class SellerBasedRec implements RecommendStrategy {
 	public static String createQueryToFindProdLikedBySimilarSocialUsers(
 			Map<String, Double> userInteractionMap, Set<String> sortedKeys, ContentFilter contentFilter, int maxUserOccurence) {
 		String query = createQueryToFindProdLikedBySimilarUsers(
-				userInteractionMap, sortedKeys, contentFilter, ReviewBasedRec.USERS_RATED_5_FIELD, maxUserOccurence, 1.0);
+				userInteractionMap, sortedKeys, contentFilter, USERS_RATED_5_FIELD, maxUserOccurence, 1.0);
 		query += " OR " + createQueryToFindProdLikedBySimilarUsers(
-				userInteractionMap, sortedKeys, contentFilter, ReviewBasedRec.USERS_RATED_4_FIELD, maxUserOccurence, 2.0);
+				userInteractionMap, sortedKeys, contentFilter, USERS_RATED_4_FIELD, maxUserOccurence, 2.0);
 		query += " OR " + createQueryToFindProdLikedBySimilarUsers(
-				userInteractionMap, sortedKeys, contentFilter, ReviewBasedRec.USERS_RATED_3_FIELD, maxUserOccurence, 3.0);
+				userInteractionMap, sortedKeys, contentFilter, USERS_RATED_3_FIELD, maxUserOccurence, 3.0);
 		query += " OR " + createQueryToFindProdLikedBySimilarUsers(
-				userInteractionMap, sortedKeys, contentFilter, ReviewBasedRec.USERS_RATED_2_FIELD, maxUserOccurence, 4.0);
+				userInteractionMap, sortedKeys, contentFilter, USERS_RATED_2_FIELD, maxUserOccurence, 4.0);
 		query += " OR " + createQueryToFindProdLikedBySimilarUsers(
-				userInteractionMap, sortedKeys, contentFilter, ReviewBasedRec.USERS_RATED_1_FIELD, maxUserOccurence, 5.0);
+				userInteractionMap, sortedKeys, contentFilter, USERS_RATED_1_FIELD, maxUserOccurence, 5.0);
 		
 		return query;
 	}
@@ -397,7 +402,7 @@ public class SellerBasedRec implements RecommendStrategy {
 	
 	@Override
 	public StrategyType getStrategyType() {
-		return StrategyType.CF_Market_Seller_CN;
+		return StrategyType.CF_Market_Seller_Overlap;
 	}
 
 }

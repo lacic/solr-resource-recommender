@@ -1,4 +1,4 @@
-package at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf;
+package at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.seller;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -34,7 +34,7 @@ import at.knowcenter.recommender.solrpowered.services.impl.item.ItemQuery;
  * @author elacic
  *
  */
-public class SellerBasedRec implements RecommendStrategy {
+public class SellerPrefAttBasedRec implements RecommendStrategy {
 
 	public static final String USERS_RATED_1_FIELD = "users_rated_1";
 	public static final String USERS_RATED_2_FIELD = "users_rated_2";
@@ -82,8 +82,8 @@ public class SellerBasedRec implements RecommendStrategy {
 			final Map<String, Double> commonNeighborMap = new HashMap<String, Double>();
 			for (String commonUser : userSellerMap.keySet()) {
 				Set<String> sellers = userSellerMap.get(commonUser);
-				sellers.retainAll(sellersPurchasedFrom);
-				commonNeighborMap.put(commonUser, (double) sellers.size());
+				
+				commonNeighborMap.put(commonUser, sellers.size() / (double) sellersPurchasedFrom.size());				
 			}
 			
 			Comparator<String> interactionCountComparator = new Comparator<String>() {
@@ -316,15 +316,15 @@ public class SellerBasedRec implements RecommendStrategy {
 	public static String createQueryToFindProdLikedBySimilarSocialUsers(
 			Map<String, Double> userInteractionMap, Set<String> sortedKeys, ContentFilter contentFilter, int maxUserOccurence) {
 		String query = createQueryToFindProdLikedBySimilarUsers(
-				userInteractionMap, sortedKeys, contentFilter, ReviewBasedRec.USERS_RATED_5_FIELD, maxUserOccurence, 1.0);
+				userInteractionMap, sortedKeys, contentFilter, USERS_RATED_5_FIELD, maxUserOccurence, 1.0);
 		query += " OR " + createQueryToFindProdLikedBySimilarUsers(
-				userInteractionMap, sortedKeys, contentFilter, ReviewBasedRec.USERS_RATED_4_FIELD, maxUserOccurence, 2.0);
+				userInteractionMap, sortedKeys, contentFilter, USERS_RATED_4_FIELD, maxUserOccurence, 2.0);
 		query += " OR " + createQueryToFindProdLikedBySimilarUsers(
-				userInteractionMap, sortedKeys, contentFilter, ReviewBasedRec.USERS_RATED_3_FIELD, maxUserOccurence, 3.0);
+				userInteractionMap, sortedKeys, contentFilter, USERS_RATED_3_FIELD, maxUserOccurence, 3.0);
 		query += " OR " + createQueryToFindProdLikedBySimilarUsers(
-				userInteractionMap, sortedKeys, contentFilter, ReviewBasedRec.USERS_RATED_2_FIELD, maxUserOccurence, 4.0);
+				userInteractionMap, sortedKeys, contentFilter, USERS_RATED_2_FIELD, maxUserOccurence, 4.0);
 		query += " OR " + createQueryToFindProdLikedBySimilarUsers(
-				userInteractionMap, sortedKeys, contentFilter, ReviewBasedRec.USERS_RATED_1_FIELD, maxUserOccurence, 5.0);
+				userInteractionMap, sortedKeys, contentFilter, USERS_RATED_1_FIELD, maxUserOccurence, 5.0);
 		
 		return query;
 	}
@@ -397,7 +397,7 @@ public class SellerBasedRec implements RecommendStrategy {
 	
 	@Override
 	public StrategyType getStrategyType() {
-		return StrategyType.CF_Market_Seller_CN;
+		return StrategyType.CF_Market_Seller_PrefAtt;
 	}
 
 }
