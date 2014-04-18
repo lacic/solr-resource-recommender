@@ -16,10 +16,17 @@ import at.knowcenter.recommender.solrpowered.engine.filtering.ContentFilter;
 import at.knowcenter.recommender.solrpowered.engine.filtering.PrecedingItemEvaluation;
 import at.knowcenter.recommender.solrpowered.engine.strategy.RecommendStrategy;
 import at.knowcenter.recommender.solrpowered.engine.strategy.StrategyType;
-import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.LocationCommonNeighborBasedRec;
-import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.LocationCoocurredCommonNeighborBasedRec;
-import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.RegionCommonNeighborBasedRec;
-import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.RegionCoocurredCommonNeighborBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.global.LocationAdarBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.global.LocationCommonNeighborBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.global.LocationCoocurredCommonNeighborBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.global.LocationCoocurredJaccardBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.global.LocationJaccardBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.region.RegionAdarBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.region.RegionCommonNeighborBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.region.RegionCoocurredAdarBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.region.RegionCoocurredCommonNeighborBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.region.RegionCoocurredJaccardBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.region.RegionJaccardBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.picks.PicksCommonNeighborBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.picks.PicksJaccardBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.MPReviewBasedRec;
@@ -173,7 +180,17 @@ public class RecommenderEngine implements RecommenderOperations{
 		recommendStrategies.put(StrategyType.CF_Location_Network_Coocured_CN, new LocationCoocurredCommonNeighborBasedRec());
 		recommendStrategies.put(StrategyType.CF_Region_Network_All_CN, new RegionCommonNeighborBasedRec());
 		recommendStrategies.put(StrategyType.CF_Region_Network_Coocurred_CN, new RegionCoocurredCommonNeighborBasedRec());
+		
+		recommendStrategies.put(StrategyType.CF_Location_Network_All_Jaccard, new LocationJaccardBasedRec());
+		recommendStrategies.put(StrategyType.CF_Location_Network_Coocured_Jaccard, new LocationCoocurredJaccardBasedRec());
+		recommendStrategies.put(StrategyType.CF_Region_Network_All_Jaccard, new RegionJaccardBasedRec());
+		recommendStrategies.put(StrategyType.CF_Region_Network_Coocurred_Jaccard, new RegionCoocurredJaccardBasedRec());
 
+		recommendStrategies.put(StrategyType.CF_Location_Network_All_Adar, new LocationAdarBasedRec());
+		recommendStrategies.put(StrategyType.CF_Location_Network_Coocured_Adar, new LocationCoocurredJaccardBasedRec());
+		recommendStrategies.put(StrategyType.CF_Region_Network_All_Adar, new RegionAdarBasedRec());
+		recommendStrategies.put(StrategyType.CF_Region_Network_Coocurred_Adar, new RegionCoocurredAdarBasedRec());
+		
 		setRecommendStrategy(StrategyType.CollaborativeFiltering);
 	}
 	

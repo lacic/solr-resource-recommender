@@ -72,7 +72,7 @@ public class SolrServiceContainer {
 			ResourceService resourceService = new ResourceService(address, port, "resources");
 			ReviewService reviewService = new ReviewService(address, port, "reviews");
 			PositionService positionService = new PositionService(address, port, "positions");
-			PositionNetworkService positionNetworkService = new PositionNetworkService(address, 8983, "position_network");
+			PositionNetworkService positionNetworkService = new PositionNetworkService(address, port, "position_network");
 
 			setUserService(userService);
 			setRecommendService(recommenderService);

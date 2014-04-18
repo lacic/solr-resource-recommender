@@ -113,13 +113,22 @@ public class ConcurentAllExistingUsersEvaluator {
 //			jobs.add(new CommonStrategyJob(userPartition, "SellerAdar" + i, StrategyType.CF_Market_Seller_AdamicAdar, 24));
 //			jobs.add(new CommonStrategyJob(userPartition, "SellerSummed" + i, StrategyType.CF_Market_Seller_Summed, 25));
 //			jobs.add(new CommonStrategyJob(userPartition, "Picks" + i, StrategyType.CF_Loc_Picks_CN, 26));
-//			jobs.add(new CommonStrategyJob(userPartition, "PicksJaccard" + i, StrategyType.CF_Loc_Picks_Jaccard, 27));
+//			jobs.add(new CommonStrategyJob(userPartition, "PicksJaccard" + i, StrategyType.CF_L[oc_Picks_Jaccard, 27));
 
-			jobs.add(new CommonStrategyJob(userPartition, "LocCN" + i, StrategyType.CF_Location_Network_All_CN, 28));
-			jobs.add(new CommonStrategyJob(userPartition, "LocCoCN" + i, StrategyType.CF_Location_Network_Coocured_CN, 29));
-			jobs.add(new CommonStrategyJob(userPartition, "RegCN" + i, StrategyType.CF_Region_Network_All_CN, 30));
-			jobs.add(new CommonStrategyJob(userPartition, "RegCoCN" + i, StrategyType.CF_Region_Network_Coocurred_CN, 31));
+//			jobs.add(new CommonStrategyJob(userPartition, "LocCN" + i, StrategyType.CF_Location_Network_All_CN, 28));
+//			jobs.add(new CommonStrategyJob(userPartition, "LocCoCN" + i, StrategyType.CF_Location_Network_Coocured_CN, 29));
+//			jobs.add(new CommonStrategyJob(userPartition, "RegCN" + i, StrategyType.CF_Region_Network_All_CN, 30));
+//			jobs.add(new CommonStrategyJob(userPartition, "RegCoCN" + i, StrategyType.CF_Region_Network_Coocurred_CN, 31));
 
+//			jobs.add(new CommonStrategyJob(userPartition, "LocJaccard" + i, StrategyType.CF_Location_Network_All_Jaccard, 32));
+//			jobs.add(new CommonStrategyJob(userPartition, "LocCoJaccard" + i, StrategyType.CF_Location_Network_Coocured_Jaccard, 33));
+//			jobs.add(new CommonStrategyJob(userPartition, "RegJaccard" + i, StrategyType.CF_Region_Network_All_Jaccard, 34));
+//			jobs.add(new CommonStrategyJob(userPartition, "RegCoJaccard" + i, StrategyType.CF_Region_Network_Coocurred_Jaccard, 35));
+			
+			jobs.add(new CommonStrategyJob(userPartition, "LocAdar" + i, StrategyType.CF_Location_Network_All_Adar, 36));
+			jobs.add(new CommonStrategyJob(userPartition, "LocCoAdar" + i, StrategyType.CF_Location_Network_Coocured_Adar, 37));
+			jobs.add(new CommonStrategyJob(userPartition, "RegAdar" + i, StrategyType.CF_Region_Network_All_Adar, 38));
+			jobs.add(new CommonStrategyJob(userPartition, "RegCoAdar" + i, StrategyType.CF_Region_Network_Coocurred_Adar, 39));
 			
 			//			jobs.add(new CF_C_UB_Soc_MP_Job(userPartition, "all_" + i, 0));
 			

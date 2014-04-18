@@ -1,4 +1,4 @@
-package at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network;
+package at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.region;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -29,7 +29,7 @@ import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendQuery;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendResponse;
 
-public class RegionCommonNeighborBasedRec implements RecommendStrategy{
+public class RegionCoocurredCommonNeighborBasedRec implements RecommendStrategy{
 
 	private List<String> alreadyPurchasedResources;
 	private ContentFilter contentFilter;
@@ -57,14 +57,14 @@ public class RegionCommonNeighborBasedRec implements RecommendStrategy{
 					return searchResponse;
 			}
 			
-			List<String> locationNeighbors = positions.get(0).getRegionNeighbors();
+			List<String> locationNeighbors = positions.get(0).getRegionCoocuredNeighbors();
 			
 			if (locationNeighbors == null || locationNeighbors.size() == 0) {
 				searchResponse.setResultItems(new ArrayList<String>());
 				return searchResponse;
 			}
 			
-			StringBuilder sb = new StringBuilder("region_neighborhood:(");
+			StringBuilder sb = new StringBuilder("region_cooccurred_neighborhood:(");
 			for (String neighbor : locationNeighbors) {
 				sb.append(neighbor + " OR ");
 			}
@@ -74,7 +74,7 @@ public class RegionCommonNeighborBasedRec implements RecommendStrategy{
 			solrParams = new ModifiableSolrParams();
 			solrParams.set("q", sb.toString());
 			solrParams.set("rows", Integer.MAX_VALUE);
-			solrParams.set("fl", "id,region_neighborhood");
+			solrParams.set("fl", "id,region_cooccurred_neighborhood");
 			solrParams.set("fq", "-id:" + user);
 			
 			response = SolrServiceContainer.getInstance().getPositionNetworkService().getSolrServer().query(solrParams);
@@ -82,7 +82,7 @@ public class RegionCommonNeighborBasedRec implements RecommendStrategy{
 			
 			final Map<String, Double> commonNeighborMap = new HashMap<String, Double>();
 			for (PositionNetwork otherPosition : otherPositions) {
-				List<String> commonNeighbors = otherPosition.getRegionNeighbors();
+				List<String> commonNeighbors = otherPosition.getRegionCoocuredNeighbors();
 				
 				commonNeighbors.retainAll(locationNeighbors);
 				
@@ -147,7 +147,7 @@ public class RegionCommonNeighborBasedRec implements RecommendStrategy{
 
 	@Override
 	public StrategyType getStrategyType() {
-		return StrategyType.CF_Region_Network_All_CN;
+		return StrategyType.CF_Region_Network_Coocurred_CN;
 	}
 
 }
