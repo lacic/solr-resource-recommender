@@ -3,6 +3,7 @@ package at.knowcenter.recommender.solrpowered.services;
 import at.knowcenter.recommender.solrpowered.configuration.ConfigUtils;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendService;
 import at.knowcenter.recommender.solrpowered.services.impl.item.ItemService;
+import at.knowcenter.recommender.solrpowered.services.impl.positionnetwork.PositionNetworkService;
 import at.knowcenter.recommender.solrpowered.services.impl.positions.PositionService;
 import at.knowcenter.recommender.solrpowered.services.impl.resource.ResourceService;
 import at.knowcenter.recommender.solrpowered.services.impl.review.ReviewService;
@@ -29,6 +30,7 @@ public class SolrServiceContainer {
 	private ResourceService resourceService;
 	private ReviewService reviewService;
 	private PositionService positionService;
+	private PositionNetworkService positionNetworkService;
 	
 	/**
 	 * Initialization-on-demand holder idiom
@@ -70,7 +72,8 @@ public class SolrServiceContainer {
 			ResourceService resourceService = new ResourceService(address, port, "resources");
 			ReviewService reviewService = new ReviewService(address, port, "reviews");
 			PositionService positionService = new PositionService(address, port, "positions");
-			
+			PositionNetworkService positionNetworkService = new PositionNetworkService(address, 8983, "position_network");
+
 			setUserService(userService);
 			setRecommendService(recommenderService);
 			setItemService(itemService);
@@ -80,6 +83,7 @@ public class SolrServiceContainer {
 			setResourceService(resourceService);
 			setReviewService(reviewService);
 			setPositionService(positionService);
+			setPositionNetworkService(positionNetworkService);
 			
 			initSuccess = true;
 		} catch (Exception ex) {
@@ -159,6 +163,15 @@ public class SolrServiceContainer {
 
 	public void setPositionService(PositionService positionService) {
 		this.positionService = positionService;
+	}
+
+	public PositionNetworkService getPositionNetworkService() {
+		return positionNetworkService;
+	}
+
+	public void setPositionNetworkService(
+			PositionNetworkService positionNetworkService) {
+		this.positionNetworkService = positionNetworkService;
 	}
 	
 	

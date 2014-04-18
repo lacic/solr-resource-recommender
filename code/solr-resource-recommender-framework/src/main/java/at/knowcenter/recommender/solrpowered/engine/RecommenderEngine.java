@@ -16,6 +16,12 @@ import at.knowcenter.recommender.solrpowered.engine.filtering.ContentFilter;
 import at.knowcenter.recommender.solrpowered.engine.filtering.PrecedingItemEvaluation;
 import at.knowcenter.recommender.solrpowered.engine.strategy.RecommendStrategy;
 import at.knowcenter.recommender.solrpowered.engine.strategy.StrategyType;
+import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.LocationCommonNeighborBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.LocationCoocurredCommonNeighborBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.RegionCommonNeighborBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.RegionCoocurredCommonNeighborBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.picks.PicksCommonNeighborBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.picks.PicksJaccardBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.MPReviewBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.MostPopularRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.PrecedingItemBasedRec;
@@ -159,6 +165,14 @@ public class RecommenderEngine implements RecommenderOperations{
 		recommendStrategies.put(StrategyType.CF_Market_Seller_Overlap, new SellerOverlapBasedRec());
 		recommendStrategies.put(StrategyType.CF_Market_Seller_AdamicAdar, new SellerAdamicAdarBasedRec());
 		recommendStrategies.put(StrategyType.CF_Market_Seller_Summed, new SellerSummedBasedRec());
+		
+		recommendStrategies.put(StrategyType.CF_Loc_Picks_CN, new PicksCommonNeighborBasedRec());
+		recommendStrategies.put(StrategyType.CF_Loc_Picks_Jaccard, new PicksJaccardBasedRec());
+		
+		recommendStrategies.put(StrategyType.CF_Location_Network_All_CN, new LocationCommonNeighborBasedRec());
+		recommendStrategies.put(StrategyType.CF_Location_Network_Coocured_CN, new LocationCoocurredCommonNeighborBasedRec());
+		recommendStrategies.put(StrategyType.CF_Region_Network_All_CN, new RegionCommonNeighborBasedRec());
+		recommendStrategies.put(StrategyType.CF_Region_Network_Coocurred_CN, new RegionCoocurredCommonNeighborBasedRec());
 
 		setRecommendStrategy(StrategyType.CollaborativeFiltering);
 	}

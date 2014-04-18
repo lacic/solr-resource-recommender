@@ -23,7 +23,7 @@ import at.knowcenter.recommender.solrpowered.engine.filtering.ContentFilter;
 import at.knowcenter.recommender.solrpowered.engine.strategy.RecommendStrategy;
 import at.knowcenter.recommender.solrpowered.engine.strategy.StrategyType;
 import at.knowcenter.recommender.solrpowered.engine.utils.RecommendationQueryUtils;
-import at.knowcenter.recommender.solrpowered.engine.utils.SocialQueryBuilder;
+import at.knowcenter.recommender.solrpowered.engine.utils.CFQueryBuilder;
 import at.knowcenter.recommender.solrpowered.model.CustomerAction;
 import at.knowcenter.recommender.solrpowered.model.SocialAction;
 import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
@@ -184,7 +184,7 @@ public class CFPurchWithSocCommonNeighborhoodReplacedRecommender implements Reco
 	private Integer findInDegreeSocNeighborhoodSize(String currentUser) {
 		Integer inDegreeSocialNeighSize = 0;
 		try {
-			ModifiableSolrParams params = SocialQueryBuilder.
+			ModifiableSolrParams params = CFQueryBuilder.
 						getInteractionsFromMeAndUSersThatILikedOrCommented(currentUser);
 			QueryResponse response = 
 					SolrServiceContainer.getInstance().getSocialActionService().getSolrServer().query(params);
