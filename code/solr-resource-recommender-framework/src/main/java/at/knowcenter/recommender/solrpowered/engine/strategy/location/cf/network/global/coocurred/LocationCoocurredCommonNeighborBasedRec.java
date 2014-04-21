@@ -1,4 +1,4 @@
-package at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.global;
+package at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.global.coocurred;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -29,7 +29,7 @@ import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendQuery;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendResponse;
 
-public class LocationCoocurredJaccardBasedRec implements RecommendStrategy{
+public class LocationCoocurredCommonNeighborBasedRec implements RecommendStrategy{
 
 	private List<String> alreadyPurchasedResources;
 	private ContentFilter contentFilter;
@@ -84,13 +84,9 @@ public class LocationCoocurredJaccardBasedRec implements RecommendStrategy{
 			for (PositionNetwork otherPosition : otherPositions) {
 				List<String> commonNeighbors = otherPosition.getLocationCoocuredNeighbors();
 				
-				Set<String> intersection = new HashSet<String>(commonNeighbors);
-				Set<String> union = new HashSet<String>(commonNeighbors);
-
-				intersection.retainAll(locationNeighbors);
-				union.addAll(locationNeighbors);
+				commonNeighbors.retainAll(locationNeighbors);
 				
-				commonNeighborMap.put(otherPosition.getUserId(), intersection.size() / (double)union.size());
+				commonNeighborMap.put(otherPosition.getUserId(), (double)commonNeighbors.size());
 			}
 			
 			Comparator<String> interactionCountComparator = new Comparator<String>() {
@@ -151,7 +147,7 @@ public class LocationCoocurredJaccardBasedRec implements RecommendStrategy{
 
 	@Override
 	public StrategyType getStrategyType() {
-		return StrategyType.CF_Location_Network_Coocured_Jaccard;
+		return StrategyType.CF_Location_Network_Coocured_CN;
 	}
 
 }

@@ -1,4 +1,4 @@
-package at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.region;
+package at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.global.coocurred;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -29,7 +29,7 @@ import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendQuery;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendResponse;
 
-public class RegionCoocurredJaccardBasedRec implements RecommendStrategy{
+public class LocationCoocurredAdarBasedRec implements RecommendStrategy{
 
 	private List<String> alreadyPurchasedResources;
 	private ContentFilter contentFilter;
@@ -57,14 +57,14 @@ public class RegionCoocurredJaccardBasedRec implements RecommendStrategy{
 					return searchResponse;
 			}
 			
-			List<String> locationNeighbors = positions.get(0).getRegionCoocuredNeighbors();
+			List<String> locationNeighbors = positions.get(0).getLocationCoocuredNeighbors();
 			
 			if (locationNeighbors == null || locationNeighbors.size() == 0) {
 				searchResponse.setResultItems(new ArrayList<String>());
 				return searchResponse;
 			}
 			
-			StringBuilder sb = new StringBuilder("region_cooccurred_neighborhood:(");
+			StringBuilder sb = new StringBuilder("global_cooccurred_neighborhood:(");
 			for (String neighbor : locationNeighbors) {
 				sb.append(neighbor + " OR ");
 			}
@@ -74,23 +74,47 @@ public class RegionCoocurredJaccardBasedRec implements RecommendStrategy{
 			solrParams = new ModifiableSolrParams();
 			solrParams.set("q", sb.toString());
 			solrParams.set("rows", Integer.MAX_VALUE);
-			solrParams.set("fl", "id,region_cooccurred_neighborhood");
+			solrParams.set("fl", "id,global_cooccurred_neighborhood");
 			solrParams.set("fq", "-id:" + user);
 			
 			response = SolrServiceContainer.getInstance().getPositionNetworkService().getSolrServer().query(solrParams);
 			List<PositionNetwork> otherPositions = response.getBeans(PositionNetwork.class);
 			
+			sb = new StringBuilder("id:(");
+			for (String neighbor : locationNeighbors) {
+				sb.append(neighbor + " OR ");
+			}
+			
+			sb.replace(sb.length() - 3, sb.length(), ")");
+			
+			solrParams = new ModifiableSolrParams();
+			solrParams.set("q", sb.toString());
+			solrParams.set("rows", Integer.MAX_VALUE);
+			solrParams.set("fl", "id,global_cooccurred_neighborhood_count");
+			solrParams.set("fq", "-id:" + user);
+			
+			response = SolrServiceContainer.getInstance().getPositionNetworkService().getSolrServer().query(solrParams);
+			List<PositionNetwork> neighbourPositions = response.getBeans(PositionNetwork.class);
+			
+			Map<String, Integer> degreeMap = new HashMap<String, Integer>();
+			
+			for (PositionNetwork neighbourPosition : neighbourPositions) {
+				degreeMap.put(neighbourPosition.getUserId(), neighbourPosition.getLocationCoocuredNeighborsCount());
+			}
+			
 			final Map<String, Double> commonNeighborMap = new HashMap<String, Double>();
 			for (PositionNetwork otherPosition : otherPositions) {
-				List<String> commonNeighbors = otherPosition.getRegionCoocuredNeighbors();
+				List<String> commonNeighbors = otherPosition.getLocationCoocuredNeighbors();
 				
 				Set<String> intersection = new HashSet<String>(commonNeighbors);
-				Set<String> union = new HashSet<String>(commonNeighbors);
-
 				intersection.retainAll(locationNeighbors);
-				union.addAll(locationNeighbors);
 				
-				commonNeighborMap.put(otherPosition.getUserId(), intersection.size() / (double)union.size());
+				Double aaSum = 0.0;
+				for (String intersectingUser : intersection) {
+					aaSum += 1.0 / Math.log(degreeMap.get(intersectingUser));
+				}
+				
+				commonNeighborMap.put(otherPosition.getUserId(), aaSum);
 			}
 			
 			Comparator<String> interactionCountComparator = new Comparator<String>() {
@@ -151,7 +175,7 @@ public class RegionCoocurredJaccardBasedRec implements RecommendStrategy{
 
 	@Override
 	public StrategyType getStrategyType() {
-		return StrategyType.CF_Region_Network_Coocurred_Jaccard;
+		return StrategyType.CF_Location_Network_Coocured_Adar;
 	}
 
 }

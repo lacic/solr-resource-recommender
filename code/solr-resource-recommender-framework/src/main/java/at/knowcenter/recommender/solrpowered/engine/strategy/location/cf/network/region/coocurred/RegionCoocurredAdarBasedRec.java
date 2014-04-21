@@ -1,4 +1,4 @@
-package at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.global;
+package at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.region.coocurred;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -29,7 +29,7 @@ import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendQuery;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendResponse;
 
-public class LocationCoocurredAdarBasedRec implements RecommendStrategy{
+public class RegionCoocurredAdarBasedRec implements RecommendStrategy{
 
 	private List<String> alreadyPurchasedResources;
 	private ContentFilter contentFilter;
@@ -57,14 +57,14 @@ public class LocationCoocurredAdarBasedRec implements RecommendStrategy{
 					return searchResponse;
 			}
 			
-			List<String> locationNeighbors = positions.get(0).getLocationCoocuredNeighbors();
+			List<String> locationNeighbors = positions.get(0).getRegionCoocuredNeighbors();
 			
 			if (locationNeighbors == null || locationNeighbors.size() == 0) {
 				searchResponse.setResultItems(new ArrayList<String>());
 				return searchResponse;
 			}
 			
-			StringBuilder sb = new StringBuilder("global_cooccurred_neighborhood:(");
+			StringBuilder sb = new StringBuilder("region_cooccurred_neighborhood:(");
 			for (String neighbor : locationNeighbors) {
 				sb.append(neighbor + " OR ");
 			}
@@ -74,11 +74,12 @@ public class LocationCoocurredAdarBasedRec implements RecommendStrategy{
 			solrParams = new ModifiableSolrParams();
 			solrParams.set("q", sb.toString());
 			solrParams.set("rows", Integer.MAX_VALUE);
-			solrParams.set("fl", "id,global_cooccurred_neighborhood");
+			solrParams.set("fl", "id,region_cooccurred_neighborhood");
 			solrParams.set("fq", "-id:" + user);
 			
 			response = SolrServiceContainer.getInstance().getPositionNetworkService().getSolrServer().query(solrParams);
 			List<PositionNetwork> otherPositions = response.getBeans(PositionNetwork.class);
+			
 			
 			sb = new StringBuilder("id:(");
 			for (String neighbor : locationNeighbors) {
@@ -90,7 +91,7 @@ public class LocationCoocurredAdarBasedRec implements RecommendStrategy{
 			solrParams = new ModifiableSolrParams();
 			solrParams.set("q", sb.toString());
 			solrParams.set("rows", Integer.MAX_VALUE);
-			solrParams.set("fl", "id,global_cooccurred_neighborhood_count");
+			solrParams.set("fl", "id,region_cooccurred_neighborhoodcount");
 			solrParams.set("fq", "-id:" + user);
 			
 			response = SolrServiceContainer.getInstance().getPositionNetworkService().getSolrServer().query(solrParams);
@@ -99,12 +100,13 @@ public class LocationCoocurredAdarBasedRec implements RecommendStrategy{
 			Map<String, Integer> degreeMap = new HashMap<String, Integer>();
 			
 			for (PositionNetwork neighbourPosition : neighbourPositions) {
-				degreeMap.put(neighbourPosition.getUserId(), neighbourPosition.getLocationCoocuredNeighborsCount());
+				degreeMap.put(neighbourPosition.getUserId(), neighbourPosition.getRegionCoocuredNeighborsCount());
 			}
+			
 			
 			final Map<String, Double> commonNeighborMap = new HashMap<String, Double>();
 			for (PositionNetwork otherPosition : otherPositions) {
-				List<String> commonNeighbors = otherPosition.getLocationCoocuredNeighbors();
+				List<String> commonNeighbors = otherPosition.getRegionCoocuredNeighbors();
 				
 				Set<String> intersection = new HashSet<String>(commonNeighbors);
 				intersection.retainAll(locationNeighbors);
@@ -175,7 +177,7 @@ public class LocationCoocurredAdarBasedRec implements RecommendStrategy{
 
 	@Override
 	public StrategyType getStrategyType() {
-		return StrategyType.CF_Location_Network_Coocured_Adar;
+		return StrategyType.CF_Region_Network_Coocurred_Adar;
 	}
 
 }
