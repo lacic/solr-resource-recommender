@@ -21,6 +21,7 @@ import org.apache.solr.common.params.ModifiableSolrParams;
 import at.knowcenter.recommender.solrpowered.engine.filtering.ContentFilter;
 import at.knowcenter.recommender.solrpowered.engine.strategy.RecommendStrategy;
 import at.knowcenter.recommender.solrpowered.engine.strategy.StrategyType;
+import at.knowcenter.recommender.solrpowered.engine.utils.CFQueryBuilder;
 import at.knowcenter.recommender.solrpowered.engine.utils.RecommendationQueryUtils;
 import at.knowcenter.recommender.solrpowered.model.CustomerAction;
 import at.knowcenter.recommender.solrpowered.model.Resource;
@@ -41,7 +42,7 @@ public class SellerAdamicAdarBasedRec implements RecommendStrategy {
 	public static final String USERS_RATED_3_FIELD = "users_rated_3";
 	public static final String USERS_RATED_4_FIELD = "users_rated_4";
 	public static final String USERS_RATED_5_FIELD = "users_rated_5";
-	public static int MAX_USER_OCCURENCE_COUNT = 60;
+	public static int MAX_USER_OCCURENCE_COUNT = CFQueryBuilder.MAX_USER_OCCURENCE_COUNT;
 	private List<String> alreadyBoughtProducts;
 	private ContentFilter contentFilter;
 

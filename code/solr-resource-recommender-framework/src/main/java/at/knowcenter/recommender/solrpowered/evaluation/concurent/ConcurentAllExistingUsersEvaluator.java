@@ -52,7 +52,7 @@ public class ConcurentAllExistingUsersEvaluator {
 		
 		initEvaluation();
 		
-		ExecutorService executor = Executors.newFixedThreadPool(3);
+		ExecutorService executor = Executors.newFixedThreadPool(5);
 		
 		List<Callable<List<MetricsExporter>>> jobs = new ArrayList<Callable<List<MetricsExporter>>>();
 		
@@ -91,8 +91,8 @@ public class ConcurentAllExistingUsersEvaluator {
 
 //			jobs.add(new CommonStrategyJob(userPartition, "InterestsC" + i, StrategyType.UB_Interests_MLT, 8));
 //			jobs.add(new CommonStrategyJob(userPartition, "CommonN" + i, StrategyType.CF_Soc_Network_CN, 9));
-//			jobs.add(new CommonStrategyJob(userPartition, "Jaccard" + i, StrategyType.CF_Soc_Network_Jaccard, 10));
-//			jobs.add(new CommonStrategyJob(userPartition, "NeighOv" + i, StrategyType.CF_Soc_Network_NeighOverlap, 11));
+			jobs.add(new CommonStrategyJob(userPartition, "Jaccard" + i, StrategyType.CF_Soc_Network_Jaccard, 10));
+			jobs.add(new CommonStrategyJob(userPartition, "NeighOv" + i, StrategyType.CF_Soc_Network_NeighOverlap, 11));
 //			jobs.add(new CommonStrategyJob(userPartition, "AdamicAdar" + i, StrategyType.CF_Soc_Network_AdamicAdar, 12));
 //			jobs.add(new CommonStrategyJob(userPartition, "PrefAttach" + i, StrategyType.CF_Soc_Network_PrefAttachment, 13));
 
@@ -125,10 +125,21 @@ public class ConcurentAllExistingUsersEvaluator {
 //			jobs.add(new CommonStrategyJob(userPartition, "RegJaccard" + i, StrategyType.CF_Region_Network_All_Jaccard, 34));
 //			jobs.add(new CommonStrategyJob(userPartition, "RegCoJaccard" + i, StrategyType.CF_Region_Network_Coocurred_Jaccard, 35));
 			
-			jobs.add(new CommonStrategyJob(userPartition, "LocAdar" + i, StrategyType.CF_Location_Network_All_Adar, 36));
-			jobs.add(new CommonStrategyJob(userPartition, "LocCoAdar" + i, StrategyType.CF_Location_Network_Coocured_Adar, 37));
-			jobs.add(new CommonStrategyJob(userPartition, "RegAdar" + i, StrategyType.CF_Region_Network_All_Adar, 38));
-			jobs.add(new CommonStrategyJob(userPartition, "RegCoAdar" + i, StrategyType.CF_Region_Network_Coocurred_Adar, 39));
+//			jobs.add(new CommonStrategyJob(userPartition, "LocAdar" + i, StrategyType.CF_Location_Network_All_Adar, 36));
+//			jobs.add(new CommonStrategyJob(userPartition, "LocCoAdar" + i, StrategyType.CF_Location_Network_Coocured_Adar, 37));
+//			jobs.add(new CommonStrategyJob(userPartition, "RegAdar" + i, StrategyType.CF_Region_Network_All_Adar, 38));
+//			jobs.add(new CommonStrategyJob(userPartition, "RegCoAdar" + i, StrategyType.CF_Region_Network_Coocurred_Adar, 39));
+			
+//			jobs.add(new CommonStrategyJob(userPartition, "RegCoOverlap" + i, StrategyType.CF_Region_Network_Coocurred_Overlap, 40));
+//			jobs.add(new CommonStrategyJob(userPartition, "RegCoPrefAtt" + i, StrategyType.CF_Region_Network_Coocurred_PrefAtt, 41));
+			
+//			jobs.add(new CommonStrategyJob(userPartition, "RegOverlap" + i, StrategyType.CF_Region_Network_All_Overlap, 42));
+//			jobs.add(new CommonStrategyJob(userPartition, "RegPrefAtt" + i, StrategyType.CF_Region_Network_All_PrefAtt, 43));
+//			jobs.add(new CommonStrategyJob(userPartition, "LocOverlap" + i, StrategyType.CF_Location_Network_All_Overlap, 44));
+//			jobs.add(new CommonStrategyJob(userPartition, "LocPrefAtt" + i, StrategyType.CF_Location_Network_All_PrefAtt, 45));
+			
+//			jobs.add(new CommonStrategyJob(userPartition, "CommonRegion" + i, StrategyType.CF_Loc_Common_Regions, 46));
+//			jobs.add(new CommonStrategyJob(userPartition, "CommonRegionJacc" + i, StrategyType.CF_Loc_Common_Regions_Jaccard, 47));
 			
 			//			jobs.add(new CF_C_UB_Soc_MP_Job(userPartition, "all_" + i, 0));
 			

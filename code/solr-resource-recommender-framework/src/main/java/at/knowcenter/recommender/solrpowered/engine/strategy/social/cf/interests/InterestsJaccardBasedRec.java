@@ -18,6 +18,7 @@ import org.apache.solr.common.params.ModifiableSolrParams;
 import at.knowcenter.recommender.solrpowered.engine.filtering.ContentFilter;
 import at.knowcenter.recommender.solrpowered.engine.strategy.RecommendStrategy;
 import at.knowcenter.recommender.solrpowered.engine.strategy.StrategyType;
+import at.knowcenter.recommender.solrpowered.engine.utils.CFQueryBuilder;
 import at.knowcenter.recommender.solrpowered.engine.utils.RecommendationQueryUtils;
 import at.knowcenter.recommender.solrpowered.model.Customer;
 import at.knowcenter.recommender.solrpowered.model.CustomerAction;
@@ -28,7 +29,7 @@ import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendResp
 
 public class InterestsJaccardBasedRec implements RecommendStrategy {
 
-	public static int MAX_USER_OCCURENCE_COUNT = 60;
+	public static int MAX_USER_OCCURENCE_COUNT = CFQueryBuilder.MAX_USER_OCCURENCE_COUNT;
 	private List<String> alreadyBoughtProducts;
 	private ContentFilter contentFilter;
 

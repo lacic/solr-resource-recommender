@@ -1,4 +1,4 @@
-package at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.picks;
+package at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.region.coocurred;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -23,12 +23,13 @@ import at.knowcenter.recommender.solrpowered.engine.utils.CFQueryBuilder;
 import at.knowcenter.recommender.solrpowered.engine.utils.RecommendationQueryUtils;
 import at.knowcenter.recommender.solrpowered.model.Customer;
 import at.knowcenter.recommender.solrpowered.model.Position;
+import at.knowcenter.recommender.solrpowered.model.PositionNetwork;
 import at.knowcenter.recommender.solrpowered.model.Resource;
 import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendQuery;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendResponse;
 
-public class PicksCommonNeighborBasedRec implements RecommendStrategy{
+public class RegionCoocurredOverlapBasedRec implements RecommendStrategy{
 
 	private List<String> alreadyPurchasedResources;
 	private ContentFilter contentFilter;
@@ -38,42 +39,60 @@ public class PicksCommonNeighborBasedRec implements RecommendStrategy{
 		RecommendResponse searchResponse = new RecommendResponse();
 		String user = query.getUser();
 
-		if (user == null || contentFilter.getCustomer() == null) {
+		if (user == null) {
 			searchResponse.setResultItems(new ArrayList<String>());
 			return searchResponse;
 		}
 		
 		ModifiableSolrParams solrParams = new ModifiableSolrParams();
 		try {
-			List<String> favoriteRegions = contentFilter.getCustomer().getFavoriteRegions();
+			solrParams.set("q", "id:" + user);
+			solrParams.set("rows", 1);
 			
-			StringBuilder queryBuilder = new StringBuilder("favorite_regions:(");
+			QueryResponse response = SolrServiceContainer.getInstance().getPositionNetworkService().getSolrServer().query(solrParams);
+			List<PositionNetwork> positions = response.getBeans(PositionNetwork.class);
 			
-			for (String region : favoriteRegions) {
-				queryBuilder.append("\"" + region + "\" OR ");
+			if (positions == null || positions.size() == 0) {
+					searchResponse.setResultItems(new ArrayList<String>());
+					return searchResponse;
 			}
 			
-			if (favoriteRegions.size() > 0 ) {
-				queryBuilder.replace(queryBuilder.length() - 3, queryBuilder.length(), ")");
-			} else {
-				queryBuilder.append("\"\")");
+			List<String> locationNeighbors = positions.get(0).getRegionCoocuredNeighbors();
+			
+			if (locationNeighbors == null || locationNeighbors.size() == 0) {
+				searchResponse.setResultItems(new ArrayList<String>());
+				return searchResponse;
 			}
 			
-			solrParams.set("q", queryBuilder.toString());
+			StringBuilder sb = new StringBuilder("region_cooccurred_neighborhood:(");
+			for (String neighbor : locationNeighbors) {
+				sb.append(neighbor + " OR ");
+			}
+			
+			sb.replace(sb.length() - 3, sb.length(), ")");
+			
+			solrParams = new ModifiableSolrParams();
+			solrParams.set("q", sb.toString());
 			solrParams.set("rows", Integer.MAX_VALUE);
+			solrParams.set("fl", "id,region_cooccurred_neighborhood");
 			solrParams.set("fq", "-id:" + user);
 			
-			
-			QueryResponse response = SolrServiceContainer.getInstance().getUserService().getSolrServer().query(solrParams);
-			List<Customer> customers = response.getBeans(Customer.class);
-			
+			response = SolrServiceContainer.getInstance().getPositionNetworkService().getSolrServer().query(solrParams);
+			List<PositionNetwork> otherPositions = response.getBeans(PositionNetwork.class);
 			
 			final Map<String, Double> commonNeighborMap = new HashMap<String, Double>();
-			for (Customer commonCustomer : customers) {
-				List<String> commonCustomerRegions = commonCustomer.getFavoriteRegions();
-				commonCustomerRegions.retainAll(favoriteRegions);
+			for (PositionNetwork otherPosition : otherPositions) {
+				List<String> commonNeighbors = otherPosition.getRegionCoocuredNeighbors();
 				
-				commonNeighborMap.put(commonCustomer.getId(), (double)commonCustomerRegions.size());
+				commonNeighbors.retainAll(locationNeighbors);
+				
+				Set<String> intersection = new HashSet<String>(commonNeighbors);
+				List<String> sum = new ArrayList<String>(commonNeighbors);
+
+				intersection.retainAll(locationNeighbors);
+				sum.addAll(locationNeighbors);
+				
+				commonNeighborMap.put(otherPosition.getUserId(), intersection.size() / (double)sum.size());
 			}
 			
 			Comparator<String> interactionCountComparator = new Comparator<String>() {
@@ -134,7 +153,7 @@ public class PicksCommonNeighborBasedRec implements RecommendStrategy{
 
 	@Override
 	public StrategyType getStrategyType() {
-		return StrategyType.CF_Loc_Picks_CN;
+		return StrategyType.CF_Region_Network_Coocurred_Overlap;
 	}
 
 }

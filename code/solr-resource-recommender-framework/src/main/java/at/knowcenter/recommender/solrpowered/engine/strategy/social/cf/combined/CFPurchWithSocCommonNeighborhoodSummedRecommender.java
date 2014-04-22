@@ -43,7 +43,7 @@ import at.knowcenter.recommender.solrpowered.services.impl.item.ItemQuery;
 public class CFPurchWithSocCommonNeighborhoodSummedRecommender implements RecommendStrategy {
 
 	private static final int MIN_FACET_USER_COUNT = 1;
-	public static int MAX_USER_OCCURENCE_COUNT = 60;
+	public static int MAX_USER_OCCURENCE_COUNT = CFQueryBuilder.MAX_USER_OCCURENCE_COUNT;
 	private List<String> alreadyBoughtProducts;
 	private ContentFilter contentFilter;
 
