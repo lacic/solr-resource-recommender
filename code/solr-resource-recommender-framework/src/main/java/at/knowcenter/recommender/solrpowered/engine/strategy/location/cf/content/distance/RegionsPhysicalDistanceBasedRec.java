@@ -1,4 +1,4 @@
-package at.knowcenter.recommender.solrpowered.engine.strategy.location.cf;
+package at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.content.distance;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

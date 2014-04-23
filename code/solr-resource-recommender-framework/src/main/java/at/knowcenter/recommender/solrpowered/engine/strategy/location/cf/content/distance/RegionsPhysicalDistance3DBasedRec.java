@@ -1,4 +1,4 @@
-package at.knowcenter.recommender.solrpowered.engine.strategy.location.cf;
+package at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.content.distance;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendQuery;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendResponse;
 
-public class RegionsDaysSeenBasedRec implements RecommendStrategy{
+public class RegionsPhysicalDistance3DBasedRec implements RecommendStrategy{
 
 	private List<String> alreadyPurchasedResources;
 	private ContentFilter contentFilter;
@@ -53,7 +53,7 @@ public class RegionsDaysSeenBasedRec implements RecommendStrategy{
 			
 			solrParams.set("q", q);
 			solrParams.set("rows", Integer.MAX_VALUE);
-			solrParams.set("fl", "time,region_id");
+			solrParams.set("fl", "time, region_id, location_in_region, zlocal");
 			
 			
 			QueryResponse response = SolrServiceContainer.getInstance().getPositionService().getSolrServer().query(solrParams);
@@ -65,12 +65,22 @@ public class RegionsDaysSeenBasedRec implements RecommendStrategy{
 			}
 			
 			Map<Date, Long> timeRegionMap = new HashMap<Date, Long>();
+			Map<Date, Integer[]> timeLocationMap = new HashMap<Date, Integer[]>();
+
 			for (Position userPosition : positions){
 				Date time = userPosition.getTime();
 				Long regionId = userPosition.getRegionId();
+				String location = userPosition.getLocationInRegion();
+				Integer zlocal = userPosition.getzLocal();
 				
 				if (!timeRegionMap.containsKey(time)) {
 					timeRegionMap.put(time, regionId);
+					String[] xyCoordinates = location.split(" ");
+					Integer[] coordinates = new Integer[3];
+					coordinates[0] = Integer.parseInt(xyCoordinates[0]);
+					coordinates[1] = Integer.parseInt(xyCoordinates[1]);
+					coordinates[2] = zlocal;
+					timeLocationMap.put(time, coordinates);
 				}
 			}
 			
@@ -88,23 +98,59 @@ public class RegionsDaysSeenBasedRec implements RecommendStrategy{
 			solrParams = new ModifiableSolrParams();
 			solrParams.set("q", queryBuilder.toString());
 			solrParams.set("rows", Integer.MAX_VALUE);
-			solrParams.set("fl", "user");
+			solrParams.set("fl", "user, time, region_id, location_in_region, zlocal");
 			solrParams.set("fq", "-user:" + user);
 			
 			response = SolrServiceContainer.getInstance().getPositionService().getSolrServer().query(solrParams);
 			positions = response.getBeans(Position.class);
 			
+			
+			Map<String, Map<Date, Integer[]>> userTimeLocationMapping = new HashMap<String, Map<Date, Integer[]>>();
+			for (Position userPosition : positions){
+				String commonUser = userPosition.getUser();
+				Date time = userPosition.getTime();
+				String location = userPosition.getLocationInRegion();
+				Integer zlocal = userPosition.getzLocal();
+				
+				Map<Date, Integer[]> timeLocationMapping = userTimeLocationMapping.get(commonUser);
+				
+				if (timeLocationMapping == null) {
+					timeLocationMapping = new HashMap<Date, Integer[]>();
+				}
+				
+				String[] xyCoordinates = location.split(" ");
+				Integer[] coordinates = new Integer[3];
+				coordinates[0] = Integer.parseInt(xyCoordinates[0]);
+				coordinates[1] = Integer.parseInt(xyCoordinates[1]);
+				coordinates[2] = zlocal;
+				
+				timeLocationMapping.put(time, coordinates);
+				userTimeLocationMapping.put(commonUser, timeLocationMapping);
+			}
+			
 			final Map<String, Double> commonNeighborMap = new HashMap<String, Double>();
 
-			for (Position userPosition : positions){
-				String coocurredUser = userPosition.getUser();
-				Double ocurrance = commonNeighborMap.get(coocurredUser);
-				if (ocurrance == null) {
-					ocurrance = 1.0;
-				} else {
-					ocurrance += 1.0;
+			for (String commonUser : userTimeLocationMapping.keySet()){
+				
+				Map<Date, Integer[]> commonUserTimeLocationMap = userTimeLocationMapping.get(commonUser);
+				
+				double meanDistance = 0.0;
+				for (Date time : commonUserTimeLocationMap.keySet()) {
+					Integer[] commonUserLocation = commonUserTimeLocationMap.get(time);
+					Integer[] targetUserLocation = timeLocationMap.get(time);
+					
+					Integer x1 = commonUserLocation[0];
+					Integer y1 = commonUserLocation[1];
+					Integer z1 = commonUserLocation[2];
+					Integer x2 = targetUserLocation[0];
+					Integer y2 = targetUserLocation[1];
+					Integer z2 = targetUserLocation[2];
+					
+					meanDistance += Math.sqrt( Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2) + Math.pow((z1 - z2), 2));
 				}
-				commonNeighborMap.put(coocurredUser, ocurrance);
+				meanDistance = meanDistance / commonUserTimeLocationMap.keySet().size();
+				
+				commonNeighborMap.put(commonUser, meanDistance);
 			}
 			
 			Comparator<String> interactionCountComparator = new Comparator<String>() {
@@ -161,7 +207,7 @@ public class RegionsDaysSeenBasedRec implements RecommendStrategy{
 
 	@Override
 	public StrategyType getStrategyType() {
-		return StrategyType.CF_Loc_Days_Seen_In_Region;
+		return StrategyType.CF_Loc_Physical_Distance_3D_in_Region;
 	}
 
 }

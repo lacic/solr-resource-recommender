@@ -113,7 +113,7 @@ public class ConcurentAllExistingUsersEvaluator {
 //			jobs.add(new CommonStrategyJob(userPartition, "SellerAdar" + i, StrategyType.CF_Market_Seller_AdamicAdar, 24));
 //			jobs.add(new CommonStrategyJob(userPartition, "SellerSummed" + i, StrategyType.CF_Market_Seller_Summed, 25));
 //			jobs.add(new CommonStrategyJob(userPartition, "Picks" + i, StrategyType.CF_Loc_Picks_CN, 26));
-//			jobs.add(new CommonStrategyJob(userPartition, "PicksJaccard" + i, StrategyType.CF_L[oc_Picks_Jaccard, 27));
+//			jobs.add(new CommonStrategyJob(userPartition, "PicksJaccard" + i, StrategyType.CF_Loc_Picks_Jaccard, 27));
 
 //			jobs.add(new CommonStrategyJob(userPartition, "LocCN" + i, StrategyType.CF_Location_Network_All_CN, 28));
 //			jobs.add(new CommonStrategyJob(userPartition, "LocCoCN" + i, StrategyType.CF_Location_Network_Coocured_CN, 29));
@@ -152,8 +152,151 @@ public class ConcurentAllExistingUsersEvaluator {
 			
 //			jobs.add(new CommonStrategyJob(userPartition, "DaysSeen" + i, StrategyType.CF_Loc_Days_Seen_In_Region, 56));
 //			jobs.add(new CommonStrategyJob(userPartition, "PhysDistance" + i, StrategyType.CF_Loc_Physical_Distance_in_Region, 57));
-			jobs.add(new CommonStrategyJob(userPartition, "PhysDistance3D" + i, StrategyType.CF_Loc_Physical_Distance_3D_in_Region, 58));
+//			jobs.add(new CommonStrategyJob(userPartition, "PhysDistance3D" + i, StrategyType.CF_Loc_Physical_Distance_3D_in_Region, 58));
 
+			// Weighted Hybrid
+			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Market", 59, new StrategyType[]{
+					StrategyType.CF_Market_Seller_Jaccard, StrategyType.CF_Review}));
+			
+			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Social_Content", 61, new StrategyType[]{
+					StrategyType.CF_Soc_Group_Jaccard, StrategyType.CF_Soc_Interests_Jaccard}));
+			
+			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Social_Network", 62, new StrategyType[]{
+					StrategyType.CF_Social, StrategyType.CF_Soc_Network_NeighOverlap}));
+			
+			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Location_Regions", 63, new StrategyType[]{
+					StrategyType.CF_Loc_Picks_Jaccard, StrategyType.CF_Loc_Common_Regions_Jaccard, StrategyType.CF_Loc_Shared_Regions_Jaccard}));
+			
+			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Location_DistanceSeen", 64, new StrategyType[]{
+					StrategyType.CF_Loc_Days_Seen_In_Region, StrategyType.CF_Loc_Physical_Distance_in_Region}));
+			
+			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Location_Content", 65, new StrategyType[]{
+					StrategyType.CF_Loc_Picks_Jaccard, StrategyType.CF_Loc_Common_Regions_Jaccard, StrategyType.CF_Loc_Shared_Regions_Jaccard, 
+					StrategyType.CF_Loc_Days_Seen_In_Region, StrategyType.CF_Loc_Physical_Distance_in_Region}));
+			
+			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Social", 66, new StrategyType[]{
+					StrategyType.CF_Social, StrategyType.CF_Soc_Network_NeighOverlap, StrategyType.CF_Soc_Group_Jaccard, StrategyType.CF_Soc_Interests_Jaccard}));
+			
+			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Location", 67, new StrategyType[]{
+					StrategyType.CF_Region_Network_Coocurred_Jaccard, StrategyType.CF_Loc_Picks_Jaccard, StrategyType.CF_Loc_Common_Regions_Jaccard, 
+					StrategyType.CF_Loc_Shared_Regions_Jaccard, StrategyType.CF_Loc_Days_Seen_In_Region, StrategyType.CF_Loc_Physical_Distance_in_Region}));
+			
+			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Social_Market", 68, new StrategyType[]{
+					StrategyType.CF_Social, StrategyType.CF_Soc_Network_NeighOverlap, StrategyType.CF_Soc_Group_Jaccard, StrategyType.CF_Soc_Interests_Jaccard,
+					StrategyType.CF_Market_Seller_Jaccard, StrategyType.CF_Review}));
+			
+			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Location_Market", 69, new StrategyType[]{
+					StrategyType.CF_Region_Network_Coocurred_Jaccard, StrategyType.CF_Loc_Picks_Jaccard, StrategyType.CF_Loc_Common_Regions_Jaccard, 
+					StrategyType.CF_Loc_Shared_Regions_Jaccard, StrategyType.CF_Loc_Days_Seen_In_Region, StrategyType.CF_Loc_Physical_Distance_in_Region,
+					StrategyType.CF_Market_Seller_Jaccard, StrategyType.CF_Review}));
+			
+			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Social_Location", 70, new StrategyType[]{
+					StrategyType.CF_Social, StrategyType.CF_Soc_Network_NeighOverlap, StrategyType.CF_Soc_Group_Jaccard, StrategyType.CF_Soc_Interests_Jaccard,
+					StrategyType.CF_Region_Network_Coocurred_Jaccard, StrategyType.CF_Loc_Picks_Jaccard, StrategyType.CF_Loc_Common_Regions_Jaccard, 
+					StrategyType.CF_Loc_Shared_Regions_Jaccard, StrategyType.CF_Loc_Days_Seen_In_Region, StrategyType.CF_Loc_Physical_Distance_in_Region}));
+			
+			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Social_Location_Market", 71, new StrategyType[]{
+					StrategyType.CF_Social, StrategyType.CF_Soc_Network_NeighOverlap, StrategyType.CF_Soc_Group_Jaccard, StrategyType.CF_Soc_Interests_Jaccard,
+					StrategyType.CF_Region_Network_Coocurred_Jaccard, StrategyType.CF_Loc_Picks_Jaccard, StrategyType.CF_Loc_Common_Regions_Jaccard, 
+					StrategyType.CF_Loc_Shared_Regions_Jaccard, StrategyType.CF_Loc_Days_Seen_In_Region, StrategyType.CF_Loc_Physical_Distance_in_Region,
+					StrategyType.CF_Market_Seller_Jaccard, StrategyType.CF_Review}));
+			
+			// Mixed Hybrid
+			
+			jobs.add(new CommonMixedHybridStrategyJob(userPartition, "Mixed_Hyb_Market", 72, new StrategyType[]{
+					StrategyType.CF_Market_Seller_Jaccard, StrategyType.CF_Review}));
+			
+			jobs.add(new CommonMixedHybridStrategyJob(userPartition, "Mixed_Hyb_Social_Content", 72, new StrategyType[]{
+					StrategyType.CF_Soc_Group_Jaccard, StrategyType.CF_Soc_Interests_Jaccard}));
+			
+			jobs.add(new CommonMixedHybridStrategyJob(userPartition, "Mixed_Hyb_Social_Network", 73, new StrategyType[]{
+					StrategyType.CF_Social, StrategyType.CF_Soc_Network_NeighOverlap}));
+			
+			jobs.add(new CommonMixedHybridStrategyJob(userPartition, "Mixed_Hyb_Location_Regions", 74, new StrategyType[]{
+					StrategyType.CF_Loc_Picks_Jaccard, StrategyType.CF_Loc_Common_Regions_Jaccard, StrategyType.CF_Loc_Shared_Regions_Jaccard}));
+			
+			jobs.add(new CommonMixedHybridStrategyJob(userPartition, "Mixed_Hyb_Location_DistanceSeen", 75, new StrategyType[]{
+					StrategyType.CF_Loc_Days_Seen_In_Region, StrategyType.CF_Loc_Physical_Distance_in_Region}));
+			
+			jobs.add(new CommonMixedHybridStrategyJob(userPartition, "Mixed_Hyb_Location_Content", 76, new StrategyType[]{
+					StrategyType.CF_Loc_Picks_Jaccard, StrategyType.CF_Loc_Common_Regions_Jaccard, StrategyType.CF_Loc_Shared_Regions_Jaccard, 
+					StrategyType.CF_Loc_Days_Seen_In_Region, StrategyType.CF_Loc_Physical_Distance_in_Region}));
+			
+			jobs.add(new CommonMixedHybridStrategyJob(userPartition, "Mixed_Hyb_Social", 77, new StrategyType[]{
+					StrategyType.CF_Social, StrategyType.CF_Soc_Network_NeighOverlap, StrategyType.CF_Soc_Group_Jaccard, StrategyType.CF_Soc_Interests_Jaccard}));
+			
+			jobs.add(new CommonMixedHybridStrategyJob(userPartition, "Mixed_Hyb_Location", 78, new StrategyType[]{
+					StrategyType.CF_Region_Network_Coocurred_Jaccard, StrategyType.CF_Loc_Picks_Jaccard, StrategyType.CF_Loc_Common_Regions_Jaccard, 
+					StrategyType.CF_Loc_Shared_Regions_Jaccard, StrategyType.CF_Loc_Days_Seen_In_Region, StrategyType.CF_Loc_Physical_Distance_in_Region}));
+			
+			jobs.add(new CommonMixedHybridStrategyJob(userPartition, "Mixed_Hyb_Social_Market", 79, new StrategyType[]{
+					StrategyType.CF_Social, StrategyType.CF_Soc_Network_NeighOverlap, StrategyType.CF_Soc_Group_Jaccard, StrategyType.CF_Soc_Interests_Jaccard,
+					StrategyType.CF_Market_Seller_Jaccard, StrategyType.CF_Review}));
+			
+			jobs.add(new CommonMixedHybridStrategyJob(userPartition, "Mixed_Hyb_Location_Market", 80, new StrategyType[]{
+					StrategyType.CF_Region_Network_Coocurred_Jaccard, StrategyType.CF_Loc_Picks_Jaccard, StrategyType.CF_Loc_Common_Regions_Jaccard, 
+					StrategyType.CF_Loc_Shared_Regions_Jaccard, StrategyType.CF_Loc_Days_Seen_In_Region, StrategyType.CF_Loc_Physical_Distance_in_Region,
+					StrategyType.CF_Market_Seller_Jaccard, StrategyType.CF_Review}));
+			
+			jobs.add(new CommonMixedHybridStrategyJob(userPartition, "Mixed_Hyb_Social_Location", 81, new StrategyType[]{
+					StrategyType.CF_Social, StrategyType.CF_Soc_Network_NeighOverlap, StrategyType.CF_Soc_Group_Jaccard, StrategyType.CF_Soc_Interests_Jaccard,
+					StrategyType.CF_Region_Network_Coocurred_Jaccard, StrategyType.CF_Loc_Picks_Jaccard, StrategyType.CF_Loc_Common_Regions_Jaccard, 
+					StrategyType.CF_Loc_Shared_Regions_Jaccard, StrategyType.CF_Loc_Days_Seen_In_Region, StrategyType.CF_Loc_Physical_Distance_in_Region}));
+			
+			jobs.add(new CommonMixedHybridStrategyJob(userPartition, "Mixed_Hyb_Social_Location_Market", 82, new StrategyType[]{
+					StrategyType.CF_Social, StrategyType.CF_Soc_Network_NeighOverlap, StrategyType.CF_Soc_Group_Jaccard, StrategyType.CF_Soc_Interests_Jaccard,
+					StrategyType.CF_Region_Network_Coocurred_Jaccard, StrategyType.CF_Loc_Picks_Jaccard, StrategyType.CF_Loc_Common_Regions_Jaccard, 
+					StrategyType.CF_Loc_Shared_Regions_Jaccard, StrategyType.CF_Loc_Days_Seen_In_Region, StrategyType.CF_Loc_Physical_Distance_in_Region,
+					StrategyType.CF_Market_Seller_Jaccard, StrategyType.CF_Review}));
+			
+			// Cross-source Hybrid
+			
+			jobs.add(new CommonHybridCrossSourceStrategyJob(userPartition, "CS_Hyb_Market", 83, new StrategyType[]{
+					StrategyType.CF_Market_Seller_Jaccard, StrategyType.CF_Review}));
+			
+			jobs.add(new CommonHybridCrossSourceStrategyJob(userPartition, "CS_Hyb_Social_Content", 84, new StrategyType[]{
+					StrategyType.CF_Soc_Group_Jaccard, StrategyType.CF_Soc_Interests_Jaccard}));
+			
+			jobs.add(new CommonHybridCrossSourceStrategyJob(userPartition, "CS_Hyb_Social_Network", 85, new StrategyType[]{
+					StrategyType.CF_Social, StrategyType.CF_Soc_Network_NeighOverlap}));
+			
+			jobs.add(new CommonHybridCrossSourceStrategyJob(userPartition, "CS_Hyb_Location_Regions", 86, new StrategyType[]{
+					StrategyType.CF_Loc_Picks_Jaccard, StrategyType.CF_Loc_Common_Regions_Jaccard, StrategyType.CF_Loc_Shared_Regions_Jaccard}));
+			
+			jobs.add(new CommonHybridCrossSourceStrategyJob(userPartition, "CS_Hyb_Location_DistanceSeen", 87, new StrategyType[]{
+					StrategyType.CF_Loc_Days_Seen_In_Region, StrategyType.CF_Loc_Physical_Distance_in_Region}));
+			
+			jobs.add(new CommonHybridCrossSourceStrategyJob(userPartition, "CS_Hyb_Location_Content", 88, new StrategyType[]{
+					StrategyType.CF_Loc_Picks_Jaccard, StrategyType.CF_Loc_Common_Regions_Jaccard, StrategyType.CF_Loc_Shared_Regions_Jaccard, 
+					StrategyType.CF_Loc_Days_Seen_In_Region, StrategyType.CF_Loc_Physical_Distance_in_Region}));
+			
+			jobs.add(new CommonHybridCrossSourceStrategyJob(userPartition, "CS_Hyb_Social", 89, new StrategyType[]{
+					StrategyType.CF_Social, StrategyType.CF_Soc_Network_NeighOverlap, StrategyType.CF_Soc_Group_Jaccard, StrategyType.CF_Soc_Interests_Jaccard}));
+			
+			jobs.add(new CommonHybridCrossSourceStrategyJob(userPartition, "CS_Hyb_Location", 90, new StrategyType[]{
+					StrategyType.CF_Region_Network_Coocurred_Jaccard, StrategyType.CF_Loc_Picks_Jaccard, StrategyType.CF_Loc_Common_Regions_Jaccard, 
+					StrategyType.CF_Loc_Shared_Regions_Jaccard, StrategyType.CF_Loc_Days_Seen_In_Region, StrategyType.CF_Loc_Physical_Distance_in_Region}));
+			
+			jobs.add(new CommonHybridCrossSourceStrategyJob(userPartition, "CS_Hyb_Social_Market", 91, new StrategyType[]{
+					StrategyType.CF_Social, StrategyType.CF_Soc_Network_NeighOverlap, StrategyType.CF_Soc_Group_Jaccard, StrategyType.CF_Soc_Interests_Jaccard,
+					StrategyType.CF_Market_Seller_Jaccard, StrategyType.CF_Review}));
+			
+			jobs.add(new CommonHybridCrossSourceStrategyJob(userPartition, "CS_Hyb_Location_Market", 92, new StrategyType[]{
+					StrategyType.CF_Region_Network_Coocurred_Jaccard, StrategyType.CF_Loc_Picks_Jaccard, StrategyType.CF_Loc_Common_Regions_Jaccard, 
+					StrategyType.CF_Loc_Shared_Regions_Jaccard, StrategyType.CF_Loc_Days_Seen_In_Region, StrategyType.CF_Loc_Physical_Distance_in_Region,
+					StrategyType.CF_Market_Seller_Jaccard, StrategyType.CF_Review}));
+			
+			jobs.add(new CommonHybridCrossSourceStrategyJob(userPartition, "CS_Hyb_Social_Location", 93, new StrategyType[]{
+					StrategyType.CF_Social, StrategyType.CF_Soc_Network_NeighOverlap, StrategyType.CF_Soc_Group_Jaccard, StrategyType.CF_Soc_Interests_Jaccard,
+					StrategyType.CF_Region_Network_Coocurred_Jaccard, StrategyType.CF_Loc_Picks_Jaccard, StrategyType.CF_Loc_Common_Regions_Jaccard, 
+					StrategyType.CF_Loc_Shared_Regions_Jaccard, StrategyType.CF_Loc_Days_Seen_In_Region, StrategyType.CF_Loc_Physical_Distance_in_Region}));
+			
+			jobs.add(new CommonHybridCrossSourceStrategyJob(userPartition, "CS_Hyb_Social_Location_Market", 94, new StrategyType[]{
+					StrategyType.CF_Social, StrategyType.CF_Soc_Network_NeighOverlap, StrategyType.CF_Soc_Group_Jaccard, StrategyType.CF_Soc_Interests_Jaccard,
+					StrategyType.CF_Region_Network_Coocurred_Jaccard, StrategyType.CF_Loc_Picks_Jaccard, StrategyType.CF_Loc_Common_Regions_Jaccard, 
+					StrategyType.CF_Loc_Shared_Regions_Jaccard, StrategyType.CF_Loc_Days_Seen_In_Region, StrategyType.CF_Loc_Physical_Distance_in_Region,
+					StrategyType.CF_Market_Seller_Jaccard, StrategyType.CF_Review}));
+			
 			//			jobs.add(new CF_C_UB_Soc_MP_Job(userPartition, "all_" + i, 0));
 			
 //			jobs.add(new CF_CFcat_C_Job(userPartition, "all_" + i));
