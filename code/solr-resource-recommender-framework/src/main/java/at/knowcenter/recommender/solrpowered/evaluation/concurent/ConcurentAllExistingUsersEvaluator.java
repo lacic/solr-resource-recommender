@@ -91,8 +91,8 @@ public class ConcurentAllExistingUsersEvaluator {
 
 //			jobs.add(new CommonStrategyJob(userPartition, "InterestsC" + i, StrategyType.UB_Interests_MLT, 8));
 //			jobs.add(new CommonStrategyJob(userPartition, "CommonN" + i, StrategyType.CF_Soc_Network_CN, 9));
-			jobs.add(new CommonStrategyJob(userPartition, "Jaccard" + i, StrategyType.CF_Soc_Network_Jaccard, 10));
-			jobs.add(new CommonStrategyJob(userPartition, "NeighOv" + i, StrategyType.CF_Soc_Network_NeighOverlap, 11));
+//			jobs.add(new CommonStrategyJob(userPartition, "Jaccard" + i, StrategyType.CF_Soc_Network_Jaccard, 10));
+//			jobs.add(new CommonStrategyJob(userPartition, "NeighOv" + i, StrategyType.CF_Soc_Network_NeighOverlap, 11));
 //			jobs.add(new CommonStrategyJob(userPartition, "AdamicAdar" + i, StrategyType.CF_Soc_Network_AdamicAdar, 12));
 //			jobs.add(new CommonStrategyJob(userPartition, "PrefAttach" + i, StrategyType.CF_Soc_Network_PrefAttachment, 13));
 
@@ -141,6 +141,19 @@ public class ConcurentAllExistingUsersEvaluator {
 //			jobs.add(new CommonStrategyJob(userPartition, "CommonRegion" + i, StrategyType.CF_Loc_Common_Regions, 46));
 //			jobs.add(new CommonStrategyJob(userPartition, "CommonRegionJacc" + i, StrategyType.CF_Loc_Common_Regions_Jaccard, 47));
 			
+//			jobs.add(new CommonStrategyJob(userPartition, "SharedRegTotal" + i, StrategyType.CF_Loc_Shared_Regions_Total, 48));
+//			jobs.add(new CommonStrategyJob(userPartition, "SharedRegJaccard" + i, StrategyType.CF_Loc_Shared_Regions_Jaccard, 49));
+//			jobs.add(new CommonStrategyJob(userPartition, "SharedRegCommon" + i, StrategyType.CF_Loc_Shared_Regions_Common, 50));
+//			jobs.add(new CommonStrategyJob(userPartition, "SellerTotal" + i, StrategyType.CF_Market_Seller_Total, 51));
+//			jobs.add(new CommonStrategyJob(userPartition, "InterestTotal" + i, StrategyType.CF_Soc_Interests_Total, 52));
+//			jobs.add(new CommonStrategyJob(userPartition, "GroupTotal" + i, StrategyType.CF_Soc_Group_Total, 53));
+//			jobs.add(new CommonStrategyJob(userPartition, "PicksTotal" + i, StrategyType.CF_Loc_Picks_Total, 54));
+//			jobs.add(new CommonStrategyJob(userPartition, "RegionTotal" + i, StrategyType.CF_Loc_Total_Regions, 55));
+			
+//			jobs.add(new CommonStrategyJob(userPartition, "DaysSeen" + i, StrategyType.CF_Loc_Days_Seen_In_Region, 56));
+//			jobs.add(new CommonStrategyJob(userPartition, "PhysDistance" + i, StrategyType.CF_Loc_Physical_Distance_in_Region, 57));
+			jobs.add(new CommonStrategyJob(userPartition, "PhysDistance3D" + i, StrategyType.CF_Loc_Physical_Distance_3D_in_Region, 58));
+
 			//			jobs.add(new CF_C_UB_Soc_MP_Job(userPartition, "all_" + i, 0));
 			
 //			jobs.add(new CF_CFcat_C_Job(userPartition, "all_" + i));

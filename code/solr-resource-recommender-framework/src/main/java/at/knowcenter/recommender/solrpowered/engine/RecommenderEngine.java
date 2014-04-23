@@ -16,10 +16,18 @@ import at.knowcenter.recommender.solrpowered.engine.filtering.ContentFilter;
 import at.knowcenter.recommender.solrpowered.engine.filtering.PrecedingItemEvaluation;
 import at.knowcenter.recommender.solrpowered.engine.strategy.RecommendStrategy;
 import at.knowcenter.recommender.solrpowered.engine.strategy.StrategyType;
+import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.RegionsDaysSeenBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.RegionsPhysicalDistance3DBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.RegionsPhysicalDistanceBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.content.picks.PicksCommonNeighborBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.content.picks.PicksJaccardBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.content.picks.PicksTotalBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.content.regions.CommonRegionsBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.content.regions.CommonRegionsJaccardBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.content.regions.CommonRegionsTotalBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.content.shared.SharedRegionsCommonBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.content.shared.SharedRegionsJaccardBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.content.shared.SharedRegionsTotalBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.global.LocationAdarBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.global.LocationCommonNeighborBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.location.cf.network.global.LocationJaccardBasedRec;
@@ -59,6 +67,7 @@ import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.sell
 import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.seller.SellerOverlapBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.seller.SellerPrefAttBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.seller.SellerSummedBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.seller.SellerTotalBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.OwnSocialRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.CommentsBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.InteractionsBasedRec;
@@ -74,11 +83,13 @@ import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.groups.Gr
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.groups.GroupJaccardBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.groups.GroupNeighborOverlapBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.groups.GroupPrefAttachmentBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.groups.GroupTotalBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.interests.InterestNeighborOverlapBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.interests.InterestsAdamicAdarBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.interests.InterestsIntersectionBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.interests.InterestsJaccardBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.interests.InterestsPrefAttachmentBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.interests.InterestsTotalBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.network.AdamicAdarBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.network.CommonNeighborBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.network.JaccardBasedRec;
@@ -209,6 +220,20 @@ public class RecommenderEngine implements RecommenderOperations{
 		recommendStrategies.put(StrategyType.CF_Loc_Common_Regions, new CommonRegionsBasedRec());
 		recommendStrategies.put(StrategyType.CF_Loc_Common_Regions_Jaccard, new CommonRegionsJaccardBasedRec());
 		
+		recommendStrategies.put(StrategyType.CF_Market_Seller_Total, new SellerTotalBasedRec());
+		recommendStrategies.put(StrategyType.CF_Soc_Interests_Total, new InterestsTotalBasedRec());
+		recommendStrategies.put(StrategyType.CF_Soc_Group_Total, new GroupTotalBasedRec());
+		recommendStrategies.put(StrategyType.CF_Loc_Picks_Total, new PicksTotalBasedRec());
+		recommendStrategies.put(StrategyType.CF_Loc_Total_Regions, new CommonRegionsTotalBasedRec());
+		
+		recommendStrategies.put(StrategyType.CF_Loc_Shared_Regions_Common, new SharedRegionsCommonBasedRec());
+		recommendStrategies.put(StrategyType.CF_Loc_Shared_Regions_Jaccard, new SharedRegionsJaccardBasedRec());
+		recommendStrategies.put(StrategyType.CF_Loc_Shared_Regions_Total, new SharedRegionsTotalBasedRec());
+		
+		recommendStrategies.put(StrategyType.CF_Loc_Days_Seen_In_Region, new RegionsDaysSeenBasedRec());
+		recommendStrategies.put(StrategyType.CF_Loc_Physical_Distance_in_Region, new RegionsPhysicalDistanceBasedRec());
+		recommendStrategies.put(StrategyType.CF_Loc_Physical_Distance_3D_in_Region, new RegionsPhysicalDistance3DBasedRec());
+
 		setRecommendStrategy(StrategyType.CollaborativeFiltering);
 	}
 	

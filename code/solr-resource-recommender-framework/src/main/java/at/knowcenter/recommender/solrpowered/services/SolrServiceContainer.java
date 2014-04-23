@@ -7,6 +7,7 @@ import at.knowcenter.recommender.solrpowered.services.impl.positionnetwork.Posit
 import at.knowcenter.recommender.solrpowered.services.impl.positions.PositionService;
 import at.knowcenter.recommender.solrpowered.services.impl.resource.ResourceService;
 import at.knowcenter.recommender.solrpowered.services.impl.review.ReviewService;
+import at.knowcenter.recommender.solrpowered.services.impl.sharedlocation.SharedLocationService;
 import at.knowcenter.recommender.solrpowered.services.impl.social.SocialActionService;
 import at.knowcenter.recommender.solrpowered.services.impl.social.reversed.OwnSocialActionService;
 import at.knowcenter.recommender.solrpowered.services.impl.socialstream.SocialStreamService;
@@ -31,6 +32,7 @@ public class SolrServiceContainer {
 	private ReviewService reviewService;
 	private PositionService positionService;
 	private PositionNetworkService positionNetworkService;
+	private SharedLocationService sharedLocationService;
 	
 	/**
 	 * Initialization-on-demand holder idiom
@@ -73,6 +75,8 @@ public class SolrServiceContainer {
 			ReviewService reviewService = new ReviewService(address, port, "reviews");
 			PositionService positionService = new PositionService(address, port, "positions");
 			PositionNetworkService positionNetworkService = new PositionNetworkService(address, port, "position_network");
+			SharedLocationService sharedLocationService = new SharedLocationService(address, port, "shared_locations");
+
 
 			setUserService(userService);
 			setRecommendService(recommenderService);
@@ -84,6 +88,7 @@ public class SolrServiceContainer {
 			setReviewService(reviewService);
 			setPositionService(positionService);
 			setPositionNetworkService(positionNetworkService);
+			setSharedLocationService(sharedLocationService);
 			
 			initSuccess = true;
 		} catch (Exception ex) {
@@ -172,6 +177,14 @@ public class SolrServiceContainer {
 	public void setPositionNetworkService(
 			PositionNetworkService positionNetworkService) {
 		this.positionNetworkService = positionNetworkService;
+	}
+
+	public SharedLocationService getSharedLocationService() {
+		return sharedLocationService;
+	}
+
+	public void setSharedLocationService(SharedLocationService sharedLocationService) {
+		this.sharedLocationService = sharedLocationService;
 	}
 	
 	

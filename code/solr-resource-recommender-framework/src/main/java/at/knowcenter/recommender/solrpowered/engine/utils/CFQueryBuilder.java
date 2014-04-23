@@ -12,7 +12,7 @@ import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendQuer
 
 public class CFQueryBuilder {
 	
-	public static final Integer MAX_USER_OCCURENCE_COUNT = 3;
+	public static final Integer MAX_USER_OCCURENCE_COUNT = 60;
 
 
 
