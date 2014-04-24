@@ -41,11 +41,15 @@ public abstract class AbstractHybridWeightedSumStrategyJob extends RecommenderEv
 						getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(strategy));
 				
 				for (String recommendation : strategyRecs) {
+					int positionScore = strategyRecs.size() - strategyRecs.indexOf(recommendation);
+					
 					Double recWeight = weightMap.get(recommendation);
+					double itemWeight = positionScore * strategyWeight;
+					
 					if (recWeight == null) {
-						recWeight = strategyWeight;
-					} else if (recWeight < strategyWeight){
-						recWeight = strategyWeight;
+						recWeight = itemWeight;
+					} else if (recWeight <itemWeight){
+						recWeight = itemWeight;
 					}
 					weightMap.put(recommendation, recWeight);
 				}

@@ -573,10 +573,11 @@ public class RecommendationQueryUtils {
 	
 	public static  void fillWeightedMap(Map<String, Double> occurencesMap, List<String> products, Double weight) {
 		for (String recommendedItem : products) {
+			int positionScore = products.size() - products.indexOf(recommendedItem);
 			if (occurencesMap.containsKey(recommendedItem)) {
-				occurencesMap.put(recommendedItem, occurencesMap.get(recommendedItem) + weight);
+				occurencesMap.put(recommendedItem, occurencesMap.get(recommendedItem) +  positionScore * weight);
 	        } else {
-	        	occurencesMap.put(recommendedItem, weight);
+	        	occurencesMap.put(recommendedItem, positionScore * weight);
 	        }
 		}
 	}
