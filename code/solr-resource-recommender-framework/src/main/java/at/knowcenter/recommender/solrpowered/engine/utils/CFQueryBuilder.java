@@ -15,7 +15,6 @@ public class CFQueryBuilder {
 	public static final Integer MAX_USER_OCCURENCE_COUNT = 60;
 
 
-
 	public static ModifiableSolrParams getInteractionsFromMeAndUSersThatILikedOrCommented(String user) {
 		ModifiableSolrParams solrParams = new ModifiableSolrParams();
 		

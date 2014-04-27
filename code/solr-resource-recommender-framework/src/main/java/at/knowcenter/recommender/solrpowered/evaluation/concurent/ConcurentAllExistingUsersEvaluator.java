@@ -71,7 +71,7 @@ public class ConcurentAllExistingUsersEvaluator {
 			
 			List<String> userPartition= users.subList(i * partitionSize, offset);
 
-//			jobs.add(new CommonStrategyJob(userPartition, "CF_Rev", StrategyType.CF_Review, 0));
+			jobs.add(new CommonStrategyJob(userPartition, "CF_Rev", StrategyType.CF_Review, 0));
 //			jobs.add(new CommonStrategyJob(userPartition, "MP", StrategyType.MostPopular_Review, 1));
 //			jobs.add(new CommonStrategyJob(userPartition, "Soc", StrategyType.CF_Social, 2));
 //			jobs.add(new C_Name_Job(userPartition));
@@ -106,63 +106,63 @@ public class ConcurentAllExistingUsersEvaluator {
 //			jobs.add(new CommonStrategyJob(userPartition, "InterestsAdar" + i, StrategyType.CF_Soc_Interests_AdemicAdar, 20));
 //			jobs.add(new CommonStrategyJob(userPartition, "InterestsPrefAttach" + i, StrategyType.CF_Soc_Interests_PrefAttach, 21));
 			
-//			jobs.add(new CommonStrategyJob(userPartition, "SellerCN" + i, StrategyType.CF_Market_Seller_CN, 20));
-//			jobs.add(new CommonStrategyJob(userPartition, "SellerJaccard" + i, StrategyType.CF_Market_Seller_Jaccard, 21));
+			jobs.add(new CommonStrategyJob(userPartition, "SellerCN" + i, StrategyType.CF_Market_Seller_CN, 20));
+			jobs.add(new CommonStrategyJob(userPartition, "SellerJaccard" + i, StrategyType.CF_Market_Seller_Jaccard, 21));
 //			jobs.add(new CommonStrategyJob(userPartition, "SellerPrefAtt" + i, StrategyType.CF_Market_Seller_PrefAtt, 22));
 //			jobs.add(new CommonStrategyJob(userPartition, "SellerOverlap" + i, StrategyType.CF_Market_Seller_Overlap, 23));
 //			jobs.add(new CommonStrategyJob(userPartition, "SellerAdar" + i, StrategyType.CF_Market_Seller_AdamicAdar, 24));
 //			jobs.add(new CommonStrategyJob(userPartition, "SellerSummed" + i, StrategyType.CF_Market_Seller_Summed, 25));
-//			jobs.add(new CommonStrategyJob(userPartition, "Picks" + i, StrategyType.CF_Loc_Picks_CN, 26));
-//			jobs.add(new CommonStrategyJob(userPartition, "PicksJaccard" + i, StrategyType.CF_Loc_Picks_Jaccard, 27));
+			jobs.add(new CommonStrategyJob(userPartition, "Picks" + i, StrategyType.CF_Loc_Picks_CN, 26));
+			jobs.add(new CommonStrategyJob(userPartition, "PicksJaccard" + i, StrategyType.CF_Loc_Picks_Jaccard, 27));
 
 //			jobs.add(new CommonStrategyJob(userPartition, "LocCN" + i, StrategyType.CF_Location_Network_All_CN, 28));
 //			jobs.add(new CommonStrategyJob(userPartition, "LocCoCN" + i, StrategyType.CF_Location_Network_Coocured_CN, 29));
 //			jobs.add(new CommonStrategyJob(userPartition, "RegCN" + i, StrategyType.CF_Region_Network_All_CN, 30));
-//			jobs.add(new CommonStrategyJob(userPartition, "RegCoCN" + i, StrategyType.CF_Region_Network_Coocurred_CN, 31));
+			jobs.add(new CommonStrategyJob(userPartition, "RegCoCN" + i, StrategyType.CF_Region_Network_Coocurred_CN, 31));
 
 //			jobs.add(new CommonStrategyJob(userPartition, "LocJaccard" + i, StrategyType.CF_Location_Network_All_Jaccard, 32));
 //			jobs.add(new CommonStrategyJob(userPartition, "LocCoJaccard" + i, StrategyType.CF_Location_Network_Coocured_Jaccard, 33));
 //			jobs.add(new CommonStrategyJob(userPartition, "RegJaccard" + i, StrategyType.CF_Region_Network_All_Jaccard, 34));
-//			jobs.add(new CommonStrategyJob(userPartition, "RegCoJaccard" + i, StrategyType.CF_Region_Network_Coocurred_Jaccard, 35));
+			jobs.add(new CommonStrategyJob(userPartition, "RegCoJaccard" + i, StrategyType.CF_Region_Network_Coocurred_Jaccard, 35));
 			
 //			jobs.add(new CommonStrategyJob(userPartition, "LocAdar" + i, StrategyType.CF_Location_Network_All_Adar, 36));
 //			jobs.add(new CommonStrategyJob(userPartition, "LocCoAdar" + i, StrategyType.CF_Location_Network_Coocured_Adar, 37));
 //			jobs.add(new CommonStrategyJob(userPartition, "RegAdar" + i, StrategyType.CF_Region_Network_All_Adar, 38));
-//			jobs.add(new CommonStrategyJob(userPartition, "RegCoAdar" + i, StrategyType.CF_Region_Network_Coocurred_Adar, 39));
+			jobs.add(new CommonStrategyJob(userPartition, "RegCoAdar" + i, StrategyType.CF_Region_Network_Coocurred_Adar, 39));
 			
-//			jobs.add(new CommonStrategyJob(userPartition, "RegCoOverlap" + i, StrategyType.CF_Region_Network_Coocurred_Overlap, 40));
-//			jobs.add(new CommonStrategyJob(userPartition, "RegCoPrefAtt" + i, StrategyType.CF_Region_Network_Coocurred_PrefAtt, 41));
+			jobs.add(new CommonStrategyJob(userPartition, "RegCoOverlap" + i, StrategyType.CF_Region_Network_Coocurred_Overlap, 40));
+			jobs.add(new CommonStrategyJob(userPartition, "RegCoPrefAtt" + i, StrategyType.CF_Region_Network_Coocurred_PrefAtt, 41));
 			
 //			jobs.add(new CommonStrategyJob(userPartition, "RegOverlap" + i, StrategyType.CF_Region_Network_All_Overlap, 42));
 //			jobs.add(new CommonStrategyJob(userPartition, "RegPrefAtt" + i, StrategyType.CF_Region_Network_All_PrefAtt, 43));
 //			jobs.add(new CommonStrategyJob(userPartition, "LocOverlap" + i, StrategyType.CF_Location_Network_All_Overlap, 44));
 //			jobs.add(new CommonStrategyJob(userPartition, "LocPrefAtt" + i, StrategyType.CF_Location_Network_All_PrefAtt, 45));
 			
-//			jobs.add(new CommonStrategyJob(userPartition, "CommonRegion" + i, StrategyType.CF_Loc_Common_Regions, 46));
-//			jobs.add(new CommonStrategyJob(userPartition, "CommonRegionJacc" + i, StrategyType.CF_Loc_Common_Regions_Jaccard, 47));
+			jobs.add(new CommonStrategyJob(userPartition, "CommonRegion" + i, StrategyType.CF_Loc_Common_Regions, 46));
+			jobs.add(new CommonStrategyJob(userPartition, "CommonRegionJacc" + i, StrategyType.CF_Loc_Common_Regions_Jaccard, 47));
 			
-//			jobs.add(new CommonStrategyJob(userPartition, "SharedRegTotal" + i, StrategyType.CF_Loc_Shared_Regions_Total, 48));
-//			jobs.add(new CommonStrategyJob(userPartition, "SharedRegJaccard" + i, StrategyType.CF_Loc_Shared_Regions_Jaccard, 49));
-//			jobs.add(new CommonStrategyJob(userPartition, "SharedRegCommon" + i, StrategyType.CF_Loc_Shared_Regions_Common, 50));
-//			jobs.add(new CommonStrategyJob(userPartition, "SellerTotal" + i, StrategyType.CF_Market_Seller_Total, 51));
+			jobs.add(new CommonStrategyJob(userPartition, "SharedRegTotal" + i, StrategyType.CF_Loc_Shared_Regions_Total, 48));
+			jobs.add(new CommonStrategyJob(userPartition, "SharedRegJaccard" + i, StrategyType.CF_Loc_Shared_Regions_Jaccard, 49));
+			jobs.add(new CommonStrategyJob(userPartition, "SharedRegCommon" + i, StrategyType.CF_Loc_Shared_Regions_Common, 50));
+			jobs.add(new CommonStrategyJob(userPartition, "SellerTotal" + i, StrategyType.CF_Market_Seller_Total, 51));
 //			jobs.add(new CommonStrategyJob(userPartition, "InterestTotal" + i, StrategyType.CF_Soc_Interests_Total, 52));
 //			jobs.add(new CommonStrategyJob(userPartition, "GroupTotal" + i, StrategyType.CF_Soc_Group_Total, 53));
-//			jobs.add(new CommonStrategyJob(userPartition, "PicksTotal" + i, StrategyType.CF_Loc_Picks_Total, 54));
-//			jobs.add(new CommonStrategyJob(userPartition, "RegionTotal" + i, StrategyType.CF_Loc_Total_Regions, 55));
+			jobs.add(new CommonStrategyJob(userPartition, "PicksTotal" + i, StrategyType.CF_Loc_Picks_Total, 54));
+			jobs.add(new CommonStrategyJob(userPartition, "RegionTotal" + i, StrategyType.CF_Loc_Total_Regions, 55));
 			
-//			jobs.add(new CommonStrategyJob(userPartition, "DaysSeen" + i, StrategyType.CF_Loc_Days_Seen_In_Region, 56));
-//			jobs.add(new CommonStrategyJob(userPartition, "PhysDistance" + i, StrategyType.CF_Loc_Physical_Distance_in_Region, 57));
+			jobs.add(new CommonStrategyJob(userPartition, "DaysSeen" + i, StrategyType.CF_Loc_Days_Seen_In_Region, 56));
+			jobs.add(new CommonStrategyJob(userPartition, "PhysDistance" + i, StrategyType.CF_Loc_Physical_Distance_in_Region, 57));
 //			jobs.add(new CommonStrategyJob(userPartition, "PhysDistance3D" + i, StrategyType.CF_Loc_Physical_Distance_3D_in_Region, 58));
 
 //			// Market Hybrid
-//			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Market", 59, new StrategyType[]{
-//					StrategyType.CF_Market_Seller_Jaccard, StrategyType.CF_Market_Seller_CN, StrategyType.CF_Review, StrategyType.CF_Market_Seller_Total}));
-//			
-//			jobs.add(new CommonMixedHybridStrategyJob(userPartition, "Mixed_Hyb_Market", 72, new StrategyType[]{
-//					StrategyType.CF_Market_Seller_Jaccard, StrategyType.CF_Market_Seller_CN, StrategyType.CF_Review, StrategyType.CF_Market_Seller_Total}));
-//			
-//			jobs.add(new CommonHybridCrossSourceStrategyJob(userPartition, "CS_Hyb_Market", 83, new StrategyType[]{
-//					StrategyType.CF_Market_Seller_Jaccard, StrategyType.CF_Market_Seller_CN, StrategyType.CF_Review, StrategyType.CF_Market_Seller_Total}));
+			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Market", 59, new StrategyType[]{
+					StrategyType.CF_Market_Seller_Jaccard, StrategyType.CF_Market_Seller_CN, StrategyType.CF_Review, StrategyType.CF_Market_Seller_Total}));
+			
+			jobs.add(new CommonMixedHybridStrategyJob(userPartition, "Mixed_Hyb_Market", 72, new StrategyType[]{
+					StrategyType.CF_Market_Seller_Jaccard, StrategyType.CF_Market_Seller_CN, StrategyType.CF_Review, StrategyType.CF_Market_Seller_Total}));
+			
+			jobs.add(new CommonHybridCrossSourceStrategyJob(userPartition, "CS_Hyb_Market", 83, new StrategyType[]{
+					StrategyType.CF_Market_Seller_Jaccard, StrategyType.CF_Market_Seller_CN, StrategyType.CF_Review, StrategyType.CF_Market_Seller_Total}));
 //			
 //			// Social Content Hybrid
 //			
@@ -285,7 +285,7 @@ public class ConcurentAllExistingUsersEvaluator {
 			
 			
 			// All
-			
+			/*
 			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Social_Location_Market", 71, new StrategyType[]{
 					StrategyType.CF_Soc_Network_NeighOverlap, StrategyType.CF_Soc_Network_Jaccard, StrategyType.CF_Soc_Network_AdamicAdar, 
 					StrategyType.CF_Soc_Network_CN, StrategyType.CF_Social, StrategyType.CF_Market_Seller_Jaccard, 
@@ -327,7 +327,7 @@ public class ConcurentAllExistingUsersEvaluator {
 					StrategyType.CF_Loc_Shared_Regions_Jaccard, StrategyType.CF_Loc_Days_Seen_In_Region, StrategyType.CF_Loc_Total_Regions,
 					StrategyType.CF_Loc_Shared_Regions_Common, StrategyType.CF_Loc_Shared_Regions_Total,
 					StrategyType.CF_Region_Network_Coocurred_PrefAtt, StrategyType.CF_Region_Network_Coocurred_Adar}));
-			
+			*/
 //			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Social_Location_Market_Best3", 95, new StrategyType[]{
 //					StrategyType.CF_Soc_Network_NeighOverlap, StrategyType.CF_Loc_Picks_Jaccard,StrategyType.CF_Market_Seller_Jaccard}));
 			

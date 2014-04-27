@@ -27,6 +27,7 @@ import at.knowcenter.recommender.solrpowered.model.Resource;
 import at.knowcenter.recommender.solrpowered.model.SocialAction;
 import at.knowcenter.recommender.solrpowered.model.SocialStream;
 import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
+import at.knowcenter.recommender.solrpowered.services.cleaner.DataFetcher;
 import at.knowcenter.recommender.solrpowered.services.impl.item.ItemQuery;
 import at.knowcenter.recommender.solrpowered.services.impl.item.ItemResponse;
 import at.knowcenter.recommender.solrpowered.services.impl.item.ItemService;
@@ -137,7 +138,12 @@ public class RecommendationQueryUtils {
 		long maxUserCount = 0;
 		long userCountSum = 0;
 		
+		List<String> neighbours = DataFetcher.getSocialNeighbourUsers(currentUser);
+		
 		for (Count userOccurence : userOccurences) {
+			if (!neighbours.contains(userOccurence.getName())) {
+				continue;
+			}
 			if ( ! userOccurence.getName().equals(currentUser)) {
 				if (userOccurenceCount >= maxUserOccurence) {
 					break;
