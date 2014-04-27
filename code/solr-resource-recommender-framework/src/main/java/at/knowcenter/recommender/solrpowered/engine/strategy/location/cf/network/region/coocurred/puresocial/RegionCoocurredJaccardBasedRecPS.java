@@ -93,6 +93,9 @@ public class RegionCoocurredJaccardBasedRecPS implements RecommendStrategy{
 			for (PositionNetwork otherPosition : otherPositions) {
 				List<String> commonNeighbors = otherPosition.getRegionCoocuredNeighbors();
 				
+				if (commonNeighbors == null)
+					continue;
+				
 				Set<String> intersection = new HashSet<String>(commonNeighbors);
 				Set<String> union = new HashSet<String>(commonNeighbors);
 

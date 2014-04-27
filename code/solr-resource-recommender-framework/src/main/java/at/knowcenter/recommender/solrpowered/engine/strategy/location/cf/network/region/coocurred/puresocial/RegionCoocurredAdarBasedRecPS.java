@@ -116,6 +116,9 @@ public class RegionCoocurredAdarBasedRecPS implements RecommendStrategy{
 			for (PositionNetwork otherPosition : otherPositions) {
 				List<String> commonNeighbors = otherPosition.getRegionCoocuredNeighbors();
 				
+				if (commonNeighbors == null)
+					continue;
+				
 				Set<String> intersection = new HashSet<String>(commonNeighbors);
 				intersection.retainAll(locationNeighbors);
 				

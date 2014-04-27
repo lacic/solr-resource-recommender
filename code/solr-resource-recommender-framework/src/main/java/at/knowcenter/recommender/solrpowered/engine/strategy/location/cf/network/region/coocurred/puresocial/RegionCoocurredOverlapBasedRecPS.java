@@ -93,6 +93,9 @@ public class RegionCoocurredOverlapBasedRecPS implements RecommendStrategy{
 			for (PositionNetwork otherPosition : otherPositions) {
 				List<String> commonNeighbors = otherPosition.getRegionCoocuredNeighbors();
 				
+				if (commonNeighbors == null)
+					continue;
+				
 				commonNeighbors.retainAll(locationNeighbors);
 				
 				Set<String> intersection = new HashSet<String>(commonNeighbors);

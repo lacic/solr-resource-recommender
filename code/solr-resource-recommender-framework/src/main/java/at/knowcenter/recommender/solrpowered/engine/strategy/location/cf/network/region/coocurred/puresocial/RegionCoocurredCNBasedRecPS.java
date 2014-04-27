@@ -92,7 +92,8 @@ public class RegionCoocurredCNBasedRecPS implements RecommendStrategy{
 			final Map<String, Double> commonNeighborMap = new HashMap<String, Double>();
 			for (PositionNetwork otherPosition : otherPositions) {
 				List<String> commonNeighbors = otherPosition.getRegionCoocuredNeighbors();
-				
+				if (commonNeighbors == null)
+					continue;
 				commonNeighbors.retainAll(locationNeighbors);
 				
 				commonNeighborMap.put(otherPosition.getUserId(), (double)commonNeighbors.size());
