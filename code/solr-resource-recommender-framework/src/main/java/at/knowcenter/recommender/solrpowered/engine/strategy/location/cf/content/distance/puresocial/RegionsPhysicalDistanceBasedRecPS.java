@@ -131,6 +131,10 @@ public class RegionsPhysicalDistanceBasedRecPS implements RecommendStrategy{
 					String[] commonUserLocation = commonUserTimeLocationMap.get(time);
 					String[] targetUserLocation = timeLocationMap.get(time);
 					
+					if (targetUserLocation == null) {
+						continue;
+					}
+					
 					Integer x1 = Integer.parseInt(commonUserLocation[0]);
 					Integer y1 = Integer.parseInt(commonUserLocation[1]);
 					Integer x2 = Integer.parseInt(targetUserLocation[0]);
