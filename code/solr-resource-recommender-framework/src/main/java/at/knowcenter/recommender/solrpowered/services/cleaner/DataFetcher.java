@@ -309,5 +309,59 @@ public class DataFetcher {
 		
 		return new ArrayList<String>(neighbours);
 	}
+	
+	public static List<String> getLocationNeighbourUsers(String targetUser) {
+		Set<String> neighbours = new HashSet<String>();
+		
+		ModifiableSolrParams solrParams = new ModifiableSolrParams();
+		String queryString = "id:(\"" + targetUser + "\"^2) OR users_that_liked_me:(\"" + targetUser + 
+								"\") OR users_that_commented_on_my_post:(\"" + targetUser + 
+								"\") OR users_that_posted_on_my_wall:(\"" + targetUser + 
+								"\") OR users_that_posted_a_snapshot_to_me:(\"" + targetUser + "\")";
+		
+		solrParams.set("q", queryString);
+		solrParams.set("rows", Integer.MAX_VALUE);
+		
+		try {
+			QueryResponse response = SolrServiceContainer.getInstance().getSocialActionService().getSolrServer().query(solrParams);
+			List<SocialAction> socialUsers = response.getBeans(SocialAction.class);
+			
+			SocialAction currentUserInteractions = socialUsers.get(0);
+			if (currentUserInteractions.getUserId().equals(targetUser)){
+				socialUsers.remove(0);
+			} else {
+				currentUserInteractions = null;
+			}
+			
+			if (currentUserInteractions != null) {
+				List<String> usersThatLikedMe = currentUserInteractions.getUsersThatLikedMe();
+				List<String> usersThatCommentedOnMyPost = currentUserInteractions.getUsersThatCommentedOnMyPost();
+				List<String> usersThatPostedASnapshopToMe = currentUserInteractions.getUsersThatPostedASnapshopToMe();
+				List<String> usersThatPostedOnMyWall = currentUserInteractions.getUsersThatPostedOnMyWall();
+				
+				if (usersThatLikedMe != null) {
+					neighbours.addAll(usersThatLikedMe);
+				}
+				if (usersThatCommentedOnMyPost != null) {
+					neighbours.addAll(usersThatCommentedOnMyPost);
+				}
+				if (usersThatPostedASnapshopToMe != null) {
+					neighbours.addAll(usersThatPostedASnapshopToMe);
+				}
+				if (usersThatPostedOnMyWall != null) {
+					neighbours.addAll(usersThatPostedOnMyWall);
+				}
+			}
+			
+			for (SocialAction socialUser : socialUsers) {
+				neighbours.add(socialUser.getUserId());
+			}
+		} catch (SolrServerException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return new ArrayList<String>(neighbours);
+	}
 
 }

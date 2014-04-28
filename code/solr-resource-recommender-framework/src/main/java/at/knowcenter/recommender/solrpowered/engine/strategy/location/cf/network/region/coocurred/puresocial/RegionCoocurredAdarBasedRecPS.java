@@ -99,7 +99,7 @@ public class RegionCoocurredAdarBasedRecPS implements RecommendStrategy{
 			solrParams = new ModifiableSolrParams();
 			solrParams.set("q", sb.toString());
 			solrParams.set("rows", Integer.MAX_VALUE);
-			solrParams.set("fl", "id,region_cooccurred_neighborhoodcount");
+			solrParams.set("fl", "id,region_cooccurred_neighborhood_count");
 			solrParams.set("fq", "-id:" + user);
 			
 			response = SolrServiceContainer.getInstance().getPositionNetworkService().getSolrServer().query(solrParams);
