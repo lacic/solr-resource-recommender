@@ -52,7 +52,7 @@ public class ConcurentAllExistingUsersEvaluator {
 		
 		initEvaluation();
 		
-		ExecutorService executor = Executors.newFixedThreadPool(5);
+		ExecutorService executor = Executors.newFixedThreadPool(28);
 		
 		List<Callable<List<MetricsExporter>>> jobs = new ArrayList<Callable<List<MetricsExporter>>>();
 		

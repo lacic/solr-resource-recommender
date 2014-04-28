@@ -21,10 +21,16 @@ public class CommonHybridWeightedSumStrategyJob extends AbstractHybridWeightedSu
 	
 	static {
 		definedStrategyWeights = new HashMap<StrategyType, Double>();
-		definedStrategyWeights.put(StrategyType.CF_Review, 								0.0197);
-		definedStrategyWeights.put(StrategyType.CF_Market_Seller_Jaccard, 				0.0239);
-		definedStrategyWeights.put(StrategyType.CF_Market_Seller_CN, 					0.0197);
-		definedStrategyWeights.put(StrategyType.CF_Market_Seller_Total, 				0.0159);
+//		definedStrategyWeights.put(StrategyType.CF_Review, 								0.0197);
+//		definedStrategyWeights.put(StrategyType.CF_Market_Seller_Jaccard, 				0.0239);
+//		definedStrategyWeights.put(StrategyType.CF_Market_Seller_CN, 					0.0197);
+//		definedStrategyWeights.put(StrategyType.CF_Market_Seller_Total, 				0.0159);
+		
+		// Pure Social Weights
+		definedStrategyWeights.put(StrategyType.CF_Review, 								0.0026);
+		definedStrategyWeights.put(StrategyType.CF_Market_Seller_Jaccard, 				0.0028);
+		definedStrategyWeights.put(StrategyType.CF_Market_Seller_CN, 					0.0028);
+		definedStrategyWeights.put(StrategyType.CF_Market_Seller_Total, 				0.0029);
 		
 		definedStrategyWeights.put(StrategyType.CF_Soc_Group_Jaccard, 					0.0077);
 		definedStrategyWeights.put(StrategyType.UB_WithOutMLTGroups, 					0.0074);
@@ -44,26 +50,48 @@ public class CommonHybridWeightedSumStrategyJob extends AbstractHybridWeightedSu
 		definedStrategyWeights.put(StrategyType.CF_Soc_Network_CN, 						0.1366);
 		definedStrategyWeights.put(StrategyType.CF_Soc_Network_PrefAttachment, 			0.0355);
 		
-		definedStrategyWeights.put(StrategyType.CF_Loc_Picks_CN, 						0.0045);
-		definedStrategyWeights.put(StrategyType.CF_Loc_Picks_Jaccard, 					0.0045);
-		definedStrategyWeights.put(StrategyType.CF_Loc_Picks_Total, 					0.0038);
+//		definedStrategyWeights.put(StrategyType.CF_Loc_Picks_CN, 						0.0045);
+//		definedStrategyWeights.put(StrategyType.CF_Loc_Picks_Jaccard, 					0.0045);
+//		definedStrategyWeights.put(StrategyType.CF_Loc_Picks_Total, 					0.0038);
+//		
+//		definedStrategyWeights.put(StrategyType.CF_Loc_Common_Regions, 					0.0030);
+//		definedStrategyWeights.put(StrategyType.CF_Loc_Common_Regions_Jaccard, 			0.0028);
+//		definedStrategyWeights.put(StrategyType.CF_Loc_Total_Regions, 					0.0015);
+//		
+//		definedStrategyWeights.put(StrategyType.CF_Loc_Shared_Regions_Common, 			0.0015);
+//		definedStrategyWeights.put(StrategyType.CF_Loc_Shared_Regions_Jaccard, 			0.0018);
+//		definedStrategyWeights.put(StrategyType.CF_Loc_Shared_Regions_Total, 			0.0007);
+//		
+//		definedStrategyWeights.put(StrategyType.CF_Loc_Days_Seen_In_Region, 			0.0016);
+//		definedStrategyWeights.put(StrategyType.CF_Loc_Physical_Distance_in_Region, 	0.0025);
+//		
+//		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_CN, 		0.0023);
+//		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_Jaccard, 	0.0034);
+//		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_Overlap, 	0.0023);
+//		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_Adar, 		0.0003);
+//		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_PrefAtt, 	0.0005);
 		
-		definedStrategyWeights.put(StrategyType.CF_Loc_Common_Regions, 					0.0030);
-		definedStrategyWeights.put(StrategyType.CF_Loc_Common_Regions_Jaccard, 			0.0028);
-		definedStrategyWeights.put(StrategyType.CF_Loc_Total_Regions, 					0.0015);
+		// Pure Social Weights
+		definedStrategyWeights.put(StrategyType.CF_Loc_Picks_CN, 						0.0054);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Picks_Jaccard, 					0.0054);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Picks_Total, 					0.0055);
 		
-		definedStrategyWeights.put(StrategyType.CF_Loc_Shared_Regions_Common, 			0.0015);
-		definedStrategyWeights.put(StrategyType.CF_Loc_Shared_Regions_Jaccard, 			0.0018);
-		definedStrategyWeights.put(StrategyType.CF_Loc_Shared_Regions_Total, 			0.0007);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Common_Regions, 					0.0062);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Common_Regions_Jaccard, 			0.0062);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Total_Regions, 					0.0048);
 		
-		definedStrategyWeights.put(StrategyType.CF_Loc_Days_Seen_In_Region, 			0.0016);
-		definedStrategyWeights.put(StrategyType.CF_Loc_Physical_Distance_in_Region, 	0.0025);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Shared_Regions_Common, 			0.0046);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Shared_Regions_Jaccard, 			0.0052);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Shared_Regions_Total, 			0.0055);
 		
-		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_CN, 		0.0023);
-		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_Jaccard, 	0.0034);
-		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_Overlap, 	0.0023);
-		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_Adar, 		0.0003);
-		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_PrefAtt, 	0.0005);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Days_Seen_In_Region, 			0.0054);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Physical_Distance_in_Region, 	0.0111);
+		
+		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_CN, 		0.0134);
+		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_Jaccard, 	0.0134);
+		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_Overlap, 	0.0102);
+		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_Adar, 		0.0102);
+		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_PrefAtt, 	0.0100);
 	}
 
 	public CommonHybridWeightedSumStrategyJob(
