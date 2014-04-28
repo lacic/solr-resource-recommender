@@ -63,7 +63,7 @@ public class PicksCommonNeighborBasedRecPS implements RecommendStrategy{
 			
 			solrParams.set("q", queryBuilder.toString());
 			solrParams.set("rows", Integer.MAX_VALUE);
-			solrParams.set("fq", "-id:" + user);
+			solrParams.set("fq", "favorite_regions:[* TO *] AND -id:" + user);
 			
 			
 			QueryResponse response = SolrServiceContainer.getInstance().getUserService().getSolrServer().query(solrParams);

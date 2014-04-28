@@ -85,7 +85,7 @@ public class CommonRegionsTotalBasedRecPS implements RecommendStrategy{
 			solrParams.set("q", queryBuilder.toString());
 			solrParams.set("rows", Integer.MAX_VALUE);
 			solrParams.set("fl", "user,region_id");
-			solrParams.set("fq", "-user:" + user);
+			solrParams.set("fq", "region_id:[* TO *] AND -user:" + user);
 			
 			response = SolrServiceContainer.getInstance().getPositionService().getSolrServer().query(solrParams);
 			positions = response.getBeans(Position.class);

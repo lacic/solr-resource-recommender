@@ -83,7 +83,7 @@ public class SharedRegionsJaccardBasedRecPS implements RecommendStrategy{
 			solrParams.set("q", queryBuilder.toString());
 			solrParams.set("rows", Integer.MAX_VALUE);
 			solrParams.set("fl", "id, shared_region_id");
-			solrParams.set("fq", "-id:" + user);
+			solrParams.set("fq", "shared_region_id:[* TO *] AND -id:" + user);
 			
 			response = SolrServiceContainer.getInstance().getSharedLocationService().getSolrServer().query(solrParams);
 			sharedLocations = response.getBeans(SharedLocation.class);
