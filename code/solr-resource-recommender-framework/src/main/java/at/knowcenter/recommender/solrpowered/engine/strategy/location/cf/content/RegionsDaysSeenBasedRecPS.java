@@ -104,7 +104,7 @@ public class RegionsDaysSeenBasedRecPS implements RecommendStrategy{
 			solrParams.set("q", queryBuilder.toString());
 			solrParams.set("rows", Integer.MAX_VALUE);
 			solrParams.set("fl", "user");
-			solrParams.set("fq", filterBuilder.toString());
+			solrParams.set("fq", filterBuilder.toString()  + "AND -user:" + user);
 			
 			response = SolrServiceContainer.getInstance().getPositionService().getSolrServer().query(solrParams);
 			positions = response.getBeans(Position.class);

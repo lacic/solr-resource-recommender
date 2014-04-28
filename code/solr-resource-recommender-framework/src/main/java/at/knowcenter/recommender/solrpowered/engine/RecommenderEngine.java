@@ -75,6 +75,7 @@ import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.Purc
 import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.ReviewBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.SellerBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.puresocial.ReviewBasedRecPS;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.puresocial.ReviewBasedRecPS2;
 import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.seller.SellerAdamicAdarBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.seller.SellerJaccardBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.seller.SellerOverlapBasedRec;
@@ -179,7 +180,7 @@ public class RecommenderEngine implements RecommenderOperations{
 				new CFPurchWithSocCommonNeighborhoodReplacedRecommender());
 		recommendStrategies.put(StrategyType.MostPopular_Review, new MPReviewBasedRec());
 //		recommendStrategies.put(StrategyType.CF_Review, new ReviewBasedRec());
-		recommendStrategies.put(StrategyType.CF_Review, new ReviewBasedRecPS());
+		recommendStrategies.put(StrategyType.CF_Review, new ReviewBasedRecPS2());
 
 		recommendStrategies.put(StrategyType.BiographyBasedMLT, new BiographyBasedRec());
 		recommendStrategies.put(StrategyType.RealBiographyBasedMLT, new RealBiographyBasedRec());

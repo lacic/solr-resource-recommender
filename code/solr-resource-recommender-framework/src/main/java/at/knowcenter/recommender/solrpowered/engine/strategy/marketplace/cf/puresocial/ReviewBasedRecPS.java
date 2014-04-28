@@ -159,6 +159,7 @@ public class ReviewBasedRecPS implements RecommendStrategy {
 		
 		solrParams.set("facet", "true");
 		solrParams.set("facet.field", facetFields);
+		solrParams.set("facet.limit", -1);
 		solrParams.set("facet.mincount", MIN_FACET_USER_COUNT);
 		return solrParams;
 	}
