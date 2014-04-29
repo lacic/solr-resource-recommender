@@ -247,6 +247,7 @@ public class SnapshotBasedRec implements RecommendStrategy {
 		String queryString = "id:(\"" + user + "\"^2) OR users_that_posted_a_snapshot_to_me:(\"" + user + "\")";
 		
 		solrParams.set("q", queryString);
+		solrParams.set("rows", Integer.MAX_VALUE);
 		return solrParams;
 	}
 	

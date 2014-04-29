@@ -1,4 +1,4 @@
-package at.knowcenter.recommender.solrpowered.engine.strategy.social.cf;
+package at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.puresocial;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,6 +28,7 @@ import at.knowcenter.recommender.solrpowered.model.CustomerAction;
 import at.knowcenter.recommender.solrpowered.model.Resource;
 import at.knowcenter.recommender.solrpowered.model.SocialAction;
 import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
+import at.knowcenter.recommender.solrpowered.services.cleaner.DataFetcher;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendQuery;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendResponse;
 import at.knowcenter.recommender.solrpowered.services.impl.item.ItemQuery;
@@ -37,7 +38,7 @@ import at.knowcenter.recommender.solrpowered.services.impl.item.ItemQuery;
  * @author elacic
  *
  */
-public class CommentsBasedRec implements RecommendStrategy {
+public class CommentsBasedRecPS implements RecommendStrategy {
 
 	public static int MAX_USER_OCCURENCE_COUNT = CFQueryBuilder.MAX_USER_OCCURENCE_COUNT;
 	private List<String> alreadyBoughtProducts;
@@ -231,7 +232,19 @@ public class CommentsBasedRec implements RecommendStrategy {
 		String queryString = "id:(\"" + user + "\"^2) OR users_that_commented_on_my_post:(\"" + user + "\")";
 		
 		solrParams.set("q", queryString);
+		
+		List<String> neighbours = DataFetcher.getSocialNeighbourUsers(user);
+		
+		StringBuilder queryBuilder = new StringBuilder("id:(");
+		
+		for (String id : neighbours) {
+			queryBuilder.append("\"" + id + "\" OR ");
+		}
+		queryBuilder.append("\"" + user + "\")");
+		
+		solrParams.set("fq", queryBuilder.toString());
 		solrParams.set("rows", Integer.MAX_VALUE);
+		
 		return solrParams;
 	}
 	

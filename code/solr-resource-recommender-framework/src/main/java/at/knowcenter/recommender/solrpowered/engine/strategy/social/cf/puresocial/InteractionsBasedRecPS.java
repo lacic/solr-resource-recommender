@@ -1,6 +1,8 @@
-package at.knowcenter.recommender.solrpowered.engine.strategy.social.cf;
+package at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.puresocial;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -28,6 +30,7 @@ import at.knowcenter.recommender.solrpowered.model.CustomerAction;
 import at.knowcenter.recommender.solrpowered.model.Resource;
 import at.knowcenter.recommender.solrpowered.model.SocialAction;
 import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
+import at.knowcenter.recommender.solrpowered.services.cleaner.DataFetcher;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendQuery;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendResponse;
 import at.knowcenter.recommender.solrpowered.services.impl.item.ItemQuery;
@@ -37,7 +40,7 @@ import at.knowcenter.recommender.solrpowered.services.impl.item.ItemQuery;
  * @author elacic
  *
  */
-public class CommentsBasedRec implements RecommendStrategy {
+public class InteractionsBasedRecPS implements RecommendStrategy {
 
 	public static int MAX_USER_OCCURENCE_COUNT = CFQueryBuilder.MAX_USER_OCCURENCE_COUNT;
 	private List<String> alreadyBoughtProducts;
@@ -64,10 +67,11 @@ public class CommentsBasedRec implements RecommendStrategy {
 				}
 			}
 			
-			solrParams = getSTEP1Params(query.getUser());
+			solrParams = getInteractionsFromMeAndUSersThatILikedOrCommented(query.getUser());
 
 			response = SolrServiceContainer.getInstance().getSocialActionService().getSolrServer().query(solrParams);
 			step1ElapsedTime = response.getElapsedTime();
+			
 			
 			List<SocialAction> socialUsers = response.getBeans(SocialAction.class);
 			
@@ -78,23 +82,33 @@ public class CommentsBasedRec implements RecommendStrategy {
 				return searchResponse;
 			}
 			
-			SocialAction firstUser = socialUsers.get(0);
-			if (firstUser.getUserId().equals(query.getUser())){
+			SocialAction currentUserInteractions = socialUsers.get(0);
+			if (currentUserInteractions.getUserId().equals(query.getUser())){
 				socialUsers.remove(0);
 			} else {
-				firstUser = null;
+				currentUserInteractions = null;
 			}
 			
 			final Map<String, Integer> userInteractionMap = new HashMap<String, Integer>();
 
-			if (firstUser != null && firstUser.getUsersThatCommentedOnMyPost() != null) {
-				for(String userCommentedOnCurrentUser : firstUser.getUsersThatCommentedOnMyPost()) {
-					Integer userInteraction = userInteractionMap.get(userCommentedOnCurrentUser);
-					if (userInteraction == null) {
-						userInteraction = 0;
-					}
-					
-					userInteractionMap.put(userCommentedOnCurrentUser, userInteraction + 1);
+
+			if (currentUserInteractions != null) {
+				List<String> usersThatLikedMe = currentUserInteractions.getUsersThatLikedMe();
+				List<String> usersThatCommentedOnMyPost = currentUserInteractions.getUsersThatCommentedOnMyPost();
+				List<String> usersThatPostedASnapshopToMe = currentUserInteractions.getUsersThatPostedASnapshopToMe();
+				List<String> usersThatPostedOnMyWall = currentUserInteractions.getUsersThatPostedOnMyWall();
+				
+				if (usersThatLikedMe != null) {
+					fillInteractions(usersThatLikedMe, userInteractionMap);
+				}
+				if (usersThatCommentedOnMyPost != null) {
+					fillInteractions(usersThatCommentedOnMyPost, userInteractionMap);
+				}
+				if (usersThatPostedASnapshopToMe != null) {
+					fillInteractions(usersThatPostedASnapshopToMe, userInteractionMap);
+				}
+				if (usersThatPostedOnMyWall != null) {
+					fillInteractions(usersThatPostedOnMyWall, userInteractionMap);
 				}
 			}
 			
@@ -108,8 +122,21 @@ public class CommentsBasedRec implements RecommendStrategy {
 					userInteraction += Collections.frequency(socialUser.getUsersThatCommentedOnMyPost(), query.getUser());
 				}
 				
+				if (socialUser.getUsersThatLikedMe() != null) {
+					userInteraction += Collections.frequency(socialUser.getUsersThatLikedMe(), query.getUser());
+				}
+				
+				if (socialUser.getUsersThatPostedASnapshopToMe() != null) {
+					userInteraction += Collections.frequency(socialUser.getUsersThatPostedASnapshopToMe(), query.getUser());
+				}
+				
+				if (socialUser.getUsersThatPostedOnMyWall() != null) {
+					userInteraction += Collections.frequency(socialUser.getUsersThatPostedOnMyWall(), query.getUser());
+				}
+				
 				userInteractionMap.put(socialUser.getUserId(), userInteraction);
 			}
+			
 			
 			Comparator<String> interactionCountComparator = new Comparator<String>() {
 
@@ -129,8 +156,7 @@ public class CommentsBasedRec implements RecommendStrategy {
 			
 	        TreeMap<String,Integer> sorted_map = new TreeMap<String,Integer>(interactionCountComparator);
 	        sorted_map.putAll(userInteractionMap);
-	        
-			solrParams = getSTEP2Params(query, maxReuslts, sorted_map);
+	        solrParams = getSTEP2Params(query, maxReuslts, sorted_map);
 			// TODO Facet for confidence value
 			response = SolrServiceContainer.getInstance().getResourceService().getSolrServer().query(solrParams);
 			// fill response object
@@ -140,7 +166,8 @@ public class CommentsBasedRec implements RecommendStrategy {
 
 			SolrDocumentList docResults = response.getResults();
 			searchResponse.setNumFound(docResults.getNumFound());
-		} catch (SolrServerException e) {
+		} catch (Exception e) {
+			System.out.println(solrParams);
 			e.printStackTrace();
 			searchResponse.setNumFound(0);
 			searchResponse.setResultItems(recommendations);
@@ -148,6 +175,20 @@ public class CommentsBasedRec implements RecommendStrategy {
 		}
 		
 		return searchResponse;
+	}
+
+
+	private void fillInteractions(List<String> users, Map<String, Integer> userInteractionMap) {
+		for(String interactedUser : users) {
+
+			Integer userInteraction = userInteractionMap.get(interactedUser);
+
+			if (userInteraction == null) {
+				userInteraction = 0;
+			}
+
+			userInteractionMap.put(interactedUser, userInteraction + 1);
+		}
 	}
 
 
@@ -226,12 +267,27 @@ public class CommentsBasedRec implements RecommendStrategy {
 		return queryBuilder.toString();
 	}
 
-	private ModifiableSolrParams getSTEP1Params(String user) {
+	private ModifiableSolrParams getInteractionsFromMeAndUSersThatILikedOrCommented(String user) {
 		ModifiableSolrParams solrParams = new ModifiableSolrParams();
-		String queryString = "id:(\"" + user + "\"^2) OR users_that_commented_on_my_post:(\"" + user + "\")";
+		String queryString = "id:(\"" + user + "\"^2) OR users_that_liked_me:(\"" + user + 
+								"\") OR users_that_commented_on_my_post:(\"" + user + 
+								"\") OR users_that_posted_on_my_wall:(\"" + user + 
+								"\") OR users_that_posted_a_snapshot_to_me:(\"" + user + "\")";
 		
 		solrParams.set("q", queryString);
+		
+		List<String> neighbours = DataFetcher.getSocialNeighbourUsers(user);
+		
+		StringBuilder queryBuilder = new StringBuilder("id:(");
+		
+		for (String id : neighbours) {
+			queryBuilder.append("\"" + id + "\" OR ");
+		}
+		queryBuilder.append("\"" + user + "\")");
+		
+		solrParams.set("fq", queryBuilder.toString());
 		solrParams.set("rows", Integer.MAX_VALUE);
+
 		return solrParams;
 	}
 	

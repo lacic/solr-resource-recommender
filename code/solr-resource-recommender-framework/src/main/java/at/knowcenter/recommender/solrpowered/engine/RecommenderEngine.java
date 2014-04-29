@@ -101,17 +101,27 @@ import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.groups.Gr
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.groups.GroupNeighborOverlapBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.groups.GroupPrefAttachmentBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.groups.GroupTotalBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.groups.puresocial.GroupCNBasedRecPS;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.groups.puresocial.GroupJaccardBasedRecPS;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.groups.puresocial.GroupTotalBasedRecPS;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.interests.InterestNeighborOverlapBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.interests.InterestsAdamicAdarBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.interests.InterestsIntersectionBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.interests.InterestsJaccardBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.interests.InterestsPrefAttachmentBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.interests.InterestsTotalBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.interests.puresocial.InterestsCNBasedRecPS;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.interests.puresocial.InterestsJaccardBasedRecPS;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.interests.puresocial.InterestsTotalBasedRecPS;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.network.AdamicAdarBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.network.CommonNeighborBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.network.JaccardBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.network.NeighborhodOverlapBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.network.PrefAttachmentBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.puresocial.CommentsBasedRecPS;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.puresocial.InteractionsBasedRecPS;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.puresocial.LikesBasedRecPS;
+import at.knowcenter.recommender.solrpowered.engine.strategy.social.cf.puresocial.WallpostBasedRecPS;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cn.BiographyBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cn.GroupBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.social.cn.InterestsAndGroupBasedRec;
@@ -156,19 +166,23 @@ public class RecommenderEngine implements RecommenderOperations{
 		recommendStrategies.put(StrategyType.CN_WeightDescriptionTags, new DescriptionTagsWeightedBasedRec());
 		recommendStrategies.put(StrategyType.CN_WeightDescriptionNameTags, new DescriptionNameTagsWeightedBasedRec());
 		recommendStrategies.put(StrategyType.CN_WeightNameDescriptionTags, new NameDescriptionTagsWeightedBasedRec());
-		recommendStrategies.put(StrategyType.CF_Social, new InteractionsBasedRec());
 		recommendStrategies.put(StrategyType.CF_Own_Social, new OwnSocialRec());
+		
+		recommendStrategies.put(StrategyType.CF_Social, new InteractionsBasedRec());
 		recommendStrategies.put(StrategyType.CF_Social_Likes, new LikesBasedRec());
 		recommendStrategies.put(StrategyType.CF_Social_Comments, new CommentsBasedRec());
+		recommendStrategies.put(StrategyType.WallPostInteraction, new WallpostBasedRec());
+		recommendStrategies.put(StrategyType.SnapshotInteraction, new SnapshotBasedRec());
+		
+//		recommendStrategies.put(StrategyType.CF_Social, new InteractionsBasedRecPS());
+//		recommendStrategies.put(StrategyType.CF_Social_Likes, new LikesBasedRecPS());
+//		recommendStrategies.put(StrategyType.CF_Social_Comments, new CommentsBasedRecPS());
+//		recommendStrategies.put(StrategyType.WallPostInteraction, new WallpostBasedRecPS());
 		
 		recommendStrategies.put(StrategyType.UB_Interests_MLT, new InterestsBasedRec());
 		recommendStrategies.put(StrategyType.UB_CustomerGroups, new GroupBasedRec());
 		recommendStrategies.put(StrategyType.UB_InterestsCustomerGroup, new InterestsAndGroupBasedRec());
 		recommendStrategies.put(StrategyType.UB_WithOutMLT, new UserBasedRecommenderWithoutMLT());
-		
-		recommendStrategies.put(StrategyType.UB_WithOutMLTInterests, new InterestsIntersectionBasedRec());
-		recommendStrategies.put(StrategyType.UB_WithOutMLTGroups, new GroupIntersectionBasedRec());
-		
 		
 		recommendStrategies.put(StrategyType.CF_Categories, new CategoryBasedRec());
 		recommendStrategies.put(StrategyType.SocialStream, new SocialStream3Rec());
@@ -185,21 +199,31 @@ public class RecommenderEngine implements RecommenderOperations{
 		recommendStrategies.put(StrategyType.BiographyBasedMLT, new BiographyBasedRec());
 		recommendStrategies.put(StrategyType.RealBiographyBasedMLT, new RealBiographyBasedRec());
 		
-		recommendStrategies.put(StrategyType.WallPostInteraction, new WallpostBasedRec());
-		recommendStrategies.put(StrategyType.SnapshotInteraction, new SnapshotBasedRec());
 		recommendStrategies.put(StrategyType.CF_Soc_Network_CN, new CommonNeighborBasedRec());
 		recommendStrategies.put(StrategyType.CF_Soc_Network_Jaccard, new JaccardBasedRec());
 		recommendStrategies.put(StrategyType.CF_Soc_Network_NeighOverlap, new NeighborhodOverlapBasedRec());
 		recommendStrategies.put(StrategyType.CF_Soc_Network_AdamicAdar, new AdamicAdarBasedRec());
 		recommendStrategies.put(StrategyType.CF_Soc_Network_PrefAttachment, new PrefAttachmentBasedRec());
 		
-		recommendStrategies.put(StrategyType.CF_Soc_Group_Jaccard, new GroupJaccardBasedRec());
+//		recommendStrategies.put(StrategyType.UB_WithOutMLTGroups, new GroupIntersectionBasedRec());
+//		recommendStrategies.put(StrategyType.CF_Soc_Group_Jaccard, new GroupJaccardBasedRec());
+//		recommendStrategies.put(StrategyType.CF_Soc_Group_Total, new GroupTotalBasedRec());
+		recommendStrategies.put(StrategyType.UB_WithOutMLTGroups, new GroupCNBasedRecPS());
+		recommendStrategies.put(StrategyType.CF_Soc_Group_Jaccard, new GroupJaccardBasedRecPS());
+		recommendStrategies.put(StrategyType.CF_Soc_Group_Total, new GroupTotalBasedRecPS());
+		
 		recommendStrategies.put(StrategyType.CF_Soc_Group_Overlap, new GroupNeighborOverlapBasedRec());
 		recommendStrategies.put(StrategyType.CF_Soc_Group_AdemicAdar, new GroupAdamicAdarBasedRec());
 		recommendStrategies.put(StrategyType.CF_Soc_Group_PrefAttach, new GroupPrefAttachmentBasedRec());
 		
-		recommendStrategies.put(StrategyType.CF_Soc_Interests_Jaccard, new InterestsJaccardBasedRec());
-		recommendStrategies.put(StrategyType.CF_Soc_Interests_Overlap, new InterestNeighborOverlapBasedRec());
+//		recommendStrategies.put(StrategyType.UB_WithOutMLTInterests, new InterestsIntersectionBasedRec());
+//		recommendStrategies.put(StrategyType.CF_Soc_Interests_Jaccard, new InterestsJaccardBasedRec());
+//		recommendStrategies.put(StrategyType.CF_Soc_Interests_Total, new InterestsTotalBasedRec());
+		recommendStrategies.put(StrategyType.UB_WithOutMLTInterests, new InterestsCNBasedRecPS());
+		recommendStrategies.put(StrategyType.CF_Soc_Interests_Jaccard, new InterestsJaccardBasedRecPS());
+		recommendStrategies.put(StrategyType.CF_Soc_Interests_Total, new InterestsTotalBasedRecPS());
+		
+		recommendStrategies.put(StrategyType.CF_Soc_Interests_Overlap, new InterestNeighborOverlapBasedRec());		
 		recommendStrategies.put(StrategyType.CF_Soc_Interests_AdemicAdar, new InterestsAdamicAdarBasedRec());
 		recommendStrategies.put(StrategyType.CF_Soc_Interests_PrefAttach, new InterestsPrefAttachmentBasedRec());
 		
@@ -258,8 +282,6 @@ public class RecommenderEngine implements RecommenderOperations{
 //		recommendStrategies.put(StrategyType.CF_Market_Seller_Total, new SellerTotalBasedRec());
 		recommendStrategies.put(StrategyType.CF_Market_Seller_Total, new SellerTotalBasedRecPS());
 
-		recommendStrategies.put(StrategyType.CF_Soc_Interests_Total, new InterestsTotalBasedRec());
-		recommendStrategies.put(StrategyType.CF_Soc_Group_Total, new GroupTotalBasedRec());
 //		recommendStrategies.put(StrategyType.CF_Loc_Picks_Total, new PicksTotalBasedRec());
 		recommendStrategies.put(StrategyType.CF_Loc_Picks_Total, new PicksTotalBasedRecPS());
 
