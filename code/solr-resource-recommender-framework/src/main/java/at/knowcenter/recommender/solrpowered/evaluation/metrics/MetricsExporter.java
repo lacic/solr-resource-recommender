@@ -86,15 +86,15 @@ public class MetricsExporter {
 			FileWriter writer = new FileWriter(file, true);
 			
 			BufferedWriter bw = new BufferedWriter(writer);		
-			bw.write(Double.toString((recallSum / size)).replace('.', ',') + ";");		
-			bw.write(Double.toString((precisionSum / size)).replace('.', ',') + ";");		
-			bw.write(Double.toString((fMeasureSum / size)).replace('.', ',') + ";");		
-			bw.write(Double.toString((mrrSum / size)).replace('.', ',') + ";");		
-			bw.write(Double.toString((mapSum / size)).replace('.', ',') + ";");
-			bw.write(Double.toString((diversitSum / size)).replace('.', ',') + ";");
-			bw.write(Double.toString((serendipitySum / size)).replace('.', ',') + ";");
-			bw.write(Double.toString((ndcgSum / size)).replace('.', ',') + ";");
-			bw.write(Double.toString((userCoverageSum / size)).replace('.', ',') + ";");
+			bw.write(Double.toString((recallSum / size)) + ";");		
+			bw.write(Double.toString((precisionSum / size)) + ";");		
+			bw.write(Double.toString((fMeasureSum / size)) + ";");		
+			bw.write(Double.toString((mrrSum / size)) + ";");		
+			bw.write(Double.toString((mapSum / size)) + ";");
+			bw.write(Double.toString((diversitSum / size)) + ";");
+			bw.write(Double.toString((serendipitySum / size)) + ";");
+			bw.write(Double.toString((ndcgSum / size)) + ";");
+			bw.write(Double.toString((userCoverageSum / size)) + ";");
 			// from nano to ms
 			long averageDuaration = (duarationSum / size) / 1000000;
 //			bw.write(Integer.toString(size) + ";");

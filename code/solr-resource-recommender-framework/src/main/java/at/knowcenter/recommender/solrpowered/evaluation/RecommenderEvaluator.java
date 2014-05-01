@@ -1,8 +1,10 @@
 package at.knowcenter.recommender.solrpowered.evaluation;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -432,10 +434,69 @@ public class RecommenderEvaluator extends RecommenderEngine{
 				fetchOffset += fetchIteration;
 			}
 		}
+		List<Resource> recommendedResources = findElementById.getBeans(Resource.class);
 		
+		List<String> recommendedCategories = new ArrayList<String>();
+		List<String> purchasedCategories = new ArrayList<String>();
 
-		PredictionCalculator pEval = new PredictionCalculator(userID, removedOwnProducts, recommendations, k);
-		SimilarityCalculator sEval = new SimilarityCalculator(fetchedAlreadyBoughtItems, findElementById.getBeans(Resource.class), k);
+		String miscCategory = "MISC";
+		for (Resource res : recommendedResources) {
+			String cat1 = res.getCategory1();
+			String cat2 = res.getCategory2();
+			String cat3 = res.getCategory3();
+			String cat4 = res.getCategory4();
+			
+			if (cat4 != null) {
+				if (! recommendedCategories.contains(cat4)) {
+					recommendedCategories.add(cat4);
+				}
+			} else if (cat3 != null) {
+				if (! recommendedCategories.contains(cat3)) {
+					recommendedCategories.add(cat3);
+				}
+			} else if (cat2 != null) {
+				if (! recommendedCategories.contains(cat2)) {
+					recommendedCategories.add(cat2);
+				}
+			} else if (cat1 != null) {
+				if (! recommendedCategories.contains(cat1)) {
+					recommendedCategories.add(cat1);
+				}
+			} else if (! recommendedCategories.contains(miscCategory)) {
+				recommendedCategories.add(miscCategory);
+			}
+		}
+
+		for (Resource res : fetchedAlreadyBoughtItems) {
+			String cat1 = res.getCategory1();
+			String cat2 = res.getCategory2();
+			String cat3 = res.getCategory3();
+			String cat4 = res.getCategory4();
+			
+			if (cat4 != null) {
+				if (! purchasedCategories.contains(cat4)) {
+					purchasedCategories.add(cat4);
+				}
+			} else if (cat3 != null) {
+				if (! purchasedCategories.contains(cat3)) {
+					purchasedCategories.add(cat3);
+				}
+			} else if (cat2 != null) {
+				if (! purchasedCategories.contains(cat2)) {
+					purchasedCategories.add(cat2);
+				}
+			} else if (cat1 != null) {
+				if (! purchasedCategories.contains(cat1)) {
+					purchasedCategories.add(cat1);
+				}
+			} else if (! purchasedCategories.contains(miscCategory)) {
+				purchasedCategories.add(miscCategory);
+			}
+		}
+
+//		PredictionCalculator pEval = new PredictionCalculator(userID, removedOwnProducts, recommendations, k);
+		PredictionCalculator pEval = new PredictionCalculator(userID, purchasedCategories, recommendedCategories, k);
+		SimilarityCalculator sEval = new SimilarityCalculator(fetchedAlreadyBoughtItems, recommendedResources, k);
 		
 		mCalc.appendMetrics(pEval, sEval);
 	}

@@ -138,12 +138,8 @@ public class RecommendationQueryUtils {
 		long maxUserCount = 0;
 		long userCountSum = 0;
 		
-		List<String> neighbours = DataFetcher.getSocialNeighbourUsers(currentUser);
 		
 		for (Count userOccurence : userOccurences) {
-			if (!neighbours.contains(userOccurence.getName())) {
-				continue;
-			}
 			if ( ! userOccurence.getName().equals(currentUser)) {
 				if (userOccurenceCount >= maxUserOccurence) {
 					break;

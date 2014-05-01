@@ -1,5 +1,6 @@
 package at.knowcenter.recommender.solrpowered.evaluation.metrics;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -139,6 +140,9 @@ public class SimilarityCalculator {
 	}
 
 	private Map<String, Integer> fillListWordCount(List<String> itemAttributeList) {
+		if (itemAttributeList == null) {
+			itemAttributeList = new ArrayList<String>();
+		}
 		Map<String, Integer> wordOccurencItemK;
 		String collectionItemK = "";
 		for (String collection : itemAttributeList) {

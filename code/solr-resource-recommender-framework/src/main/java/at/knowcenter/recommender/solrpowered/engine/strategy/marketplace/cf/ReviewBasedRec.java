@@ -79,7 +79,6 @@ public class ReviewBasedRec implements RecommendStrategy {
 
 			SolrServer server = SolrServiceContainer.getInstance().getResourceService().getSolrServer();
 			response = server.query(solrParams);
-			
 			// fill response object
 			List<Resource> beans = response.getBeans(Resource.class);
 			searchResponse.setResultItems(RecommendationQueryUtils.extractRecommendationIds(beans));
@@ -107,7 +106,6 @@ public class ReviewBasedRec implements RecommendStrategy {
 		
 		for (FacetField userFacet : userFacets) {
 			double searchRank = 0.0;
-			
 			if (userFacet.getName().equals(USERS_RATED_5_FIELD)) {
 				searchRank = 1.0;
 			}
@@ -127,7 +125,6 @@ public class ReviewBasedRec implements RecommendStrategy {
 			queryString += RecommendationQueryUtils.
 					createQueryToFindProdLikedBySimilarUsers(userFacet.getValues(), query.getUser(), contentFilter, userFacet.getName(), MAX_USER_OCCURENCE_COUNT, searchRank) + " OR ";
 		}
-		
 		// remove last OR
 		queryString = queryString.substring(0, queryString.length() - 3);
 		
@@ -153,13 +150,13 @@ public class ReviewBasedRec implements RecommendStrategy {
 		ModifiableSolrParams solrParams;
 		solrParams = new ModifiableSolrParams();
 		queryString = RecommendationQueryUtils.createQueryToFindSimilarUsersForSameAttribute("id", query.getProductIds());
-		
 		solrParams.set("q", queryString);
 		solrParams.set("fl", "id");
 		
 		solrParams.set("facet", "true");
 		solrParams.set("facet.field", facetFields);
 		solrParams.set("facet.mincount", MIN_FACET_USER_COUNT);
+		solrParams.set("facet.limit", 60);
 		return solrParams;
 	}
 	

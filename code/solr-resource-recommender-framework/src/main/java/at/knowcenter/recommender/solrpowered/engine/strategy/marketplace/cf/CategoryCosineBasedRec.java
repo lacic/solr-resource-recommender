@@ -24,6 +24,7 @@ import at.knowcenter.recommender.solrpowered.engine.strategy.RecommendStrategy;
 import at.knowcenter.recommender.solrpowered.engine.strategy.StrategyType;
 import at.knowcenter.recommender.solrpowered.engine.utils.CFQueryBuilder;
 import at.knowcenter.recommender.solrpowered.engine.utils.RecommendationQueryUtils;
+import at.knowcenter.recommender.solrpowered.evaluation.metrics.SimilarityCalculator;
 import at.knowcenter.recommender.solrpowered.model.Customer;
 import at.knowcenter.recommender.solrpowered.model.CustomerAction;
 import at.knowcenter.recommender.solrpowered.model.Item;
@@ -37,7 +38,7 @@ import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendResp
  * @author Emanuel Lacic
  *
  */
-public class CategoryBasedRec implements RecommendStrategy {
+public class CategoryCosineBasedRec implements RecommendStrategy {
 
 	public static final String USERS_RATED_1_FIELD = "users_rated_1";
 	public static final String USERS_RATED_2_FIELD = "users_rated_2";
@@ -85,28 +86,26 @@ public class CategoryBasedRec implements RecommendStrategy {
 			response = SolrServiceContainer.getInstance().getResourceService().getSolrServer().query(solrParams);
 			
 			List<Resource> resources = response.getBeans(Resource.class);
-			Set<String> knownCategories = new HashSet<String>();
+			Map<String,Integer> knownCategories = new HashMap<String,Integer>();
 			
 			for (Resource item : resources) {
 				if (item.getTags() != null) {
-					knownCategories.addAll(item.getTags());
+					for (String tag : item.getTags()) {
+						Integer ocurrance = knownCategories.get(tag);
+						ocurrance = (ocurrance == null) ? 1 : ocurrance + 1;
+						knownCategories.put(tag, ocurrance);
+					}
 				}
 			}
 			
-			Set<String> otherUsers = fetchUsersFromCategories(knownCategories, query.getUser());
-			Map<String, Set<String>> userSellerMap = fetchUserCategoryMapping(otherUsers, query.getUser());
+			Set<String> otherUsers = fetchUsersFromCategories(knownCategories.keySet(), query.getUser());
+			Map<String,  Map<String,Integer>> userSellerMap = fetchUserCategoryMapping(otherUsers, query.getUser());
 			
 			final Map<String, Double> commonNeighborMap = new HashMap<String, Double>();
 			for (String commonUser : userSellerMap.keySet()) {
-				Set<String> categories = userSellerMap.get(commonUser);
+				Map<String,Integer> categories = userSellerMap.get(commonUser);
 				
-				Set<String> intersection = new HashSet<String>(categories);
-				intersection.retainAll(knownCategories);
-				
-//				Set<String> union = new HashSet<String>(categories);
-//				union.addAll(knownCategories);
-				
-				commonNeighborMap.put(commonUser, (double) intersection.size() );				
+				commonNeighborMap.put(commonUser, SimilarityCalculator.getCosineSim(knownCategories, categories));				
 			}
 			
 			Comparator<String> interactionCountComparator = new Comparator<String>() {
@@ -207,8 +206,8 @@ public class CategoryBasedRec implements RecommendStrategy {
 		return usersFromCategories;
 	}
 	
-	private Map<String, Set<String>> fetchUserCategoryMapping(Set<String> otherUsers, String currentUser) {
-		Map<String, Set<String>> userCategoryMapping = new HashMap<String, Set<String>>();
+	private Map<String,  Map<String,Integer>> fetchUserCategoryMapping(Set<String> otherUsers, String currentUser) {
+		Map<String,  Map<String,Integer>> userCategoryMapping = new HashMap<String,  Map<String,Integer>>();
 		ModifiableSolrParams solrParams = new ModifiableSolrParams();
 		
 		StringBuilder rated5Builder = new StringBuilder(USERS_RATED_5_FIELD + ":(");
@@ -281,19 +280,24 @@ public class CategoryBasedRec implements RecommendStrategy {
 		return userCategoryMapping;
 	}
 	
-	private void fillSellersForUsers(Map<String, Set<String>> userCategoryMapping, List<String> categories, 
+	private void fillSellersForUsers(Map<String, Map<String,Integer>> userCategoryMapping, List<String> categories, 
 			List<String> usersThatPurchased, String currentUser, Set<String> otherUsers) {
 		
 		for (String purchasingUser :usersThatPurchased) {
 			if ((! purchasingUser.equals(currentUser)) && otherUsers.contains(purchasingUser)) {
-				Set<String> sellers = userCategoryMapping.get(purchasingUser);
+				Map<String,Integer> userCategories = userCategoryMapping.get(purchasingUser);
 				
-				if (sellers == null) {
-					sellers = new HashSet<String>();
+				if (userCategories == null) {
+					userCategories = new HashMap<String,Integer>();
 				}
 				
-				sellers.addAll(categories);
-				userCategoryMapping.put(purchasingUser, sellers);
+				for (String cat : categories) {
+					Integer occurance = userCategories.get(cat);
+					occurance = (occurance == null) ? 1 : occurance + 1;
+					userCategories.put(cat, occurance);
+				}
+				
+				userCategoryMapping.put(purchasingUser, userCategories);
 			}
 		}
 	}
