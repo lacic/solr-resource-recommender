@@ -8,6 +8,8 @@ import java.util.concurrent.Callable;
 
 import at.knowcenter.recommender.solrpowered.engine.filtering.ContentFilter;
 import at.knowcenter.recommender.solrpowered.engine.strategy.StrategyType;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.CategoryBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.CategoryJaccardBasedRec;
 import at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.AbstractStrategyJob;
 import at.knowcenter.recommender.solrpowered.evaluation.metrics.MetricsExporter;
 
@@ -25,6 +27,10 @@ public class CommonHybridCrossSourceStrategyJob extends AbstractHybridCrossSourc
 		definedStrategyWeights.put(StrategyType.CF_Market_Seller_Jaccard, 				0.0239);
 		definedStrategyWeights.put(StrategyType.CF_Market_Seller_CN, 					0.0197);
 		definedStrategyWeights.put(StrategyType.CF_Market_Seller_Total, 				0.0159);
+		
+		definedStrategyWeights.put(StrategyType.CF_Categories_CN, 						0.0034);
+		definedStrategyWeights.put(StrategyType.CF_Categories_Jacc, 					0.0059);
+		definedStrategyWeights.put(StrategyType.CF_Categories_Total, 					0.0017);
 		
 		// Pure Social Weights
 //		definedStrategyWeights.put(StrategyType.CF_Review, 								0.0026);
