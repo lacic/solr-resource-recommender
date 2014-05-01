@@ -573,13 +573,15 @@ public class RecommendationQueryUtils {
 	}
 	
 	
-	public static  void fillWeightedMap(Map<String, Double> occurencesMap, List<String> products, Double weight) {
+	public static  void fillWeightedMap(Map<String, Double> weightedMap, List<String> products, Double weight) {
 		for (String recommendedItem : products) {
+			// rank in rec list
 			int positionScore = products.size() - products.indexOf(recommendedItem);
-			if (occurencesMap.containsKey(recommendedItem)) {
-				occurencesMap.put(recommendedItem, occurencesMap.get(recommendedItem) +  positionScore * weight);
+			
+			if (weightedMap.containsKey(recommendedItem)) {
+				weightedMap.put(recommendedItem, weightedMap.get(recommendedItem) +  positionScore * weight);
 	        } else {
-	        	occurencesMap.put(recommendedItem, positionScore * weight);
+	        	weightedMap.put(recommendedItem, positionScore * weight);
 	        }
 		}
 	}

@@ -32,52 +32,22 @@ public abstract class AbstractHybridWeightedSumStrategyJob extends RecommenderEv
 			
 			List<String> recommendations = new ArrayList<String>();
 
-			final Map<String, Double> weightMap = new HashMap<String, Double>();
+			Map<String, Double> weightMap = new HashMap<String, Double>();
 
 			for (StrategyType strategy : strategyWeights.keySet()) {
 				Double strategyWeight = strategyWeights.get(strategy);
-				
 				List<String> strategyRecs = 
 						getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(strategy));
 				
-				for (String recommendation : strategyRecs) {
-					int positionScore = strategyRecs.size() - strategyRecs.indexOf(recommendation);
-					
-					Double recWeight = weightMap.get(recommendation);
-					double itemWeight = positionScore * strategyWeight;
-					
-					if (recWeight == null) {
-						recWeight = itemWeight;
-					} else if (recWeight <itemWeight){
-						recWeight = itemWeight;
-					}
-					weightMap.put(recommendation, recWeight);
-				}
-				
+				RecommendationQueryUtils.fillWeightedMap(weightMap, strategyRecs, strategyWeight);
 			}
 			
-			Comparator<String> interactionCountComparator = new Comparator<String>() {
+			List<String> sortedAndTrimedRecommendations = 
+					RecommendationQueryUtils.extractCrossRankedProducts(weightMap);
+			RecommendationQueryUtils.appendDifferentProducts(
+					resultSize, recommendations, sortedAndTrimedRecommendations);
 
-				@Override
-				public int compare(String a, String b) {
-					if (weightMap.get(a) >= weightMap.get(b)) {
-			            return -1;
-			        } else {
-			            return 1;
-			        }
-				}
-				
-			};
 			
-	        TreeMap<String,Double> sortedMap = new TreeMap<String,Double>(interactionCountComparator);
-	        sortedMap.putAll(weightMap);
-	        
-	        for (String recommendedItem : sortedMap.keySet()) {
-	        	recommendations.add(recommendedItem);
-	        	if (recommendations.size() >= resultSize) {
-	        		break;
-	        	}
-	        }
 			
 			long duaration = System.nanoTime() - getRecommStartTime;
 			

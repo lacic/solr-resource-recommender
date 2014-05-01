@@ -74,6 +74,8 @@ import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cb.comb
 import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cb.combinations.NameTagsWeightedBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.CategoryBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.CategoryCosineBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.CategoryJaccardBasedRec;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.CategoryTotalBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.PurchasesBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.ReviewBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.SellerBasedRec;
@@ -188,6 +190,9 @@ public class RecommenderEngine implements RecommenderOperations{
 		recommendStrategies.put(StrategyType.UB_WithOutMLT, new UserBasedRecommenderWithoutMLT());
 		
 		recommendStrategies.put(StrategyType.CF_Categories, new CategoryCosineBasedRec());
+		recommendStrategies.put(StrategyType.CF_Categories_CN, new CategoryBasedRec());
+		recommendStrategies.put(StrategyType.CF_Categories_Jacc, new CategoryJaccardBasedRec());
+		recommendStrategies.put(StrategyType.CF_Categories_Total, new CategoryTotalBasedRec());
 		recommendStrategies.put(StrategyType.SocialStream, new SocialStream3Rec());
 		recommendStrategies.put(StrategyType.CFPurchWithSocCommonNeighborhoodRecommender, 
 				new CFPurchWithSocCommonNeighborhoodRecommender());
@@ -275,11 +280,11 @@ public class RecommenderEngine implements RecommenderOperations{
 		recommendStrategies.put(StrategyType.CF_Location_Network_All_Overlap, new LocationOverlapBasedRec());
 		recommendStrategies.put(StrategyType.CF_Location_Network_All_PrefAtt, new LocationPrefAttBasedRec());
 		
-//		recommendStrategies.put(StrategyType.CF_Loc_Common_Regions, new CommonRegionsBasedRec());
-//		recommendStrategies.put(StrategyType.CF_Loc_Common_Regions_Jaccard, new CommonRegionsJaccardBasedRec());
+		recommendStrategies.put(StrategyType.CF_Loc_Common_Regions, new CommonRegionsBasedRec());
+		recommendStrategies.put(StrategyType.CF_Loc_Common_Regions_Jaccard, new CommonRegionsJaccardBasedRec());
 		
-		recommendStrategies.put(StrategyType.CF_Loc_Common_Regions, new CommonRegionsBasedRecPS());
-		recommendStrategies.put(StrategyType.CF_Loc_Common_Regions_Jaccard, new CommonRegionsJaccardBasedRecPS());
+//		recommendStrategies.put(StrategyType.CF_Loc_Common_Regions, new CommonRegionsBasedRecPS());
+//		recommendStrategies.put(StrategyType.CF_Loc_Common_Regions_Jaccard, new CommonRegionsJaccardBasedRecPS());
 		
 		
 		recommendStrategies.put(StrategyType.CF_Market_Seller_Total, new SellerTotalBasedRec());

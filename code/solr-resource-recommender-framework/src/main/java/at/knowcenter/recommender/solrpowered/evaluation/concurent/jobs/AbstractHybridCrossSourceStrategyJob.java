@@ -30,18 +30,32 @@ public abstract class AbstractHybridCrossSourceStrategyJob extends RecommenderEv
 			
 			List<String> recommendations = new ArrayList<String>();
 
-			Map<String, Double> occurencesMap = new HashMap<String, Double>();
+			Map<String, Double> weightMap = new HashMap<String, Double>();
+			Map<String, Integer> ocurranceMap = new HashMap<String, Integer>();
 
 			for (StrategyType strategy : strategyWeights.keySet()) {
 				Double strategyWeight = strategyWeights.get(strategy);
 				List<String> strategyRecs = 
 						getRecommendations(userID, null, resultSize, cf, recommendStrategies.get(strategy));
 				
-				RecommendationQueryUtils.fillWeightedMap(occurencesMap, strategyRecs, strategyWeight);
+				RecommendationQueryUtils.fillWeightedMap(weightMap, strategyRecs, strategyWeight);
+				
+				for (String rec : strategyRecs) {
+					if (ocurranceMap.containsKey(rec)) {
+						ocurranceMap.put(rec, ocurranceMap.get(rec) + 1);
+					} else {
+						ocurranceMap.put(rec, 1);
+					}
+				}
+			}
+			
+			for (String rec : weightMap.keySet()) {
+				Integer ocurrance = ocurranceMap.get(rec);
+				weightMap.put(rec, weightMap.get(rec) * ocurrance);
 			}
 			
 			List<String> sortedAndTrimedRecommendations = 
-					RecommendationQueryUtils.extractCrossRankedProducts(occurencesMap);
+					RecommendationQueryUtils.extractCrossRankedProducts(weightMap);
 			RecommendationQueryUtils.appendDifferentProducts(
 					resultSize, recommendations, sortedAndTrimedRecommendations);
 
