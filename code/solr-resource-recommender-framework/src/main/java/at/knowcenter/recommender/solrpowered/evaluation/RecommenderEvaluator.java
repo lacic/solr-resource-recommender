@@ -496,8 +496,8 @@ public class RecommenderEvaluator extends RecommenderEngine{
 			}
 		}
 
-//		PredictionCalculator pEval = new PredictionCalculator(userID, removedOwnProducts, recommendations, k);
-		PredictionCalculator pEval = new PredictionCalculator(userID, purchasedCategories, recommendedCategories, k);
+		PredictionCalculator pEval = new PredictionCalculator(userID, removedOwnProducts, recommendations, k);
+//		PredictionCalculator pEval = new PredictionCalculator(userID, purchasedCategories, recommendedCategories, k);
 		SimilarityCalculator sEval = new SimilarityCalculator(fetchedAlreadyBoughtItems, recommendedResources, k);
 		
 		mCalc.appendMetrics(pEval, sEval);
