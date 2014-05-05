@@ -92,10 +92,8 @@ public class CategoryJaccardBasedRec implements RecommendStrategy {
 					knownCategories.addAll(item.getTags());
 				}
 			}
-			
 			Set<String> otherUsers = fetchUsersFromCategories(knownCategories, query.getUser());
 			Map<String, Set<String>> userSellerMap = fetchUserCategoryMapping(otherUsers, query.getUser());
-			
 			final Map<String, Double> commonNeighborMap = new HashMap<String, Double>();
 			for (String commonUser : userSellerMap.keySet()) {
 				Set<String> categories = userSellerMap.get(commonUser);
@@ -157,7 +155,7 @@ public class CategoryJaccardBasedRec implements RecommendStrategy {
 		StringBuilder sellerBuilder = new StringBuilder("tags:(");
 
 		for (String seller : tags) {
-			sellerBuilder.append(seller + " OR ");
+			sellerBuilder.append("\"" + seller + "\" OR ");
 		}
 		
 		if (tags.size() > 0) {
@@ -170,7 +168,6 @@ public class CategoryJaccardBasedRec implements RecommendStrategy {
 		solrParams.set("rows", Integer.MAX_VALUE);
 		solrParams.set("fq", "tags:[* TO *]");
 		solrParams.set("fl", "users_rated_5,users_rated_4,users_rated_3,users_rated_2,users_rated_1");
-
 		try {
 			QueryResponse response = SolrServiceContainer.getInstance().getResourceService().getSolrServer().query(solrParams);
 			

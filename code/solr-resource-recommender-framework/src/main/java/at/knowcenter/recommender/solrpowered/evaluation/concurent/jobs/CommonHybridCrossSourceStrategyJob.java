@@ -25,7 +25,9 @@ public class CommonHybridCrossSourceStrategyJob extends AbstractHybridCrossSourc
 		definedStrategyWeights.put(StrategyType.CF_Market_Seller_Jaccard, 				0.0239);
 		definedStrategyWeights.put(StrategyType.CF_Market_Seller_CN, 					0.0197);
 		definedStrategyWeights.put(StrategyType.CF_Market_Seller_Total, 				0.0159);
-		
+		definedStrategyWeights.put(StrategyType.CF_Market_Seller_Total, 				0.0159);
+		definedStrategyWeights.put(StrategyType.CF_Market_Seller_Total, 				0.0159);
+		definedStrategyWeights.put(StrategyType.CF_Market_Seller_Total, 				0.0159);
 		// Pure Social Weights
 //		definedStrategyWeights.put(StrategyType.CF_Review, 								0.0026);
 //		definedStrategyWeights.put(StrategyType.CF_Market_Seller_Jaccard, 				0.0028);
