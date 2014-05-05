@@ -154,7 +154,7 @@ public class CategoryTotalBasedRec implements RecommendStrategy {
 		StringBuilder sellerBuilder = new StringBuilder("tags:(");
 
 		for (String seller : tags) {
-			sellerBuilder.append(seller + " OR ");
+			sellerBuilder.append("\"" + seller + "\" OR ");
 		}
 		
 		if (tags.size() > 0) {

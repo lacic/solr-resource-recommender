@@ -26,6 +26,10 @@ public class CommonHybridWeightedSumStrategyJob extends AbstractHybridWeightedSu
 		definedStrategyWeights.put(StrategyType.CF_Market_Seller_CN, 					0.0197);
 		definedStrategyWeights.put(StrategyType.CF_Market_Seller_Total, 				0.0159);
 		
+		definedStrategyWeights.put(StrategyType.CF_Categories_CN, 						0.0034);
+		definedStrategyWeights.put(StrategyType.CF_Categories_Jacc, 					0.0059);
+		definedStrategyWeights.put(StrategyType.CF_Categories_Total, 					0.0017);
+		
 		// Pure Social Weights
 //		definedStrategyWeights.put(StrategyType.CF_Review, 								0.0026);
 //		definedStrategyWeights.put(StrategyType.CF_Market_Seller_Jaccard, 				0.0028);
