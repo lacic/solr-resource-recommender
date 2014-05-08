@@ -18,6 +18,11 @@ The source-code can be directly checked-out through this repository. The code/so
 
 ## Installation
 
+### Apache Solr
+
+First things first, SocRecM depends on [Apache Solr](http://lucene.apache.org/solr/) as its datasource. Download it, extract everything in any prefered location and set up the different collection configuration with the provided [schema files](https://github.com/lacic/solr-resource-recommender/tree/master/resources/solr-schemas). For first time users, please conduct Solr's [tutorial site](http://lucene.apache.org/solr/4_7_2/tutorial.html).
+
+
 ### Using Maven
 
 The framework is built and deployed via [Maven](http://maven.apache.org/). To install it, check out this repository and run mvn clean install in the code/solr-resource-recommender-framework/ folder. 
