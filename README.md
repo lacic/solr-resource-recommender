@@ -1,8 +1,8 @@
-SocRecSearch - Towards a Scalable Social Recommender Engine for Online Marketplaces: The Case of Apache Solr
+SocRecM - Towards a Scalable Social Recommender Engine for Online Marketplaces: The Case of Apache Solr
 =========================
 
 ## Description
-Recent research has unveiled the importance of online social networks for improving the quality of recommenders in several domains, what has encouraged the research community to investigate ways to better exploit the social information for recommendations. However, there is a lack of work that offers details of frameworks that allow an easy integration of social data with traditional recommendation algorithms in order to yield a straight-forward and scalable implementation of new and existing systems. With SocRecSearch we intend to bridge this gap. In particular with SocRecSearch we introduce a novel social recommender engine for online marketplaces that is built upon the well-know search engine Apache Solr. The framework offers a set of content and collaborative filtering approaches hybrid approaches to recommend items (e.g., products) to user not only in a personalized manner but also utilizing social data from the users social networks such as Facebook, Google+, or Twitter. To the best of our knowledge SocRecSearch is the first open source recommender engine for online marketplaces that relies on
+Recent research has unveiled the importance of online social networks for improving the quality of recommenders in several domains, what has encouraged the research community to investigate ways to better exploit the social information for recommendations. However, there is a lack of work that offers details of frameworks that allow an easy integration of social data with traditional recommendation algorithms in order to yield a straight-forward and scalable implementation of new and existing systems. With SocRecM we intend to bridge this gap. In particular with SocRecM we introduce a novel social recommender engine for online marketplaces that is built upon the well-know search engine Apache Solr. The framework offers a set of content and collaborative filtering approaches hybrid approaches to recommend items (e.g., products) to user not only in a personalized manner but also utilizing social data from the users social networks such as Facebook, Google+, or Twitter. To the best of our knowledge SocRecM is the first open source recommender engine for online marketplaces that relies on
 std. search software such as Apache Solr and is able to utilize social data from user to increase the recommender accuracy.
 
 
@@ -41,7 +41,7 @@ Once you have set up the framework inside your project use the provided SolrServ
 ```
 ...
 SolrServiceContainer.getInstance().getUserService().updateDocument(new Customer());
-SolrServiceContainer.getInstance().getItemService().updateDocument(new Item());
+SolrServiceContainer.getInstance().getResourceService().updateDocument(new Resource());
 ```
 
 After you have initially imported your data into Solr, only thing needed is to call the RecommenderEngine to generate recommendations based on a user-ID and/or product-ID. Additional parameters are n (the number of returned recommendations) and a content filter (used for narrowing down the wanted recommendation results, e.g., recommendations suited only for users of 18 years or older).
