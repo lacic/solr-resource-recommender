@@ -72,20 +72,17 @@ public class SocialStreamService extends SolrService<SocialStreamQuery, SocialSt
 	 * if there are already documents with the same ids they will be overwritten
 	 * @param searchItem
 	 */
-	public void updateDocuments(List<SocialStream> socialActions, SearchServerBulkMessage searchServerBulkUpload) {
+	public void writeDocuments(List<SocialStream> socialActions, SearchServerBulkMessage searchServerBulkUpload) {
 		updateDocuments(socialActions, searchServerBulkUpload, solrServer);
-		try {
-			solrServer.addBeans(socialActions);
-			solrServer.commit();
-		} catch (SolrServerException | IOException e) {
-			e.printStackTrace();
-		}
 		
 	}
 
 	@Override
-	public void removeElementById(String id, String language) {
+	public void removeElementById(String id) {
 		removeElementById(id, solrServer);
-		
+	}
+	@Override
+	public void removeElementByIds(List<String> ids) {
+		removeElementByIds(ids, solrServer);
 	}
 }

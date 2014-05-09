@@ -1,8 +1,10 @@
 package at.knowcenter.recommender.solrpowered.evaluation;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -23,6 +25,7 @@ import at.knowcenter.recommender.solrpowered.evaluation.metrics.SimilarityCalcul
 import at.knowcenter.recommender.solrpowered.model.Customer;
 import at.knowcenter.recommender.solrpowered.model.Item;
 import at.knowcenter.recommender.solrpowered.model.OwnSocialAction;
+import at.knowcenter.recommender.solrpowered.model.Resource;
 import at.knowcenter.recommender.solrpowered.model.SocialAction;
 import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendQuery;
@@ -96,16 +99,16 @@ public class RecommenderEvaluator extends RecommenderEngine{
 		
 		this.eval = new PredictionCalculator(userID, removedOwnProducts, recommendations, n);
 		
-		List<Item> recommendedItems = new ArrayList<Item>();
+		List<Resource> recommendedItems = new ArrayList<Resource>();
 		
 		for (String product : recommendations) {
 			QueryResponse findElementById = 
-					SolrServiceContainer.getInstance().getRecommendService().findElementById(product, SolrServiceContainer.getInstance().getItemService().getSolrServer());
-			recommendedItems.addAll(findElementById.getBeans(Item.class));
+					SolrServiceContainer.getInstance().getResourceService().findElementById(product, SolrServiceContainer.getInstance().getResourceService().getSolrServer());
+			recommendedItems.addAll(findElementById.getBeans(Resource.class));
 		}
 		
 		
-		this.similarityItemEval = new SimilarityCalculator(new ArrayList<Item>(), recommendedItems, n);
+		this.similarityItemEval = new SimilarityCalculator(new ArrayList<Resource>(), recommendedItems, n);
 		
 //		System.out.println( precision );
 		return recommendations;
@@ -403,14 +406,14 @@ public class RecommenderEvaluator extends RecommenderEngine{
 	protected void appendMetrics(MetricsExporter mCalc, int k, String userID,
 			List<String> recommendations, List<String> alreadyBoughtProducts) {
 		QueryResponse findElementById = 
-				SolrServiceContainer.getInstance().getRecommendService().findElementsById(recommendations, SolrServiceContainer.getInstance().getItemService().getSolrServer());
+				SolrServiceContainer.getInstance().getResourceService().findElementsById(recommendations, SolrServiceContainer.getInstance().getResourceService().getSolrServer());
 		
 		
-		List<Item> fetchedAlreadyBoughtItems = new ArrayList<Item>();
+		List<Resource> fetchedAlreadyBoughtItems = new ArrayList<Resource>();
 		if (alreadyBoughtProducts.size() <= 2500) {
 			QueryResponse alreadyBoughtItems = 
-					SolrServiceContainer.getInstance().getRecommendService().findElementsById(alreadyBoughtProducts, SolrServiceContainer.getInstance().getItemService().getSolrServer());
-			fetchedAlreadyBoughtItems.addAll(alreadyBoughtItems.getBeans(Item.class));
+					SolrServiceContainer.getInstance().getResourceService().findElementsById(alreadyBoughtProducts, SolrServiceContainer.getInstance().getResourceService().getSolrServer());
+			fetchedAlreadyBoughtItems.addAll(alreadyBoughtItems.getBeans(Resource.class));
 		} else {
 			int fetchIteration = 2500;
 			int fetchOffset = 0;
@@ -427,14 +430,75 @@ public class RecommenderEvaluator extends RecommenderEngine{
 							SolrServiceContainer.getInstance().getItemService().getSolrServer());
 				}
 				
-				fetchedAlreadyBoughtItems.addAll(alreadyBoughtItems.getBeans(Item.class));
+				fetchedAlreadyBoughtItems.addAll(alreadyBoughtItems.getBeans(Resource.class));
 				fetchOffset += fetchIteration;
 			}
 		}
+		List<Resource> recommendedResources = findElementById.getBeans(Resource.class);
 		
+		List<String> recommendedCategories = new ArrayList<String>();
+		List<String> purchasedCategories = new ArrayList<String>();
+
+		String miscCategory = "MISC";
+		for (Resource res : recommendedResources) {
+			String cat1 = res.getCategory1();
+			String cat2 = res.getCategory2();
+			String cat3 = res.getCategory3();
+			String cat4 = res.getCategory4();
+			
+//			if (cat4 != null) {
+//				if (! recommendedCategories.contains(cat4)) {
+//					recommendedCategories.add(cat4);
+//				}
+//			} else if (cat3 != null) {
+//				if (! recommendedCategories.contains(cat3)) {
+//					recommendedCategories.add(cat3);
+//				}
+//			} else if (cat2 != null) {
+//				if (! recommendedCategories.contains(cat2)) {
+//					recommendedCategories.add(cat2);
+//				}
+//			} else 
+			if (cat1 != null) {
+				if (! recommendedCategories.contains(cat1)) {
+					recommendedCategories.add(cat1);
+				}
+			} else if (! recommendedCategories.contains(miscCategory)) {
+				recommendedCategories.add(miscCategory);
+			}
+		}
+
+		for (Resource res : fetchedAlreadyBoughtItems) {
+			String cat1 = res.getCategory1();
+			String cat2 = res.getCategory2();
+			String cat3 = res.getCategory3();
+			String cat4 = res.getCategory4();
+			
+//			if (cat4 != null) {
+//				if (! purchasedCategories.contains(cat4)) {
+//					purchasedCategories.add(cat4);
+//				}
+//			} else if (cat3 != null) {
+//				if (! purchasedCategories.contains(cat3)) {
+//					purchasedCategories.add(cat3);
+//				}
+//			} else if (cat2 != null) {
+//				if (! purchasedCategories.contains(cat2)) {
+//					purchasedCategories.add(cat2);
+//				}
+//			} else 
+			if (cat1 != null) {
+				if (! purchasedCategories.contains(cat1)) {
+					purchasedCategories.add(cat1);
+				}
+			} else if (! purchasedCategories.contains(miscCategory)) {
+				purchasedCategories.add(miscCategory);
+			}
+		}
 
 		PredictionCalculator pEval = new PredictionCalculator(userID, removedOwnProducts, recommendations, k);
-		SimilarityCalculator sEval = new SimilarityCalculator(fetchedAlreadyBoughtItems, findElementById.getBeans(Item.class), k);
+//		PredictionCalculator pEval = new PredictionCalculator(userID, purchasedCategories, recommendedCategories, k);
+		SimilarityCalculator sEval = new SimilarityCalculator(fetchedAlreadyBoughtItems, recommendedResources, k);
 		
 		mCalc.appendMetrics(pEval, sEval);
 	}

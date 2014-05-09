@@ -18,12 +18,16 @@ import org.apache.solr.common.SolrDocument;
 
 import at.knowcenter.recommender.solrpowered.engine.filtering.ContentFilter;
 import at.knowcenter.recommender.solrpowered.engine.filtering.FriendsEvaluation;
+import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.ReviewBasedRec;
+import at.knowcenter.recommender.solrpowered.model.Customer;
 import at.knowcenter.recommender.solrpowered.model.CustomerAction;
 import at.knowcenter.recommender.solrpowered.model.Item;
 import at.knowcenter.recommender.solrpowered.model.OwnSocialAction;
+import at.knowcenter.recommender.solrpowered.model.Resource;
 import at.knowcenter.recommender.solrpowered.model.SocialAction;
 import at.knowcenter.recommender.solrpowered.model.SocialStream;
 import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
+import at.knowcenter.recommender.solrpowered.services.cleaner.DataFetcher;
 import at.knowcenter.recommender.solrpowered.services.impl.item.ItemQuery;
 import at.knowcenter.recommender.solrpowered.services.impl.item.ItemResponse;
 import at.knowcenter.recommender.solrpowered.services.impl.item.ItemService;
@@ -62,6 +66,44 @@ public class RecommendationQueryUtils {
 			
 			if (ids != null && ids.size() > 0){
 				queryBuilder.replace(queryBuilder.length() - 3, queryBuilder.length(), "");
+			} else {
+				queryBuilder.append("\"\"");
+			}
+			
+			queryBuilder.append(")");
+		}
+
+		return queryBuilder.toString();
+	}
+	
+	/**
+	 * Step 1 in Collaborative Filtering using SOLR.
+	 * <br/>
+	 * Finds similar users who like the same document
+	 */
+	public static String createOrderedQuery(String attributeName, List<String> ids) {
+		StringBuilder queryBuilder = new StringBuilder();
+		
+		if (ids != null) {
+
+			queryBuilder.append(attributeName + ":(");
+			
+			int productCounter = 0;
+			
+			int weight = ids.size();
+			
+			for (String product : ids) {
+				if (productCounter >= MAX_SAME_PRODUCT_COUNT) {
+					break;
+				}
+				
+				queryBuilder.append("\"" + product + "\"^"+ weight +" OR ");
+				productCounter++;
+				weight--;
+			}
+			
+			if (ids != null && ids.size() > 0){
+				queryBuilder.replace(queryBuilder.length() - 3, queryBuilder.length(), "");
 			}
 			
 			queryBuilder.append(")");
@@ -86,10 +128,16 @@ public class RecommendationQueryUtils {
 		StringBuilder queryBuilder = new StringBuilder();
 
 		queryBuilder.append(usersFieldName + ":(");
+		
+		if (weightDividor <= 0.0) {
+			queryBuilder.append("\"\")");
+			return queryBuilder.toString();
+		}
 		//  max users
 		int userOccurenceCount = 0;
 		long maxUserCount = 0;
 		long userCountSum = 0;
+		
 		
 		for (Count userOccurence : userOccurences) {
 			if ( ! userOccurence.getName().equals(currentUser)) {
@@ -122,6 +170,8 @@ public class RecommendationQueryUtils {
 		
 		if (queryBuilder.length() > (usersFieldName + ":(").length()){
 			queryBuilder.replace(queryBuilder.length() - 3, queryBuilder.length(), "");
+		} else {
+			queryBuilder.append("\"\"");
 		}
 		
 		queryBuilder.append(")");
@@ -165,50 +215,57 @@ public class RecommendationQueryUtils {
 		return queryBuilder.toString();
 	}
 	
-	/**
-	 * Step 2 in Social Collaborative Filtering using SOLR.
-	 * <br/>
-	 * Finds docs which are "liked" by the similar users in Step 1
-	 * @param contentFilter 
-	 */
+	
 	public static String createQueryToFindProdLikedBySimilarSocialUsers(
-			Map<String, Float> customerScoringMap, ContentFilter contentFilter, int maxUserOccurence) {
-		StringBuilder purchaseBuilder = new StringBuilder();
-		StringBuilder viewedBuilder = new StringBuilder();
-		StringBuilder markedFavoriteBuilder = new StringBuilder();
+			Map<String, Double> userInteractionMap, ContentFilter contentFilter, int maxUserOccurence) {
+		String query = createQueryToFindProdLikedBySimilarUsers(
+				userInteractionMap, contentFilter, ReviewBasedRec.USERS_RATED_5_FIELD, maxUserOccurence, 1.0);
+		query += " OR " + createQueryToFindProdLikedBySimilarUsers(
+				userInteractionMap, contentFilter, ReviewBasedRec.USERS_RATED_4_FIELD, maxUserOccurence, 2.0);
+		query += " OR " + createQueryToFindProdLikedBySimilarUsers(
+				userInteractionMap, contentFilter, ReviewBasedRec.USERS_RATED_3_FIELD, maxUserOccurence, 3.0);
+		query += " OR " + createQueryToFindProdLikedBySimilarUsers(
+				userInteractionMap, contentFilter, ReviewBasedRec.USERS_RATED_2_FIELD, maxUserOccurence, 4.0);
+		query += " OR " + createQueryToFindProdLikedBySimilarUsers(
+				userInteractionMap, contentFilter, ReviewBasedRec.USERS_RATED_1_FIELD, maxUserOccurence, 5.0);
+		
+		return query;
+	}
+	
+	private static String createQueryToFindProdLikedBySimilarUsers(
+			Map<String, Double> userInteractionMap, 
+			ContentFilter contentFilter,
+			String usersFieldName,
+			int maxUserOccurence,
+			double weightDividor) {
+		StringBuilder queryBuilder = new StringBuilder();
 
-		purchaseBuilder.append("users_purchased:(");
-		markedFavoriteBuilder.append("users_marked_favorite:(");
-		viewedBuilder.append("users_viewed:(");
+		queryBuilder.append(usersFieldName + ":(");
+		
+		if (weightDividor <= 0.0) {
+			queryBuilder.append("\"\")");
+			return queryBuilder.toString();
+		}
 		//  max users
 		int userOccurenceCount = 0;
 		
-		for (String user : customerScoringMap.keySet()) {
+		for (String user : userInteractionMap.keySet()) {
 			if (userOccurenceCount >= maxUserOccurence) { break; }
+			Double boosting = userInteractionMap.get(user) / weightDividor ;
+			boosting = ((int) (boosting * 100)) / 100.0;
 			
-			purchaseBuilder.append("\"" + user + "\"^" + customerScoringMap.get(user) + " OR ");
-			markedFavoriteBuilder.append("\"" + user + "\"^" + ( customerScoringMap.get(user) / 2 ) + " OR ");
-			viewedBuilder.append("\"" + user + "\"^" + ( customerScoringMap.get(user) / 3 ) + " OR ");
-			
+			queryBuilder.append(user + "^" + boosting + " OR ");
 			userOccurenceCount++;
 		}
 		
-		
-		if (purchaseBuilder.length() > ("users_purchased:(").length()){
-			purchaseBuilder.replace(purchaseBuilder.length() - 3, purchaseBuilder.length(), "");
-		}
-		if (markedFavoriteBuilder.length() > ("users_marked_favorite:(").length()){
-			markedFavoriteBuilder.replace(markedFavoriteBuilder.length() - 3, markedFavoriteBuilder.length(), "");
-		}
-		if (viewedBuilder.length() > ("users_viewed:(").length()){
-			viewedBuilder.replace(viewedBuilder.length() - 3, viewedBuilder.length(), "");
+		if (queryBuilder.length() > (usersFieldName + ":(").length()){
+			queryBuilder.replace(queryBuilder.length() - 3, queryBuilder.length(), "");
+		} else {
+			queryBuilder.append("\"\"");
 		}
 		
-		purchaseBuilder.append(")");
-		markedFavoriteBuilder.append(")");
-		viewedBuilder.append(")");
-		
-		return purchaseBuilder.toString() + " OR " + markedFavoriteBuilder.toString() + " OR " + viewedBuilder;
+		queryBuilder.append(")");
+		return queryBuilder.toString();
 	}
 	
 	public static String buildFilterForContentBasedFilteringOnItems(ContentFilter contentFilter) {
@@ -316,7 +373,7 @@ public class RecommendationQueryUtils {
 		return age;
 	}
 	
-	/**13
+	/**
 	 * Creates a filter query to remove products from the searched user in the final result list 
 	 * (should not be recommended additionally)
 	 * @param query query object containing the products from the initially searched user
@@ -338,6 +395,37 @@ public class RecommendationQueryUtils {
 			
 			queryBuilder.replace(queryBuilder.length() - 3, queryBuilder.length(), "");
 		}
+		
+		return queryBuilder.toString();
+	}
+	
+	/**
+	 * Creates a filter query to remove products from the searched user in the final result list 
+	 * (should not be recommended additionally)
+	 * @param query query object containing the products from the initially searched user
+	 * @return query string for filtering
+	 */
+	public static String buildFilterForAlreadyBoughtProducts(String filterFiled, List<String> alreadyBoughtProducts) {
+		StringBuilder queryBuilder = new StringBuilder("-" + filterFiled + ":(");
+		
+		
+		int productCounter = 0;
+		if (alreadyBoughtProducts != null && alreadyBoughtProducts.size() > 0 ) {
+			for (String product : alreadyBoughtProducts) {
+				if (productCounter >= MAX_SAME_PRODUCT_COUNT) {
+					break;
+				}
+				queryBuilder.append(product + " OR ");
+				productCounter++;
+			}
+			
+		}
+		if (productCounter > 0) {
+			queryBuilder.replace(queryBuilder.length() - 3, queryBuilder.length(), ")");
+		} else {
+			queryBuilder.append("\"\")");
+		}
+		
 		
 		return queryBuilder.toString();
 	}
@@ -407,6 +495,12 @@ public class RecommendationQueryUtils {
 			}
 			if (searchItem instanceof OwnSocialAction) {
 				recommendations.add( ((OwnSocialAction) searchItem ).getUserId());
+			}
+			if (searchItem instanceof Customer) {
+				recommendations.add( ((Customer) searchItem ).getId());
+			}
+			if (searchItem instanceof Resource) {
+				recommendations.add( ((Resource) searchItem ).getItemId());
 			}
 			
 		}
@@ -479,12 +573,15 @@ public class RecommendationQueryUtils {
 	}
 	
 	
-	public static  void fillWeightedMap(Map<String, Double> occurencesMap, List<String> products, Double weight) {
+	public static  void fillWeightedMap(Map<String, Double> weightedMap, List<String> products, Double weight) {
 		for (String recommendedItem : products) {
-			if (occurencesMap.containsKey(recommendedItem)) {
-				occurencesMap.put(recommendedItem, occurencesMap.get(recommendedItem) + weight);
+			// rank in rec list
+			int positionScore = products.size() - products.indexOf(recommendedItem);
+			
+			if (weightedMap.containsKey(recommendedItem)) {
+				weightedMap.put(recommendedItem, weightedMap.get(recommendedItem) +  positionScore * weight);
 	        } else {
-	        	occurencesMap.put(recommendedItem, weight);
+	        	weightedMap.put(recommendedItem, positionScore * weight);
 	        }
 		}
 	}
@@ -595,6 +692,19 @@ public class RecommendationQueryUtils {
 		return searchItem;
 	}
 	
+	public static Resource serializeSolrDocToSearchResource(SolrDocument solrDocument) {
+		Resource searchItem = new Resource();
+		searchItem.setItemId((String) solrDocument.getFieldValue("id"));
+		searchItem.setItemName((String) solrDocument.getFieldValue("name"));
+		searchItem.setDescription((String) solrDocument.getFieldValue("description"));
+		searchItem.setPrice(((Double) solrDocument.getFieldValue("price")));
+		searchItem.setCurrency((String) solrDocument.getFieldValue("currency"));
+		searchItem.setValidFrom((Date) solrDocument.getFieldValue("validFrom"));
+		searchItem.setTags((List<String>) solrDocument.getFieldValue("tags"));
+		searchItem.setManufacturer((String) solrDocument.getFieldValue("manufacturer"));
+		return searchItem;
+	}
+	
 	public static SocialStream serializeSolrDocToSocialStream(SolrDocument solrDocument) {
 		SocialStream socialStream = new SocialStream();
 //		socialStream.setActionId(		(String) 	solrDocument.getFieldValue("id"));
@@ -612,7 +722,7 @@ public class RecommendationQueryUtils {
 	 * @param solrDocument document to serialize
 	 * @return a customer scoring map
 	 */
-	public static String serializeSolrDocToSearchCustomer(SolrDocument solrDocument) {
+	public static String serializeSolrDocToId(SolrDocument solrDocument) {
 		return (String) solrDocument.getFieldValue("id");
 	}
 	

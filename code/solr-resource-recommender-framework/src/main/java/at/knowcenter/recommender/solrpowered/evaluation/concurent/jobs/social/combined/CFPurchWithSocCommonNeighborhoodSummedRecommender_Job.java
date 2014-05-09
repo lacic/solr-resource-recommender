@@ -8,11 +8,11 @@ import org.apache.solr.client.solrj.SolrServer;
 import at.knowcenter.recommender.solrpowered.engine.filtering.ContentFilter;
 import at.knowcenter.recommender.solrpowered.engine.strategy.StrategyType;
 import at.knowcenter.recommender.solrpowered.evaluation.RecommenderEvaluator;
-import at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.social.UB_Strategy_Job;
+import at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.AbstractStrategyJob;
 import at.knowcenter.recommender.solrpowered.evaluation.metrics.MetricsExporter;
 import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
 
-public class CFPurchWithSocCommonNeighborhoodSummedRecommender_Job extends UB_Strategy_Job implements Callable<List<MetricsExporter>>{
+public class CFPurchWithSocCommonNeighborhoodSummedRecommender_Job extends AbstractStrategyJob implements Callable<List<MetricsExporter>>{
 
 	private List<String> users;
 

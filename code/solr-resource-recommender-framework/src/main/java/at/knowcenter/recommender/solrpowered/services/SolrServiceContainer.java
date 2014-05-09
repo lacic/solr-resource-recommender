@@ -3,6 +3,11 @@ package at.knowcenter.recommender.solrpowered.services;
 import at.knowcenter.recommender.solrpowered.configuration.ConfigUtils;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendService;
 import at.knowcenter.recommender.solrpowered.services.impl.item.ItemService;
+import at.knowcenter.recommender.solrpowered.services.impl.positionnetwork.PositionNetworkService;
+import at.knowcenter.recommender.solrpowered.services.impl.positions.PositionService;
+import at.knowcenter.recommender.solrpowered.services.impl.resource.ResourceService;
+import at.knowcenter.recommender.solrpowered.services.impl.review.ReviewService;
+import at.knowcenter.recommender.solrpowered.services.impl.sharedlocation.SharedLocationService;
 import at.knowcenter.recommender.solrpowered.services.impl.social.SocialActionService;
 import at.knowcenter.recommender.solrpowered.services.impl.social.reversed.OwnSocialActionService;
 import at.knowcenter.recommender.solrpowered.services.impl.socialstream.SocialStreamService;
@@ -23,6 +28,11 @@ public class SolrServiceContainer {
 	private SocialActionService socialActionService;
 	private OwnSocialActionService ownSocialActionService;
 	private SocialStreamService socialStreamService;
+	private ResourceService resourceService;
+	private ReviewService reviewService;
+	private PositionService positionService;
+	private PositionNetworkService positionNetworkService;
+	private SharedLocationService sharedLocationService;
 	
 	/**
 	 * Initialization-on-demand holder idiom
@@ -52,23 +62,34 @@ public class SolrServiceContainer {
 		boolean initSuccess = false;
 		
 		int port = 8984;
-		String address = "localhost";
+		String address = "kti-social";
 		
 		try {
-			UserService userService = new UserService(address, port, "collection3");
+			UserService userService = new UserService(address, port, "profile");
 			RecommendService recommenderService = new RecommendService(address, port, "collection2");
 			ItemService itemService = new ItemService(address, port, "collection1");
-			SocialActionService socialService = new SocialActionService(address, port, "bn_social_action");
-			OwnSocialActionService ownSocialService = new OwnSocialActionService(address, port, "bn_own_social_action");
-			SocialStreamService socialStreamService = new SocialStreamService(address, port, "bn_social_stream");
-			
+			SocialActionService socialService = new SocialActionService(address, port, "social_action");
+			OwnSocialActionService ownSocialService = new OwnSocialActionService(address, port, "own_social_action");
+			SocialStreamService socialStreamService = new SocialStreamService(address, port, "social_stream");
+			ResourceService resourceService = new ResourceService(address, port, "resources");
+			ReviewService reviewService = new ReviewService(address, port, "reviews");
+			PositionService positionService = new PositionService(address, port, "positions");
+			PositionNetworkService positionNetworkService = new PositionNetworkService(address, port, "position_network");
+			SharedLocationService sharedLocationService = new SharedLocationService(address, port, "shared_locations");
+
+
 			setUserService(userService);
 			setRecommendService(recommenderService);
 			setItemService(itemService);
 			setSocialActionService(socialService);
 			setOwnSocialActionService(ownSocialService);
 			setSocialStreamService(socialStreamService);
-		
+			setResourceService(resourceService);
+			setReviewService(reviewService);
+			setPositionService(positionService);
+			setPositionNetworkService(positionNetworkService);
+			setSharedLocationService(sharedLocationService);
+			
 			initSuccess = true;
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -124,8 +145,47 @@ public class SolrServiceContainer {
 	public void setSocialStreamService(SocialStreamService socialStreamService) {
 		this.socialStreamService = socialStreamService;
 	}
-	
-	
-	
 
+	public ResourceService getResourceService() {
+		return resourceService;
+	}
+
+	public void setResourceService(ResourceService resourceService) {
+		this.resourceService = resourceService;
+	}
+
+	public ReviewService getReviewService() {
+		return reviewService;
+	}
+
+	public void setReviewService(ReviewService reviewService) {
+		this.reviewService = reviewService;
+	}
+
+	public PositionService getPositionService() {
+		return positionService;
+	}
+
+	public void setPositionService(PositionService positionService) {
+		this.positionService = positionService;
+	}
+
+	public PositionNetworkService getPositionNetworkService() {
+		return positionNetworkService;
+	}
+
+	public void setPositionNetworkService(
+			PositionNetworkService positionNetworkService) {
+		this.positionNetworkService = positionNetworkService;
+	}
+
+	public SharedLocationService getSharedLocationService() {
+		return sharedLocationService;
+	}
+
+	public void setSharedLocationService(SharedLocationService sharedLocationService) {
+		this.sharedLocationService = sharedLocationService;
+	}
+	
+	
 }

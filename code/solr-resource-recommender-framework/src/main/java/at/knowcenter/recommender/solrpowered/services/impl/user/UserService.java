@@ -1,5 +1,6 @@
 package at.knowcenter.recommender.solrpowered.services.impl.user;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -156,7 +157,7 @@ public class UserService extends SolrService<UserQuery, Customer, UserResponse>{
 	 * if there are already documents with the same ids they will be overwritten
 	 * @param searchItem
 	 */
-	public void updateDocuments(List<Customer> searchItems, SearchServerBulkMessage searchServerBulkUpload) {
+	public void writeDocuments(List<Customer> searchItems, SearchServerBulkMessage searchServerBulkUpload) {
 		updateDocuments(searchItems, searchServerBulkUpload, solrServer);
 	}
 	
@@ -200,7 +201,24 @@ public class UserService extends SolrService<UserQuery, Customer, UserResponse>{
 	}
 
 	@Override
-	public void removeElementById(String id, String language) {
+	public void removeElementById(String id) {
 		removeElementById(id, solrServer);
+	}
+	
+	@Override
+	public void removeElementByIds(List<String> ids) {
+		removeElementByIds(ids, solrServer);
+	}
+
+	public void deleteAllSolrData() {
+	    try {
+	    	solrServer.deleteByQuery("*:*", 1);
+	    } catch (SolrServerException e) {
+	      throw new RuntimeException("Failed to delete data in Solr. "
+	          + e.getMessage(), e);
+	    } catch (IOException e) {
+	      throw new RuntimeException("Failed to delete data in Solr. "
+	          + e.getMessage(), e);
+	    }
 	}
 }

@@ -1,6 +1,7 @@
 package at.knowcenter.recommender.solrpowered.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -32,51 +33,57 @@ public class Resource implements Serializable  {
 	private List<String> tags;
 	@Field("manufacturer")
 	private String manufacturer;
-	@Field("preceedingItemId")
-	private String preceedingItemId;
-	@Field("collection")
-	private List<String> collection;
-	
-	// indexed fields
-	@Field("language")
-	private String language;
+	@Field("seller")
+	private String seller;
+	@Field("selling_region")
+	private String sellingRegion;
+	@Field("location_in_region")
+	private String locationInRegion;
 	@Field("price")
     private Double price;
 	@Field("currency")
     private String currency;
 	@Field("validFrom")
     private Date validFrom;
-	@Field("validTo")
-    private Date validTo;
-	@Field("ageRating")
-	private String ageRating;
-	@Field("clientId")
-	private String clientId;
-	@Field("categoryIdClient")
-    private List<String> categoryIdClient;
-	@Field("categoryIdApp")
-    private List<String> categoryIdApp;
+	
+	@Field("cat1")
+    private String category1;
+	@Field("cat2")
+    private String category2;
+	@Field("cat3")
+    private String category3;
+	@Field("cat4")
+    private String category4;
 	
 	// Customer actions
 	
 	// Stored fields
 	
-	@Field("users_purchased")
-	private List<String> customerIdsPurchased;
-	@Field("users_viewed")
-	private List<String> customerIdsViewed;
-	@Field("users_marked_favorite")
-	private List<String> customerIdsMarkedFavorite;
+	@Field("users_rated_5")
+	private List<String> usersRated5;
+	@Field("users_rated_4")
+	private List<String> usersRated4;
+	@Field("users_rated_3")
+	private List<String> usersRated3;
+	@Field("users_rated_2")
+	private List<String> usersRated2;
+	@Field("users_rated_1")
+	private List<String> usersRated1;
     
-	// Indexed fields
-	
-	@Field("user_count_purchased")
-	private Integer userCountPurchased = 0;
-	@Field("user_count_viewed")
-	private Integer userCountViewed = 0;
-	@Field("user_count_marked_favorite")
-	private Integer userCountMarkedFavorite = 0;
+	@Field("users_rated_5_count")
+	private Integer usersRated5Count;
+	@Field("users_rated_4_count")
+	private Integer usersRated4Count;
+	@Field("users_rated_3_count")
+	private Integer usersRated3Count;
+	@Field("users_rated_2_count")
+	private Integer usersRated2Count;
+	@Field("users_rated_1_count")
+	private Integer usersRated1Count;
 
+    @Field("score")
+    private Float score;
+    
 	public Resource(){    	
     }
     
@@ -140,43 +147,6 @@ public class Resource implements Serializable  {
 	}
 
 
-
-	public String getPreceedingItemId() {
-		return preceedingItemId;
-	}
-
-
-
-	public void setPreceedingItemId(String preceedingItemId) {
-		this.preceedingItemId = preceedingItemId;
-	}
-
-
-
-	public List<String> getCollection() {
-		return collection;
-	}
-
-
-
-	public void setCollection(List<String> collection) {
-		this.collection = collection;
-	}
-
-
-
-	public String getLanguage() {
-		return language;
-	}
-
-
-
-	public void setLanguage(String language) {
-		this.language = language;
-	}
-
-
-
 	public Double getPrice() {
 		return price;
 	}
@@ -211,147 +181,245 @@ public class Resource implements Serializable  {
 		this.validFrom = validFrom;
 	}
 
-
-
-	public Date getValidTo() {
-		return validTo;
-	}
-
-
-
-	public void setValidTo(Date validTo) {
-		this.validTo = validTo;
-	}
-
-
-
-	public String getAgeRating() {
-		return ageRating;
-	}
-
-
-
-	public void setAgeRating(String ageRating) {
-		this.ageRating = ageRating;
-	}
-
-
-
-	public String getClientId() {
-		return clientId;
-	}
-
-
-
-	public void setClientId(String clientId) {
-		this.clientId = clientId;
-	}
-
-
-
-	public List<String> getCategoryIdClient() {
-		return categoryIdClient;
-	}
-
-
-
-	public void setCategoryIdClient(List<String> categoryIdClient) {
-		this.categoryIdClient = categoryIdClient;
-	}
-
-
-
-	public List<String> getCategoryIdApp() {
-		return categoryIdApp;
-	}
-
-
-
-	public void setCategoryIdApp(List<String> categoryIdApp) {
-		this.categoryIdApp = categoryIdApp;
-	}
-
-
-
-	public List<String> getCustomerIdsPurchased() {
-		return customerIdsPurchased;
-	}
-
-
-
-	public void setCustomerIdsPurchased(List<String> customerIdsPurchased) {
-		this.customerIdsPurchased = customerIdsPurchased;
-	}
-
-
-
-	public List<String> getCustomerIdsViewed() {
-		return customerIdsViewed;
-	}
-
-
-
-	public void setCustomerIdsViewed(List<String> customerIdsViewed) {
-		this.customerIdsViewed = customerIdsViewed;
-	}
-
-
-
-	public List<String> getCustomerIdsMarkedFavorite() {
-		return customerIdsMarkedFavorite;
-	}
-
-
-
-	public void setCustomerIdsMarkedFavorite(List<String> customerIdsMarkedFavorite) {
-		this.customerIdsMarkedFavorite = customerIdsMarkedFavorite;
-	}
-
-
-
-	public Integer getUserCountPurchased() {
-		return userCountPurchased;
-	}
-
-
-
-	public void setUserCountPurchased(Integer userCountPurchased) {
-		this.userCountPurchased = userCountPurchased;
-	}
-
-
-
-	public Integer getUserCountViewed() {
-		return userCountViewed;
-	}
-
-
-
-	public void setUserCountViewed(Integer userCountViewed) {
-		this.userCountViewed = userCountViewed;
-	}
-
-
-
-	public Integer getUserCountMarkedFavorite() {
-		return userCountMarkedFavorite;
-	}
-
-
-
-	public void setUserCountMarkedFavorite(Integer userCountMarkedFavorite) {
-		this.userCountMarkedFavorite = userCountMarkedFavorite;
-	}
-
-
-
 	@Override
 	public String toString() {
 		return "Resource";
 	}
 
 
+	public String getSeller() {
+		return seller;
+	}
 
 
+	public void setSeller(String seller) {
+		this.seller = seller;
+	}
+
+
+	public String getSellingRegion() {
+		return sellingRegion;
+	}
+
+
+	public void setSellingRegion(String sellingRegion) {
+		this.sellingRegion = sellingRegion;
+	}
+
+
+	public String getLocationInRegion() {
+		return locationInRegion;
+	}
+
+
+	public void setLocationInRegion(String locationInRegion) {
+		this.locationInRegion = locationInRegion;
+	}
+
+
+	public List<String> getUsersRated5() {
+		return usersRated5;
+	}
+	
+	public void setUsersRated5(List<String> usersRated5) {
+		this.usersRated5 = usersRated5;
+		setUsersRated5Count((usersRated5 != null) ? usersRated5.size() : 0);
+	}
+	
+	public void addUserRated5(String user) {
+		if (this.usersRated5 == null) {
+			this.usersRated5 = new ArrayList<String>();
+		}
+		this.usersRated5.add(user);
+		setUsersRated5Count(usersRated5.size());
+	}
+	
+	public List<String> getUsersRated4() {
+		return usersRated4;
+	}
+
+
+	public void setUsersRated4(List<String> usersRated4) {
+		this.usersRated4 = usersRated4;
+		setUsersRated4Count((usersRated4 != null) ? usersRated4.size() : 0);
+	}
+
+	public void addUserRated4(String user) {
+		if (this.usersRated4 == null) {
+			this.usersRated4 = new ArrayList<String>();
+		}
+		this.usersRated4.add(user);
+		setUsersRated4Count(usersRated4.size());
+	}
+	
+	public List<String> getUsersRated3() {
+		return usersRated3;
+	}
+
+
+	public void setUsersRated3(List<String> usersRated3) {
+		this.usersRated3 = usersRated3;
+		setUsersRated3Count((usersRated3 != null) ? usersRated3.size() : 0);
+	}
+
+	public void addUserRated3(String user) {
+		if (this.usersRated3 == null) {
+			this.usersRated3 = new ArrayList<String>();
+		}
+		this.usersRated3.add(user);
+		setUsersRated3Count(usersRated3.size());
+	}
+
+	public List<String> getUsersRated2() {
+		return usersRated2;
+	}
+
+
+	public void setUsersRated2(List<String> usersRated2) {
+		this.usersRated2 = usersRated2;
+		setUsersRated2Count((usersRated2 != null) ? usersRated2.size() : 0);
+	}
+
+	public void addUserRated2(String user) {
+		if (this.usersRated2 == null) {
+			this.usersRated2 = new ArrayList<String>();
+		}
+		this.usersRated2.add(user);
+		setUsersRated2Count(usersRated2.size());
+	}
+	
+	public List<String> getUsersRated1() {
+		return usersRated1;
+	}
+
+
+	public void setUsersRated1(List<String> usersRated1) {
+		this.usersRated1 = usersRated1;
+		setUsersRated1Count((usersRated1 != null) ? usersRated1.size() : 0);
+	}
+
+	public void addUserRated1(String user) {
+		if (this.usersRated1 == null) {
+			this.usersRated1 = new ArrayList<String>();
+		}
+		this.usersRated1.add(user);
+		setUsersRated1Count(usersRated1.size());
+	}
+	
+	public Integer getUsersRated5Count() {
+		if (usersRated5Count == null) {
+			return 0;
+		}
+		return usersRated5Count;
+	}
+
+
+	public void setUsersRated5Count(Integer usersRated5Count) {
+		this.usersRated5Count = usersRated5Count;
+	}
+
+
+	public Integer getUsersRated4Count() {
+		if (usersRated4Count == null) {
+			return 0;
+		}
+		return usersRated4Count;
+	}
+
+
+	public void setUsersRated4Count(Integer usersRated4Count) {
+		this.usersRated4Count = usersRated4Count;
+	}
+
+
+	public Integer getUsersRated3Count() {
+		if (usersRated3Count == null) {
+			return 0;
+		}
+		return usersRated3Count;
+	}
+
+
+	public void setUsersRated3Count(Integer usersRated3Count) {
+		this.usersRated3Count = usersRated3Count;
+	}
+
+
+	public Integer getUsersRated2Count() {
+		if (usersRated2Count == null) {
+			return 0;
+		}
+		return usersRated2Count;
+	}
+
+
+	public void setUsersRated2Count(Integer usersRated2Count) {
+		this.usersRated2Count = usersRated2Count;
+	}
+
+
+	public Integer getUsersRated1Count() {
+		if (usersRated1Count == null) {
+			return 0;
+		}
+		return usersRated1Count;
+	}
+
+
+	public void setUsersRated1Count(Integer usersRated1Count) {
+		this.usersRated1Count = usersRated1Count;
+	}
+
+
+	public Float getScore() {
+		return score;
+	}
+
+
+	public void setScore(Float score) {
+		this.score = score;
+	}
+
+
+	public String getCategory1() {
+		return category1;
+	}
+
+
+	public void setCategory1(String category1) {
+		this.category1 = category1;
+	}
+
+
+	public String getCategory2() {
+		return category2;
+	}
+
+
+	public void setCategory2(String category2) {
+		this.category2 = category2;
+	}
+
+
+	public String getCategory3() {
+		return category3;
+	}
+
+
+	public void setCategory3(String category3) {
+		this.category3 = category3;
+	}
+
+
+	public String getCategory4() {
+		return category4;
+	}
+
+
+	public void setCategory4(String category4) {
+		this.category4 = category4;
+	}
+	
+	
 
 }

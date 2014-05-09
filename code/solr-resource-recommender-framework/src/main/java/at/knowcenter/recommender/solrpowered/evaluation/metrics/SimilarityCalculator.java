@@ -1,5 +1,6 @@
 package at.knowcenter.recommender.solrpowered.evaluation.metrics;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -7,13 +8,14 @@ import java.util.Map;
 import java.util.Set;
 
 import at.knowcenter.recommender.solrpowered.model.Item;
+import at.knowcenter.recommender.solrpowered.model.Resource;
 
 public class SimilarityCalculator {
 	
-	private List<Item> userKnownData;
-	private List<Item> predictionData;
+	private List<Resource> userKnownData;
+	private List<Resource> predictionData;
 
-	public SimilarityCalculator(List<Item> userKnownData, List<Item> predictionData, int k) {
+	public SimilarityCalculator(List<Resource> userKnownData, List<Resource> predictionData, int k) {
 		this.userKnownData = userKnownData;
 		if (k == 0 || predictionData.size() < k) {
 			this.predictionData = predictionData;
@@ -23,63 +25,75 @@ public class SimilarityCalculator {
 		
  	}
 	
-	public double calculateNovelty(Item itemI) {
-		int p = 2;
-		if (predictionData != null && predictionData.size() > 1) {
-			p = predictionData.size();
+	/**
+	 * Calculates the novelty for an item.
+	 * 
+	 * N(i) = (1 / (p - 1 )) * Sum{j E [0,p] | i != j} dis(i,j)
+	 * 
+	 * @param itemI
+	 * @return
+	 */
+	public double calculateNovelty(Resource itemI, List<Resource> itemsToCompare) {
+		if (itemsToCompare == null) {
+			return 0.0;
 		}
 		
 		double disimilaritySum = 0.0;
-		
-		for (Item itemJ : predictionData) {
+
+		int similarItemCount = 0;
+		for (Resource itemJ : itemsToCompare) {
 			if ( ! itemI.equals(itemJ)) {
-				disimilaritySum += calculateSimilarity(itemI, itemJ);
+				disimilaritySum += 1.0 - calculateSimilarity(itemI, itemJ);
+				similarItemCount++;
 			}
 		}
 		
-		
-		return ( 1.0 / ( p - 1 ) ) * disimilaritySum;
+		if (similarItemCount == 0) {
+			return 0.0;
+		}
+		return disimilaritySum / similarItemCount;
 	}
 	
+	/**
+	 * How serendipitous are items in the prediction set.
+	 * Calculating how novel is each predicted item compared to already known items.
+	 * @return predicted items serendipity
+	 */
 	public double calculateSerendipity() {
-		int p = 2;
-		if (userKnownData != null && userKnownData.size() > 1) {
-			p = userKnownData.size();
+		double serendipity = 0.0;
+
+		if (this.predictionData == null || this.predictionData.size() == 0) {
+			return serendipity;
 		}
 		
-		double disimilaritySum = 0.0;
-		
-		for (Item predictedResource : predictionData) {
-			for (Item knownResource : userKnownData) {
-				if ( ! predictedResource.equals(knownResource)) {
-					disimilaritySum += calculateSimilarity(predictedResource, knownResource);
-				}
-			}
+		if (userKnownData == null || userKnownData.size() == 0) {
+			return 1.0;
 		}
 		
+		for (Resource predictedResource : predictionData) {
+			serendipity += calculateNovelty(predictedResource, userKnownData);
+		}
 		
-		return ( 1.0 / (p * ( p - 1 )) ) * disimilaritySum;
+		return serendipity / predictionData.size();
 	}
 	
-	
+	/**
+	 * How diverse are items in the predicted set between each other.
+	 * Calculating how novel is each item compared to the predicted item set.
+	 * @return predicted items diversity
+	 */
 	public double calculateDiversity() {
-		int p = 2;
-		if (predictionData != null && predictionData.size() > 1) {
-			p = predictionData.size();
+		double diversity = 0.0;
+
+		if (this.predictionData == null || this.predictionData.size() == 0) {
+			return diversity;
 		}
 		
-		double disimilaritySum = 0.0;
-		
-		for (Item predictedResource : predictionData) {
-			for (Item otherPredictedResource : predictionData) {
-				if ( ! predictedResource.equals(otherPredictedResource)) {
-					disimilaritySum += calculateSimilarity(predictedResource, otherPredictedResource);
-				}
-			}
+		for (Resource predictedResource : predictionData) {
+			diversity += calculateNovelty(predictedResource, predictionData);
 		}
 		
-		
-		return ( 1.0 / (p * ( p - 1 )) ) * disimilaritySum;
+		return diversity / predictionData.size();
 	}
 	
 	private double calculateCosineDisimilarity(Item itemK, Item itemC) {
@@ -106,31 +120,29 @@ public class SimilarityCalculator {
 		return dotProduct / (vectorItemC * vectorItemK);
 	}
 	
-	private double calculateSimilarity(Item itemK, Item itemC) {
+	private double calculateSimilarity(Resource itemK, Resource itemC) {
 		Map<String, Integer> wordOccurencItemK = fillDescriptionWordCount(itemK.getDescription(), "|");
 		Map<String, Integer> wordOccurencItemC = fillDescriptionWordCount(itemC.getDescription(), "|");
 		
 		double descriptionSimilarity = getCosineSim(wordOccurencItemC, wordOccurencItemK);
 		
-		wordOccurencItemK = fillDescriptionWordCount(itemK.getName(), " ");
-		wordOccurencItemC = fillDescriptionWordCount(itemC.getName(), " ");
+		wordOccurencItemK = fillDescriptionWordCount(itemK.getItemName(), " ");
+		wordOccurencItemC = fillDescriptionWordCount(itemC.getItemName(), " ");
 		
 		double nameSimilarity = getCosineSim(wordOccurencItemC, wordOccurencItemK);
-		
-		wordOccurencItemK = fillListWordCount(itemK.getCollection());
-		wordOccurencItemC = fillListWordCount(itemC.getCollection());
-		
-		double collectionSimilarity = getCosineSim(wordOccurencItemC, wordOccurencItemK);
 		
 		wordOccurencItemK = fillListWordCount(itemK.getTags());
 		wordOccurencItemC = fillListWordCount(itemC.getTags());
 		
 		double tagSimilarity = getCosineSim(wordOccurencItemC, wordOccurencItemK);
 		
-		return  ( 1.5 * descriptionSimilarity + 1.3 * nameSimilarity + 0.4 * collectionSimilarity + 0.8 * tagSimilarity) / 4;
+		return  ( 1.5 * descriptionSimilarity + 1.7 * nameSimilarity + 0.8 * tagSimilarity) / 4;
 	}
 
 	private Map<String, Integer> fillListWordCount(List<String> itemAttributeList) {
+		if (itemAttributeList == null) {
+			itemAttributeList = new ArrayList<String>();
+		}
 		Map<String, Integer> wordOccurencItemK;
 		String collectionItemK = "";
 		for (String collection : itemAttributeList) {
@@ -167,10 +179,19 @@ public class SimilarityCalculator {
 	public static double getCosineSim(Map<? extends Object, Integer> targetMap, Map<? extends Object, Integer> nMap) {
         Set<Object> both = new HashSet<Object>(targetMap.keySet());
         both.retainAll(nMap.keySet());
-        double scalar = 0.0, norm1 = 0.0, norm2 = 0.0;
-        for (Object k : both) scalar += (targetMap.get(k) * nMap.get(k));
-        for (Object k : targetMap.keySet()) norm1 += (targetMap.get(k) * targetMap.get(k));
-        for (Object k : nMap.keySet()) norm2 += (nMap.get(k) * nMap.get(k));
+        double scalar = 0.0;
+        double norm1 = 0.0;
+        double norm2 = 0.0;
+        
+        for (Object k : both) {
+        	scalar += (targetMap.get(k) * nMap.get(k));
+        }
+        for (Object k : targetMap.keySet()) {
+        	norm1 += (targetMap.get(k) * targetMap.get(k));
+        }
+        for (Object k : nMap.keySet()) {
+        	norm2 += (nMap.get(k) * nMap.get(k));
+        }
         return scalar / Math.sqrt(norm1 * norm2);
 	}
 	

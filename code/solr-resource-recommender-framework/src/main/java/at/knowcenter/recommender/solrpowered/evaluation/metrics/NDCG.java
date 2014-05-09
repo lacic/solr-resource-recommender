@@ -28,9 +28,16 @@ public class NDCG {
 			if (!realData.contains(predictedItem))
 				continue;
 
+			// the relevance in the DCG part is either 1 (the item is contained in real data) 
+			// or 0 (item is not contained in the real data)
+			int itemRelevance = 1;
+			if (!realData.contains(predictedItem))
+				itemRelevance = 0;
+
 			// compute NDCG part
 			int rank = i + 1;
-			dcg += Math.log(2) / Math.log(rank + 1);
+
+			dcg += (Math.pow(2, itemRelevance) - 1.0) * (Math.log(2) / Math.log(rank + 1));
 		}
 
 		return dcg / idcg;
@@ -44,9 +51,12 @@ public class NDCG {
 	 */
 	public static double calculateIDCG(int n) {
 		double idcg = 0;
-
+		// if can get relevance for every item should replace the relevance score at this point, else
+		// every item in the ideal case has relevance of 1
+		int itemRelevance = 1;
+		
 		for (int i = 0; i < n; i++){
-			idcg += Math.log(2) / Math.log(i + 2);
+			idcg += (Math.pow(2, itemRelevance) - 1.0) * ( Math.log(2) / Math.log(i + 2) );
 		}
 
 		return idcg;

@@ -116,27 +116,27 @@ public class SocialActionService extends SolrService<SocialActionQuery, SocialAc
 	 * if there are already documents with the same ids they will be overwritten
 	 * @param searchItem
 	 */
-	public void updateDocuments(List<SocialAction> socialActions, SearchServerBulkMessage searchServerBulkUpload) {
-		long start = System.nanoTime();
-		Map<String, SocialAction> saToStoreMap = new HashMap<String, SocialAction>();
-		
-		for (SocialAction saToStore : socialActions){
-			SocialAction savedSocialAction = saToStoreMap.get(saToStore.getUserId());
-			
-			if (savedSocialAction == null) {
-				saToStoreMap.put(saToStore.getUserId(), saToStore);
-			} else {
-				setStoredValues(saToStore, savedSocialAction);
-				saToStoreMap.put(saToStore.getUserId(), saToStore);
-			}
-		}
-		
-		for (SocialAction ca : saToStoreMap.values()) {
-			updateStoredItems(ca);
-		}
+	public void writeDocuments(List<SocialAction> socialActions, SearchServerBulkMessage searchServerBulkUpload) {
+//		long start = System.nanoTime();
+//		Map<String, SocialAction> saToStoreMap = new HashMap<String, SocialAction>();
+//		
+//		for (SocialAction saToStore : socialActions){
+//			SocialAction savedSocialAction = saToStoreMap.get(saToStore.getUserId());
+//			
+//			if (savedSocialAction == null) {
+//				saToStoreMap.put(saToStore.getUserId(), saToStore);
+//			} else {
+//				setStoredValues(saToStore, savedSocialAction);
+//				saToStoreMap.put(saToStore.getUserId(), saToStore);
+//			}
+//		}
+//		
+//		for (SocialAction ca : saToStoreMap.values()) {
+//			updateStoredItems(ca);
+//		}
 
 		try {
-			solrServer.addBeans(saToStoreMap.values());
+			solrServer.addBeans(socialActions);
 			solrServer.commit();
 		} catch (SolrServerException | IOException e) {
 			e.printStackTrace();
@@ -146,11 +146,12 @@ public class SocialActionService extends SolrService<SocialActionQuery, SocialAc
 	
 
 	@Override
-	public void removeElementById(String id, String language) {
-		if (language != null) {
-			id += "_" + language;
-		}
+	public void removeElementById(String id) {
 		removeElementById(id, solrServer);
-		
+	}
+	
+	@Override
+	public void removeElementByIds(List<String> ids) {
+		removeElementByIds(ids, solrServer);
 	}
 }

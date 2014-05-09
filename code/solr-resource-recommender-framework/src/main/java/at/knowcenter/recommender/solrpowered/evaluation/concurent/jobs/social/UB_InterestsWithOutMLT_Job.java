@@ -3,12 +3,12 @@ package at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.social;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-
 import at.knowcenter.recommender.solrpowered.engine.filtering.ContentFilter;
 import at.knowcenter.recommender.solrpowered.engine.strategy.StrategyType;
+import at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.AbstractStrategyJob;
 import at.knowcenter.recommender.solrpowered.evaluation.metrics.MetricsExporter;
 
-public class UB_InterestsWithOutMLT_Job extends UB_Strategy_Job implements Callable<List<MetricsExporter>>{
+public class UB_InterestsWithOutMLT_Job extends AbstractStrategyJob implements Callable<List<MetricsExporter>>{
 
 	private List<String> users;
 
