@@ -1,0 +1,8 @@
+target/
+.settings/
+.project
+.classpath
+.sonar4clipse
+*.sonar4clipseExternals
+.idea
+.DS_Store
