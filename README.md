@@ -1,8 +1,8 @@
-SocRecM - Towards a Scalable Social Recommender Engine for Online Marketplaces: The Case of Apache Solr
+SocRec - Towards a Scalable Social Resource Recommender Framework using Apache Solr
 =========================
 
 ## Description
-Recent research has unveiled the importance of online social networks for improving the quality of recommenders in several domains, what has encouraged the research community to investigate ways to better exploit the social information for recommendations. However, there is a lack of work that offers details of frameworks that allow an easy integration of social data with traditional recommendation algorithms in order to yield a straight-forward and scalable implementation of new and existing systems. With SocRecM we intend to bridge this gap. In particular with SocRecM we introduce a novel social recommender engine for online marketplaces that is built upon the well-know search engine Apache Solr. The framework offers a set of content and collaborative filtering approaches hybrid approaches to recommend items (e.g., products) to user not only in a personalized manner but also utilizing social data from the users social networks such as Facebook, Google+, or Twitter. To the best of our knowledge SocRecM is the first open source recommender engine for online marketplaces that relies on
+Recent research has unveiled the importance of online social networks for improving the quality of recommenders in several domains, what has encouraged the research community to investigate ways to better exploit the social information for recommendations. However, there is a lack of work that offers details of frameworks that allow an easy integration of social data with traditional recommendation algorithms in order to yield a straight-forward and scalable implementation of new and existing systems. With SocRec we intend to bridge this gap. In particular with SocRec we introduce a novel social recommender engine for online marketplaces that is built upon the well-know search engine Apache Solr. The framework offers a set of content and collaborative filtering approaches hybrid approaches to recommend items (e.g., products) to user not only in a personalized manner but also utilizing social data from the users social networks such as Facebook, Google+, or Twitter. To the best of our knowledge SocRec is the first open source recommender engine for online marketplaces that relies on
 std. search software such as Apache Solr and is able to utilize social data from user to increase the recommender accuracy.
 
 
@@ -20,7 +20,7 @@ The source-code can be directly checked-out through this repository. The code/so
 
 ### Apache Solr
 
-First things first, SocRecM depends on [Apache Solr](http://lucene.apache.org/solr/) as its datasource. Download it, extract everything in any prefered location and set up the different collection configuration with the provided [schema files](https://github.com/lacic/solr-resource-recommender/tree/master/resources/solr-schemas). For first time users, please conduct Solr's [tutorial site](http://lucene.apache.org/solr/4_7_2/tutorial.html).
+First things first, SocRec depends on [Apache Solr](http://lucene.apache.org/solr/) as its datasource. Download it, extract everything in any prefered location and set up the different collection configuration with the provided [schema files](https://github.com/lacic/solr-resource-recommender/tree/master/resources/solr-schemas). For first time users, please conduct Solr's [tutorial site](http://lucene.apache.org/solr/4_7_2/tutorial.html).
 
 
 ### Using Maven
@@ -28,8 +28,8 @@ First things first, SocRecM depends on [Apache Solr](http://lucene.apache.org/so
 The framework is built and deployed via [Maven](http://maven.apache.org/). To install it, check out this repository and run mvn clean install in the code/solr-resource-recommender-framework/ folder. 
 
 ```
-$ git clone https://github.com/lacic/solr-resource-recommender.git solr-resource-recommender
-$ cd solr-resource-recommender/code/solr-resource-recommender-framework
+$ git clone https://github.com/learning-layers/SocRec.git soc-rec
+$ cd soc-rec/code/solr-resource-recommender-framework
 $ mvn clean install
 ```
 
@@ -37,7 +37,7 @@ After that, it is available to other projects by depending directly on it (consu
 
 ### Using the provided .jar file
 
-If you wish, you can download the solr-resource-recommender-framework-1.0-SNAPSHOT.jar and add it to your projects build path. Take note of the depended libraries which are needed for the framework and which can be found in the [pom.xml](https://github.com/lacic/solr-resource-recommender/blob/master/code/solr-resource-recommender-framework/pom.xml) file.
+If you wish, you can download the solr-resource-recommender-framework-1.0-SNAPSHOT.jar and add it to your projects build path. Take note of the depended libraries which are needed for the framework and which can be found in the [pom.xml](https://github.com/learning-layers/SocRec/blob/master/code/solr-resource-recommender-framework/pom.xml) file.
 
 ## How to use
 
@@ -62,10 +62,12 @@ List<String> recommendedResourceIds = engine.getRecommendations(userID, productI
 ```
 
 
+=======
 
 
 ## References
 * Lacic, E., Kowald, D., Parra, D., Kahr, M., & Trattner, C. (2014). [Towards a Scalable Social Recommender Engine for Online Marketplaces: The Case of Apache Solr](http://www.christophtrattner.info/pubs/ws12srs11.pdf), In Proceedings of the ACM World Wide Web Conference companion (WWW 2014). ACM.
+* Lacic, E., Kowald, D., & Trattner, C. (2014). [SocRecM: A Scalable Social Recommender Engine for Online Marketplaces](http://www.christophtrattner.info/pubs/ht245-lacic.pdf), In Proceedings of the 25th ACM Conference on Hypertext and Social Media, HT'14, New York, NY, USA, 2014. ACM.
 
 ## Contact
 * Emanuel Lacic, Graz University of Technology, elacic@know-center.at
