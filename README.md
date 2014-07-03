@@ -67,7 +67,7 @@ List<String> recommendedResourceIds = engine.getRecommendations(userID, productI
 
 ## References
 * Lacic, E., Kowald, D., Parra, D., Kahr, M., & Trattner, C. (2014). [Towards a Scalable Social Recommender Engine for Online Marketplaces: The Case of Apache Solr](http://www.christophtrattner.info/pubs/ws12srs11.pdf), In Proceedings of the ACM World Wide Web Conference companion (WWW 2014). ACM.
-* Lacic, E., Kowald, & Trattner, C. (2014). [SocRecM: A Scalable Social Recommender Engine for Online Marketplaces](http://www.christophtrattner.info/pubs/ht245-lacic.pdf), In Proceedings of the 25th ACM Conference on Hypertext and Social Media, HT'14, New York, NY, USA, 2014. ACM.
+* Lacic, E., Kowald, D., & Trattner, C. (2014). [SocRecM: A Scalable Social Recommender Engine for Online Marketplaces](http://www.christophtrattner.info/pubs/ht245-lacic.pdf), In Proceedings of the 25th ACM Conference on Hypertext and Social Media, HT'14, New York, NY, USA, 2014. ACM.
 
 ## Contact
 * Emanuel Lacic, Graz University of Technology, elacic@know-center.at
