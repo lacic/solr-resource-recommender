@@ -26,6 +26,7 @@ public class MetricsExporter {
 	private double serendipitySum = 0.0;
 	private double userCoverageSum = 0.0;
 	private long duarationSum = 0;
+	private double listAt10CoverageSum = 0.0;
 	
 	private List<Double> precisions = new ArrayList<Double>();
 	private List<Double> recalls = new ArrayList<Double>();
@@ -129,7 +130,19 @@ public class MetricsExporter {
 			bw.write(Double.toString((diversitSum / size)) + ";");
 			bw.write(Double.toString((serendipitySum / size)) + ";");
 			bw.write(Double.toString((ndcgSum / size)) + ";");
+			
 			bw.write(Double.toString((userCoverageSum / size)) + ";");
+			bw.write(Double.toString((listAt10CoverageSum / size)) + ";;");
+			
+			bw.write(Double.toString((recallSum / userCoverageSum)) + ";");		
+			bw.write(Double.toString((precisionSum / userCoverageSum)) + ";");		
+			bw.write(Double.toString((fMeasureSum / userCoverageSum)) + ";");		
+			bw.write(Double.toString((mrrSum / userCoverageSum)) + ";");		
+			bw.write(Double.toString((mapSum / userCoverageSum)) + ";");
+			bw.write(Double.toString((diversitSum / userCoverageSum)) + ";");
+			bw.write(Double.toString((serendipitySum / userCoverageSum)) + ";");
+			bw.write(Double.toString((ndcgSum / userCoverageSum)) + ";");
+			
 			// from nano to ms
 			long averageDuaration = (duarationSum / size) / 1000000;
 //			bw.write(Integer.toString(size) + ";");
@@ -193,6 +206,7 @@ public class MetricsExporter {
 		userCoverageSum = 0.0;
 		duarationSum = 0;
 		usersThatDidNotGetRecommended = 0;
+		listAt10CoverageSum = 0.0;
 	}
 
 	public double getPrecisionSum() {
@@ -292,5 +306,8 @@ public class MetricsExporter {
 		return userCoverages;
 	}
 
+	public Double getListCoverage() {
+		return listAt10CoverageSum;
+	}
 	
 }

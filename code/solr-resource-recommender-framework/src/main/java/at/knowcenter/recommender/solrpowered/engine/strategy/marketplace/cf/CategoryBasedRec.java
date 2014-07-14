@@ -12,6 +12,7 @@ import java.util.TreeMap;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
@@ -96,6 +97,7 @@ public class CategoryBasedRec implements RecommendStrategy {
 			Set<String> otherUsers = fetchUsersFromCategories(knownCategories, query.getUser());
 			Map<String, Set<String>> userSellerMap = fetchUserCategoryMapping(otherUsers, query.getUser());
 			
+
 			final Map<String, Double> commonNeighborMap = new HashMap<String, Double>();
 			for (String commonUser : userSellerMap.keySet()) {
 				Set<String> categories = userSellerMap.get(commonUser);
@@ -166,40 +168,62 @@ public class CategoryBasedRec implements RecommendStrategy {
 			sellerBuilder.append("\"\")");
 		}
 		
+
+		
 		solrParams.set("q", sellerBuilder.toString());
-		solrParams.set("rows", Integer.MAX_VALUE);
+		solrParams.set("rows", 1);
 		solrParams.set("fq", "tags:[* TO *]");
-		solrParams.set("fl", "users_rated_5,users_rated_4,users_rated_3,users_rated_2,users_rated_1");
+		solrParams.set("fl", "id");
+		
+		solrParams.set("facet", "true");
+		solrParams.set("facet.field", 
+				new String[]{ 
+				USERS_RATED_5_FIELD, USERS_RATED_4_FIELD, 
+				USERS_RATED_3_FIELD, USERS_RATED_2_FIELD, 
+				USERS_RATED_1_FIELD }
+		);
+		solrParams.set("facet.mincount", 1);
+		solrParams.set("facet.limit", -1);
+		
 
 		try {
 			QueryResponse response = SolrServiceContainer.getInstance().getResourceService().getSolrServer().query(solrParams);
 			
-			List<Resource> resources = response.getBeans(Resource.class);
+			List<FacetField> facetFields = response.getFacetFields();
 			
-			for (Resource res : resources) {
-				List<String> usersRated1 = res.getUsersRated1();
-				List<String> usersRated2 = res.getUsersRated2();
-				List<String> usersRated3 = res.getUsersRated3();
-				List<String> usersRated4 = res.getUsersRated4();
-				List<String> usersRated5 = res.getUsersRated5();
-				
-				if (usersRated1 != null) {
-					usersFromCategories.addAll(usersRated1);
-				}
-				if (usersRated2 != null) {
-					usersFromCategories.addAll(usersRated2);
-				}
-				if (usersRated3 != null) {
-					usersFromCategories.addAll(usersRated3);
-				}
-				if (usersRated4 != null) {
-					usersFromCategories.addAll(usersRated4);
-				}
-				if (usersRated5 != null) {
-					usersFromCategories.addAll(usersRated5);
+			for (FacetField userFacet : facetFields) {
+				List<Count> counts = userFacet.getValues();
+				for (Count c : counts) {
+					usersFromCategories.add(c.getName());
 				}
 			}
-		} catch (SolrServerException e) {
+			
+//			List<Resource> resources = response.getBeans(Resource.class);
+//			
+//			for (Resource res : resources) {
+//				List<String> usersRated1 = res.getUsersRated1();
+//				List<String> usersRated2 = res.getUsersRated2();
+//				List<String> usersRated3 = res.getUsersRated3();
+//				List<String> usersRated4 = res.getUsersRated4();
+//				List<String> usersRated5 = res.getUsersRated5();
+//				
+//				if (usersRated1 != null) {
+//					usersFromCategories.addAll(usersRated1);
+//				}
+//				if (usersRated2 != null) {
+//					usersFromCategories.addAll(usersRated2);
+//				}
+//				if (usersRated3 != null) {
+//					usersFromCategories.addAll(usersRated3);
+//				}
+//				if (usersRated4 != null) {
+//					usersFromCategories.addAll(usersRated4);
+//				}
+//				if (usersRated5 != null) {
+//					usersFromCategories.addAll(usersRated5);
+//				}
+//			}
+		} catch (Exception e) {
 			System.out.println(solrParams);
 			e.printStackTrace();
 		}
@@ -238,17 +262,113 @@ public class CategoryBasedRec implements RecommendStrategy {
 			rated2Builder.append("\"\")");
 			rated1Builder.append("\"\")");
 		}
+		/*
 		solrParams.set("q", rated5Builder.toString() + " OR " + rated4Builder.toString() + " OR " + 
 				rated3Builder.toString() + " OR " + rated2Builder.toString() + " OR " + rated1Builder.toString());
 		solrParams.set("rows", Integer.MAX_VALUE);
 		solrParams.set("fq", "tags:[* TO *]");
 		solrParams.set("fl", "tags,users_rated_5,users_rated_4,users_rated_3,users_rated_2,users_rated_1");
-
+*/
 		try {
-			QueryResponse response = SolrServiceContainer.getInstance().getResourceService().getSolrServer().query(solrParams);
+			QueryResponse response = null;
+
+			solrParams = new ModifiableSolrParams();
+			solrParams.set("q", rated5Builder.toString());
+			solrParams.set("rows", 40);
+			solrParams.set("fq", "tags:[* TO *]");
+			solrParams.set("fl", "tags,users_rated_5");
+
+			response = SolrServiceContainer.getInstance().getResourceService().getSolrServer().query(solrParams);
 			
 			List<Resource> resources = response.getBeans(Resource.class);
+			for (Resource res : resources) {
+				List<String> categories = res.getTags();
+				
+				List<String> usersRated5 = res.getUsersRated5();
+				
+				if (usersRated5 != null) {
+					fillSellersForUsers(userCategoryMapping, categories, usersRated5, currentUser, otherUsers);
+				}
+			}
+
+			solrParams = new ModifiableSolrParams();
+			solrParams.set("q", rated4Builder.toString());
+			solrParams.set("rows", 40);
+			solrParams.set("fq", "tags:[* TO *]");
+			solrParams.set("fl", "tags,users_rated_4");
+			response = SolrServiceContainer.getInstance().getResourceService().getSolrServer().query(solrParams);
 			
+			resources = response.getBeans(Resource.class);
+			
+			for (Resource res : resources) {
+				List<String> categories = res.getTags();
+				
+				List<String> usersRated4 = res.getUsersRated4();
+				
+				if (usersRated4 != null) {
+					fillSellersForUsers(userCategoryMapping, categories, usersRated4, currentUser, otherUsers);
+				}
+			}
+
+			solrParams = new ModifiableSolrParams();
+			solrParams.set("q", rated3Builder.toString());
+			solrParams.set("rows", 40);
+			solrParams.set("fq", "tags:[* TO *]");
+			solrParams.set("fl", "tags,users_rated_3");
+
+			response = SolrServiceContainer.getInstance().getResourceService().getSolrServer().query(solrParams);
+			
+			resources = response.getBeans(Resource.class);
+			for (Resource res : resources) {
+				List<String> categories = res.getTags();
+				
+				List<String> usersRated3 = res.getUsersRated3();
+				
+				if (usersRated3 != null) {
+					fillSellersForUsers(userCategoryMapping, categories, usersRated3, currentUser, otherUsers);
+				}
+			}
+
+			solrParams = new ModifiableSolrParams();
+			solrParams.set("q", rated2Builder.toString());
+			solrParams.set("rows", 40);
+			solrParams.set("fq", "tags:[* TO *]");
+			solrParams.set("fl", "tags,users_rated_2");
+
+			response = SolrServiceContainer.getInstance().getResourceService().getSolrServer().query(solrParams);
+			
+			resources = response.getBeans(Resource.class);
+			for (Resource res : resources) {
+				List<String> categories = res.getTags();
+				
+				List<String> usersRated2 = res.getUsersRated2();
+				
+				if (usersRated2 != null) {
+					fillSellersForUsers(userCategoryMapping, categories, usersRated2, currentUser, otherUsers);
+				}
+			}
+
+			solrParams = new ModifiableSolrParams();
+			solrParams.set("q", rated1Builder.toString());
+			solrParams.set("rows", 40);
+			solrParams.set("fq", "tags:[* TO *]");
+			solrParams.set("fl", "tags,users_rated_1");
+
+			response = SolrServiceContainer.getInstance().getResourceService().getSolrServer().query(solrParams);
+			
+			resources = response.getBeans(Resource.class);
+			for (Resource res : resources) {
+				List<String> categories = res.getTags();
+				
+				List<String> usersRated1 = res.getUsersRated1();
+				
+				if (usersRated1 != null) {
+					fillSellersForUsers(userCategoryMapping, categories, usersRated1, currentUser, otherUsers);
+				}
+			}
+
+
+/*
 			for (Resource res : resources) {
 				List<String> categories = res.getTags();
 				
@@ -274,7 +394,8 @@ public class CategoryBasedRec implements RecommendStrategy {
 					fillSellersForUsers(userCategoryMapping, categories, usersRated5, currentUser, otherUsers);
 				}
 			}
-		} catch (SolrServerException e) {
+*/
+		} catch (Exception e) {
 			System.out.println(solrParams);
 			e.printStackTrace();
 		}

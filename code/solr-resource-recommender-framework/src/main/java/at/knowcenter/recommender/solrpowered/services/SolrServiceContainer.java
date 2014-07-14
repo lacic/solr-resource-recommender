@@ -22,6 +22,7 @@ import at.knowcenter.recommender.solrpowered.services.impl.user.UserService;
  */
 public class SolrServiceContainer {
 	
+	// Main services in leave one out method or either for training set
 	private RecommendService recommendService;
 	private UserService userService;
 	private ItemService itemService;
@@ -33,6 +34,12 @@ public class SolrServiceContainer {
 	private PositionService positionService;
 	private PositionNetworkService positionNetworkService;
 	private SharedLocationService sharedLocationService;
+	
+	// Test services
+	
+	private ResourceService testResourceService;
+	private ReviewService testReviewService;
+
 	
 	/**
 	 * Initialization-on-demand holder idiom
@@ -77,7 +84,6 @@ public class SolrServiceContainer {
 			PositionNetworkService positionNetworkService = new PositionNetworkService(address, port, "position_network");
 			SharedLocationService sharedLocationService = new SharedLocationService(address, port, "shared_locations");
 
-
 			setUserService(userService);
 			setRecommendService(recommenderService);
 			setItemService(itemService);
@@ -89,7 +95,15 @@ public class SolrServiceContainer {
 			setPositionService(positionService);
 			setPositionNetworkService(positionNetworkService);
 			setSharedLocationService(sharedLocationService);
+
+			int testPort = 8985;
 			
+			ResourceService testResourceService = new ResourceService(address, testPort, "resources");
+			ReviewService testReviewService = new ReviewService(address, testPort, "reviews");
+
+			setTestResourceService(testResourceService);
+			setTestReviewService(testReviewService);
+
 			initSuccess = true;
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -185,6 +199,22 @@ public class SolrServiceContainer {
 
 	public void setSharedLocationService(SharedLocationService sharedLocationService) {
 		this.sharedLocationService = sharedLocationService;
+	}
+
+	public ResourceService getTestResourceService() {
+		return testResourceService;
+	}
+
+	public void setTestResourceService(ResourceService testResourceService) {
+		this.testResourceService = testResourceService;
+	}
+
+	public ReviewService getTestReviewService() {
+		return testReviewService;
+	}
+
+	public void setTestReviewService(ReviewService testReviewService) {
+		this.testReviewService = testReviewService;
 	}
 	
 	

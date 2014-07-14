@@ -22,6 +22,8 @@ import at.knowcenter.recommender.solrpowered.model.Review;
 import at.knowcenter.recommender.solrpowered.model.SocialAction;
 import at.knowcenter.recommender.solrpowered.model.SocialStream;
 import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
+import at.knowcenter.recommender.solrpowered.services.common.SolrService;
+import at.knowcenter.recommender.solrpowered.services.impl.review.ReviewService;
 
 public class DataFetcher {
 
@@ -65,6 +67,10 @@ public class DataFetcher {
 	}
 	
 	public static List<String> getReviewingUsers() {
+		return getReviewingUsers(SolrServiceContainer.getInstance().getReviewService());
+	}
+	
+	public static List<String> getReviewingUsers(ReviewService reviewService) {
 		ModifiableSolrParams solrParams = new ModifiableSolrParams();
 		QueryResponse response = null;
 		
@@ -76,7 +82,7 @@ public class DataFetcher {
 		solrParams.set("facet.mincount", 1);
 	
 		try {
-			response = SolrServiceContainer.getInstance().getReviewService().getSolrServer().query(solrParams);
+			response = reviewService.getSolrServer().query(solrParams);
 		} catch (SolrServerException e) {
 			e.printStackTrace();
 		}
@@ -94,6 +100,10 @@ public class DataFetcher {
 	}
 	
 	public static List<String> getRatedProductsFromUser(String username) {
+		return getRatedProductsFromUser(username, SolrServiceContainer.getInstance().getReviewService());
+	}
+	
+	public static List<String> getRatedProductsFromUser(String username, ReviewService reveiwService) {
 		ModifiableSolrParams solrParams = new ModifiableSolrParams();
 		QueryResponse response = null;
 		
@@ -104,7 +114,7 @@ public class DataFetcher {
 		solrParams.set("facet.mincount", 1);
 	
 		try {
-			response = SolrServiceContainer.getInstance().getReviewService().getSolrServer().query(solrParams);
+			response = reveiwService.getSolrServer().query(solrParams);
 		} catch (SolrServerException e) {
 			e.printStackTrace();
 		}

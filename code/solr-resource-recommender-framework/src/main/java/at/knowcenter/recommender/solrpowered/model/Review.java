@@ -32,7 +32,7 @@ public class Review implements Serializable  {
 	@Field("review")
     private String review;
 	@Field("rating")
-	private Integer rating;
+	private Double rating;
 	@Field("date")
 	private Date date;
 	@Field("review_type")
@@ -77,11 +77,11 @@ public class Review implements Serializable  {
 		this.review = review;
 	}
 
-	public Integer getRating() {
+	public Double getRating() {
 		return rating;
 	}
 
-	public void setRating(Integer rating) {
+	public void setRating(Double rating) {
 		this.rating = rating;
 	}
 

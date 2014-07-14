@@ -60,18 +60,18 @@ public class SLSQLToSolrDataImporter {
 			System.out.println("MySQL not runnign");
 			return;
 		}
-
-		importer.fillPicksFromFile();
-
-		importer.createReviewsFromSQLDB();
-		importer.createCategoriesFromSQLDB();
-		importer.createStoresFromSQLDB();	
-		importer.createResourcesFromSQLDB();
-		importer.createCustomersFromMySQLDatabase();
-		importer.createSocialInteractionsFromSQLDatabase();
-		importer.createSocialStreamFromSQLDatabase();
-		importer.createCustomersFromMySQLDatabase();
-		importer.createPositionsFromMySQLDatabase();
+//		SolrServiceContainer.getInstance().getPositionService().wipeIndex();
+//		importer.fillPicksFromFile();
+//
+//		importer.createReviewsFromSQLDB();
+//		importer.createCategoriesFromSQLDB();
+//		importer.createStoresFromSQLDB();	
+//		importer.createResourcesFromSQLDB();
+//		importer.createCustomersFromMySQLDatabase();
+//		importer.createSocialInteractionsFromSQLDatabase();
+//		importer.createSocialStreamFromSQLDatabase();
+//		importer.createCustomersFromMySQLDatabase();
+//		importer.createPositionsFromMySQLDatabase();
 
 		importer.closeConnection();
 	}
@@ -122,27 +122,36 @@ public class SLSQLToSolrDataImporter {
 			String query = "SELECT a.avatar, a.uuid FROM test.about AS a";
 			ResultSet rs = conhandler.runQuery(query);
 			while(rs.next()) {
-				uuidAvatarMap.put(
-						rs.getString("uuid").substring(1, rs.getString("uuid").length()), 
-						rs.getString("avatar").replace("'", ""));
+				String uuid = rs.getString("uuid").substring(1, rs.getString("uuid").length());
+				String username = rs.getString("avatar").replace("'", "");
+				
+				uuidAvatarMap.put(uuid, username);
 			}
-
-			System.out.println(uuidAvatarMap.keySet().size());
 			
-			createPositionsFromTable("positions_robot_1203", uuidAvatarMap);
-			createPositionsFromTable("positions_robot_1204", uuidAvatarMap);
-			createPositionsFromTable("positions_robot_1205", uuidAvatarMap);
-			createPositionsFromTable("positions_robot_1206", uuidAvatarMap);
-			createPositionsFromTable("positions_robot_1207", uuidAvatarMap);
-			createPositionsFromTable("positions_robot_1208", uuidAvatarMap);
+			Integer positionID = 0;
+			
+			positionID = createPositionsFromTable("positions_robot_1203", uuidAvatarMap, positionID);
+			positionID = createPositionsFromTable("positions_robot_1204", uuidAvatarMap, positionID);
+			positionID = createPositionsFromTable("positions_robot_1205", uuidAvatarMap, positionID);
+			positionID = createPositionsFromTable("positions_robot_1206", uuidAvatarMap, positionID);
+			positionID = createPositionsFromTable("positions_robot_1207", uuidAvatarMap, positionID);
+			positionID = createPositionsFromTable("positions_robot_1208", uuidAvatarMap, positionID);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void createPositionsFromTable(String positionsTableName, Map<String, String> uuidAvatarMap)
+	/**
+	 * 
+	 * @param positionsTableName
+	 * @param uuidAvatarMap
+	 * @return Last assigned positionID
+	 * @throws SQLException
+	 */
+	private Integer createPositionsFromTable(String positionsTableName, Map<String, String> uuidAvatarMap, Integer positionID)
 			throws SQLException {
-		String query = "SELECT * FROM test." + positionsTableName + " AS p ";
+		String query = "SELECT p.avatar, p.xlocal , p.ylocal , p.zlocal , p.regionname , p.regionhandle , p.xglobal , p.yglobal , p.time "
+				+ "FROM test." + positionsTableName + " AS p ";
 		ResultSet rs = conhandler.runQuery(query);
 
 		
@@ -153,19 +162,23 @@ public class SLSQLToSolrDataImporter {
 			if (userUUID != null &&  uuidAvatarMap.get(userUUID) != null) {
 				Position position = new Position();
 
+				positionID++;
+				position.setId(positionID.toString());
+				
 				position.setUser(uuidAvatarMap.get(userUUID));
-				position.setId(rs.getString("nr"));
+
 				position.setRegionId(rs.getLong("regionhandle"));
-				position.setTime(rs.getDate("time"));
+				position.setTime(rs.getTimestamp("time"));
 				position.setRegionName(rs.getString("regionname"));
+				
 				Integer yLocal = rs.getInt("ylocal");
 				Integer xLocal = rs.getInt("xlocal");
+				
 				position.setLocationInRegion(xLocal + " " + yLocal);
 				position.setzLocal(rs.getInt("zlocal"));
 				
 				Integer xGlobal = rs.getInt("xglobal");
 				Integer yGlobal = rs.getInt("yglobal");
-				
 				
 				position.setRegionLocation(xGlobal + " " + yGlobal);
 				position.setGlobalLocation((xGlobal*256 + xLocal) + " " + (yGlobal*256 + yLocal));
@@ -186,6 +199,8 @@ public class SLSQLToSolrDataImporter {
 				}
 			});
 		}
+		
+		return positionID;
 	}
 
 	public void createStoresFromSQLDB() {
@@ -495,7 +510,7 @@ public class SLSQLToSolrDataImporter {
 				Review comment = new Review();
 				int rid = commentRs.getInt("rid");
 				
-				comment.setDate(commentRs.getDate("date"));
+				comment.setDate(commentRs.getTimestamp("date"));
 				comment.setReview(commentRs.getString("comment"));
 				
 				
@@ -746,7 +761,7 @@ public class SLSQLToSolrDataImporter {
 					Integer productId = rs.getInt("product_id");
 					int rating = rs.getInt("rating");
 					Integer reviewId = rs.getInt("review_id");
-					Date date = rs.getDate("date");
+					Date date = rs.getTimestamp("date");
 					String review = rs.getString("review");
 					
 					Review rev = new Review();
@@ -754,7 +769,7 @@ public class SLSQLToSolrDataImporter {
 					rev.setId(String.valueOf(reviewId));
 					rev.setItemId(String.valueOf(productId));
 					rev.setDate(date);
-					rev.setRating(rating);
+					rev.setRating((double)rating);
 					rev.setReview(review);
 					rev.setUser(normalizedUser);
 					rev.setReviewType(Review.REVIEW);

@@ -235,17 +235,113 @@ public class CategoryJaccardBasedRec implements RecommendStrategy {
 			rated2Builder.append("\"\")");
 			rated1Builder.append("\"\")");
 		}
+		/*
 		solrParams.set("q", rated5Builder.toString() + " OR " + rated4Builder.toString() + " OR " + 
 				rated3Builder.toString() + " OR " + rated2Builder.toString() + " OR " + rated1Builder.toString());
 		solrParams.set("rows", Integer.MAX_VALUE);
 		solrParams.set("fq", "tags:[* TO *]");
 		solrParams.set("fl", "tags,users_rated_5,users_rated_4,users_rated_3,users_rated_2,users_rated_1");
-
+*/
 		try {
-			QueryResponse response = SolrServiceContainer.getInstance().getResourceService().getSolrServer().query(solrParams);
+			QueryResponse response = null;
+
+			solrParams = new ModifiableSolrParams();
+			solrParams.set("q", rated5Builder.toString());
+			solrParams.set("rows", Integer.MAX_VALUE);
+			solrParams.set("fq", "tags:[* TO *]");
+			solrParams.set("fl", "tags,users_rated_5");
+
+			response = SolrServiceContainer.getInstance().getResourceService().getSolrServer().query(solrParams);
 			
 			List<Resource> resources = response.getBeans(Resource.class);
+			for (Resource res : resources) {
+				List<String> categories = res.getTags();
+				
+				List<String> usersRated5 = res.getUsersRated5();
+				
+				if (usersRated5 != null) {
+					fillSellersForUsers(userCategoryMapping, categories, usersRated5, currentUser, otherUsers);
+				}
+			}
+
+			solrParams = new ModifiableSolrParams();
+			solrParams.set("q", rated4Builder.toString());
+			solrParams.set("rows", Integer.MAX_VALUE);
+			solrParams.set("fq", "tags:[* TO *]");
+			solrParams.set("fl", "tags,users_rated_4");
+
+			response = SolrServiceContainer.getInstance().getResourceService().getSolrServer().query(solrParams);
 			
+			resources = response.getBeans(Resource.class);
+			for (Resource res : resources) {
+				List<String> categories = res.getTags();
+				
+				List<String> usersRated4 = res.getUsersRated4();
+				
+				if (usersRated4 != null) {
+					fillSellersForUsers(userCategoryMapping, categories, usersRated4, currentUser, otherUsers);
+				}
+			}
+
+			solrParams = new ModifiableSolrParams();
+			solrParams.set("q", rated3Builder.toString());
+			solrParams.set("rows", Integer.MAX_VALUE);
+			solrParams.set("fq", "tags:[* TO *]");
+			solrParams.set("fl", "tags,users_rated_3");
+
+			response = SolrServiceContainer.getInstance().getResourceService().getSolrServer().query(solrParams);
+			
+			resources = response.getBeans(Resource.class);
+			for (Resource res : resources) {
+				List<String> categories = res.getTags();
+				
+				List<String> usersRated3 = res.getUsersRated3();
+				
+				if (usersRated3 != null) {
+					fillSellersForUsers(userCategoryMapping, categories, usersRated3, currentUser, otherUsers);
+				}
+			}
+
+			solrParams = new ModifiableSolrParams();
+			solrParams.set("q", rated2Builder.toString());
+			solrParams.set("rows", Integer.MAX_VALUE);
+			solrParams.set("fq", "tags:[* TO *]");
+			solrParams.set("fl", "tags,users_rated_2");
+
+			response = SolrServiceContainer.getInstance().getResourceService().getSolrServer().query(solrParams);
+			
+			resources = response.getBeans(Resource.class);
+			for (Resource res : resources) {
+				List<String> categories = res.getTags();
+				
+				List<String> usersRated2 = res.getUsersRated2();
+				
+				if (usersRated2 != null) {
+					fillSellersForUsers(userCategoryMapping, categories, usersRated2, currentUser, otherUsers);
+				}
+			}
+
+			solrParams = new ModifiableSolrParams();
+			solrParams.set("q", rated1Builder.toString());
+			solrParams.set("rows", Integer.MAX_VALUE);
+			solrParams.set("fq", "tags:[* TO *]");
+			solrParams.set("fl", "tags,users_rated_1");
+
+			response = SolrServiceContainer.getInstance().getResourceService().getSolrServer().query(solrParams);
+			
+			resources = response.getBeans(Resource.class);
+			for (Resource res : resources) {
+				List<String> categories = res.getTags();
+				
+				List<String> usersRated1 = res.getUsersRated1();
+				
+				if (usersRated1 != null) {
+					fillSellersForUsers(userCategoryMapping, categories, usersRated1, currentUser, otherUsers);
+				}
+			}
+
+
+/*
 			for (Resource res : resources) {
 				List<String> categories = res.getTags();
 				
@@ -271,7 +367,8 @@ public class CategoryJaccardBasedRec implements RecommendStrategy {
 					fillSellersForUsers(userCategoryMapping, categories, usersRated5, currentUser, otherUsers);
 				}
 			}
-		} catch (SolrServerException e) {
+*/
+		} catch (Exception e) {
 			System.out.println(solrParams);
 			e.printStackTrace();
 		}
