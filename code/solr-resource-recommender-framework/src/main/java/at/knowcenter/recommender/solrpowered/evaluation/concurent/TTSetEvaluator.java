@@ -14,6 +14,7 @@ import java.util.concurrent.Future;
 import at.knowcenter.recommender.solrpowered.engine.strategy.StrategyType;
 import at.knowcenter.recommender.solrpowered.evaluation.RecommenderEvaluator;
 import at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.*;
+import at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.hybrid.CommonTTWeightedSumHybridJob;
 import at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.impl.hybrid.CF_CFcat_C_Job;
 import at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.impl.hybrid.UB_InterestsGroups_Social_Job;
 import at.knowcenter.recommender.solrpowered.evaluation.concurent.jobs.impl.marketplace.MP_Job;
@@ -52,7 +53,7 @@ public class TTSetEvaluator {
 		
 		initEvaluation();
 		
-		ExecutorService executor = Executors.newFixedThreadPool(5);
+		ExecutorService executor = Executors.newFixedThreadPool(29);
 		
 		List<Callable<List<MetricsExporter>>> jobs = new ArrayList<Callable<List<MetricsExporter>>>();
 		
@@ -71,6 +72,7 @@ public class TTSetEvaluator {
 			
 			List<String> userPartition= users.subList(i * partitionSize, offset);
 
+			/*
 			jobs.add(new CommonTTStrategyJob(userPartition, "MP_"+ i, StrategyType.MostPopular_Review, 0));
 			jobs.add(new CommonTTStrategyJob(userPartition, "CF_Rev_" + i, StrategyType.CF_Review, 1));
 //			jobs.add(new CommonTTStrategyJob(userPartition, "Cat_" + i, StrategyType.CF_Categories, 3));
@@ -117,7 +119,7 @@ public class TTSetEvaluator {
 			jobs.add(new CommonTTStrategyJob(userPartition, "RegCoAdar" + i, StrategyType.CF_Region_Network_Coocurred_Adar, 29));
 			jobs.add(new CommonTTStrategyJob(userPartition, "RegCoOverlap" + i, StrategyType.CF_Region_Network_Coocurred_Overlap, 30));
 			jobs.add(new CommonTTStrategyJob(userPartition, "RegCoPrefAtt" + i, StrategyType.CF_Region_Network_Coocurred_PrefAtt, 31));
-			
+			*/
 
 //			jobs.add(new CommonTTStrategyJob(userPartition, "Wallposts_" + i, StrategyType.WallPostInteraction, 6));
 //			jobs.add(new CommonTTStrategyJob(userPartition, "Snapshots_" + i, StrategyType.SnapshotInteraction, 7));
@@ -155,18 +157,17 @@ public class TTSetEvaluator {
 
 			
 			// Market Hybrid
-//			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Market", 59, new StrategyType[]{
-//					StrategyType.CF_Market_Seller_Jaccard, StrategyType.CF_Market_Seller_CN, 
-//					StrategyType.CF_Review, StrategyType.CF_Market_Seller_Total,
-//					StrategyType.CF_Categories_CN, StrategyType.CF_Categories_Jacc, StrategyType.CF_Categories_Total}));
-//			
+			jobs.add(new CommonTTWeightedSumHybridJob(userPartition, "WS_Hyb_Market", 59, new StrategyType[]{
+					StrategyType.CF_Market_Seller_Jaccard, StrategyType.CF_Market_Seller_CN, 
+					StrategyType.CF_Review, StrategyType.CF_Market_Seller_Total,
+					StrategyType.CF_Categories_CN, StrategyType.CF_Categories_Jacc, StrategyType.CF_Categories_Total}));
+			
 //			jobs.add(new CommonMixedHybridStrategyJob(userPartition, "Mixed_Hyb_Market_" + i, 72, new StrategyType[]{
 //					StrategyType.CF_Market_Seller_Jaccard, StrategyType.CF_Market_Seller_CN, 
 //					StrategyType.CF_Review, StrategyType.CF_Market_Seller_Total,
 //					StrategyType.CF_Categories_CN,StrategyType.CF_Categories_Jacc,StrategyType.CF_Categories_Total}));
 //			
 //			jobs.add(new CommonHybridCrossSourceStrategyJob(userPartition, "CS_Hyb_Market", 83, new StrategyType[]{
-//					StrategyType.CF_Market_Seller_Jaccard, StrategyType.CF_Market_Seller_CN, StrategyType.CF_Review, StrategyType.CF_Market_Seller_Total}));
 //					StrategyType.CF_Market_Seller_Jaccard, StrategyType.CF_Market_Seller_CN, 
 //					StrategyType.CF_Review, StrategyType.CF_Market_Seller_Total,
 //					StrategyType.CF_Categories_CN, StrategyType.CF_Categories_Jacc, StrategyType.CF_Categories_Total}));
@@ -181,9 +182,9 @@ public class TTSetEvaluator {
 			
 //			// Social Content Hybrid
 //			
-//			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Social_Content", 61, new StrategyType[]{
-//					StrategyType.CF_Soc_Group_Jaccard, StrategyType.UB_WithOutMLTGroups, StrategyType.CF_Soc_Group_Total,
-//					StrategyType.CF_Soc_Interests_Jaccard, StrategyType.UB_WithOutMLTInterests, StrategyType.CF_Soc_Interests_Total}));
+			jobs.add(new CommonTTWeightedSumHybridJob(userPartition, "WS_Hyb_Social_Content", 61, new StrategyType[]{
+					StrategyType.CF_Soc_Group_Jaccard, StrategyType.UB_WithOutMLTGroups, StrategyType.CF_Soc_Group_Total,
+					StrategyType.CF_Soc_Interests_Jaccard, StrategyType.UB_WithOutMLTInterests, StrategyType.CF_Soc_Interests_Total}));
 //			
 //			jobs.add(new CommonMixedHybridStrategyJob(userPartition, "Mixed_Hyb_Social_Content", 72, new StrategyType[]{
 //					StrategyType.CF_Soc_Group_Jaccard, StrategyType.UB_WithOutMLTGroups, StrategyType.CF_Soc_Group_Total,
@@ -195,9 +196,9 @@ public class TTSetEvaluator {
 //			
 //			// Social Network Hybrid
 //			
-//			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Social_Network", 62, new StrategyType[]{
-//					StrategyType.CF_Soc_Network_NeighOverlap, StrategyType.CF_Soc_Network_Jaccard, StrategyType.CF_Soc_Network_AdamicAdar, StrategyType.CF_Soc_Network_CN,
-//					StrategyType.CF_Social, StrategyType.CF_Soc_Network_PrefAttachment, StrategyType.CF_Social_Likes, StrategyType.CF_Social_Comments, StrategyType.WallPostInteraction}));
+			jobs.add(new CommonTTWeightedSumHybridJob(userPartition, "WS_Hyb_Social_Network", 62, new StrategyType[]{
+					StrategyType.CF_Soc_Network_NeighOverlap, StrategyType.CF_Soc_Network_Jaccard, StrategyType.CF_Soc_Network_AdamicAdar, StrategyType.CF_Soc_Network_CN,
+					StrategyType.CF_Social, StrategyType.CF_Soc_Network_PrefAttachment, StrategyType.CF_Social_Likes, StrategyType.CF_Social_Comments, StrategyType.WallPostInteraction}));
 //			
 //			jobs.add(new CommonMixedHybridStrategyJob(userPartition, "Mixed_Hyb_Social_Network", 73, new StrategyType[]{
 //					StrategyType.CF_Soc_Network_NeighOverlap, StrategyType.CF_Soc_Network_Jaccard, StrategyType.CF_Soc_Network_AdamicAdar, StrategyType.CF_Soc_Network_CN,
@@ -209,11 +210,11 @@ public class TTSetEvaluator {
 //			
 //			// Social Hybrid
 //			
-//			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Social", 66, new StrategyType[]{
-//					StrategyType.CF_Soc_Network_NeighOverlap, StrategyType.CF_Soc_Network_Jaccard, StrategyType.CF_Soc_Network_AdamicAdar, StrategyType.CF_Soc_Network_CN,
-//					StrategyType.CF_Social, StrategyType.CF_Soc_Group_Jaccard, StrategyType.UB_WithOutMLTGroups, StrategyType.CF_Soc_Group_Total,
-//					StrategyType.CF_Soc_Network_PrefAttachment, StrategyType.CF_Social_Likes, StrategyType.CF_Social_Comments, StrategyType.WallPostInteraction,
-//					StrategyType.CF_Soc_Interests_Jaccard, StrategyType.UB_WithOutMLTInterests, StrategyType.CF_Soc_Interests_Total}));
+			jobs.add(new CommonTTWeightedSumHybridJob(userPartition, "WS_Hyb_Social", 66, new StrategyType[]{
+					StrategyType.CF_Soc_Network_NeighOverlap, StrategyType.CF_Soc_Network_Jaccard, StrategyType.CF_Soc_Network_AdamicAdar, StrategyType.CF_Soc_Network_CN,
+					StrategyType.CF_Social, StrategyType.CF_Soc_Group_Jaccard, StrategyType.UB_WithOutMLTGroups, StrategyType.CF_Soc_Group_Total,
+					StrategyType.CF_Soc_Network_PrefAttachment, StrategyType.CF_Social_Likes, StrategyType.CF_Social_Comments, StrategyType.WallPostInteraction,
+					StrategyType.CF_Soc_Interests_Jaccard, StrategyType.UB_WithOutMLTInterests, StrategyType.CF_Soc_Interests_Total}));
 //			
 //			jobs.add(new CommonMixedHybridStrategyJob(userPartition, "Mixed_Hyb_Social", 77, new StrategyType[]{
 //					StrategyType.CF_Soc_Network_NeighOverlap, StrategyType.CF_Soc_Network_Jaccard, StrategyType.CF_Soc_Network_AdamicAdar, StrategyType.CF_Soc_Network_CN,
@@ -236,11 +237,11 @@ public class TTSetEvaluator {
 //			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Location_DistanceSeen", 64, new StrategyType[]{
 //					StrategyType.CF_Loc_Days_Seen_In_Region, StrategyType.CF_Loc_Physical_Distance_in_Region}));
 			
-//			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Location_Content", 65, new StrategyType[]{
-//					StrategyType.CF_Loc_Picks_CN, StrategyType.CF_Loc_Picks_Jaccard, StrategyType.CF_Loc_Picks_Total,
-//					StrategyType.CF_Loc_Common_Regions, StrategyType.CF_Loc_Common_Regions_Jaccard, StrategyType.CF_Loc_Physical_Distance_in_Region,
-//					StrategyType.CF_Loc_Shared_Regions_Jaccard, StrategyType.CF_Loc_Days_Seen_In_Region, StrategyType.CF_Loc_Total_Regions,
-//					StrategyType.CF_Loc_Shared_Regions_Common, StrategyType.CF_Loc_Shared_Regions_Total}));
+			jobs.add(new CommonTTWeightedSumHybridJob(userPartition, "WS_Hyb_Location_Content", 65, new StrategyType[]{
+					StrategyType.CF_Loc_Picks_CN, StrategyType.CF_Loc_Picks_Jaccard, StrategyType.CF_Loc_Picks_Total,
+					StrategyType.CF_Loc_Common_Regions, StrategyType.CF_Loc_Common_Regions_Jaccard, StrategyType.CF_Loc_Physical_Distance_in_Region,
+					StrategyType.CF_Loc_Shared_Regions_Jaccard, StrategyType.CF_Loc_Days_Seen_In_Region, StrategyType.CF_Loc_Total_Regions,
+					StrategyType.CF_Loc_Shared_Regions_Common, StrategyType.CF_Loc_Shared_Regions_Total}));
 //			
 //			jobs.add(new CommonMixedHybridStrategyJob(userPartition, "Mixed_Hyb_Location_Content", 76, new StrategyType[]{
 //					StrategyType.CF_Loc_Picks_CN, StrategyType.CF_Loc_Picks_Jaccard, StrategyType.CF_Loc_Picks_Total,
@@ -257,9 +258,9 @@ public class TTSetEvaluator {
 //			
 //			// Location Network Hybrid
 //			
-//			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Location_Network", 67, new StrategyType[]{
-//					StrategyType.CF_Region_Network_Coocurred_Jaccard, StrategyType.CF_Region_Network_Coocurred_Overlap, StrategyType.CF_Region_Network_Coocurred_CN, 
-//					StrategyType.CF_Region_Network_Coocurred_PrefAtt, StrategyType.CF_Region_Network_Coocurred_Adar}));
+			jobs.add(new CommonTTWeightedSumHybridJob(userPartition, "WS_Hyb_Location_Network", 67, new StrategyType[]{
+					StrategyType.CF_Region_Network_Coocurred_Jaccard, StrategyType.CF_Region_Network_Coocurred_Overlap, StrategyType.CF_Region_Network_Coocurred_CN, 
+					StrategyType.CF_Region_Network_Coocurred_PrefAtt, StrategyType.CF_Region_Network_Coocurred_Adar}));
 //			
 //			jobs.add(new CommonMixedHybridStrategyJob(userPartition, "Mixed_Hyb_Location_Network", 67, new StrategyType[]{
 //					StrategyType.CF_Region_Network_Coocurred_Jaccard, StrategyType.CF_Region_Network_Coocurred_Overlap, StrategyType.CF_Region_Network_Coocurred_CN, 
@@ -273,13 +274,13 @@ public class TTSetEvaluator {
 			// Location Hybrid
 			
 			
-//			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Location", 67, new StrategyType[]{
-//					StrategyType.CF_Loc_Picks_CN, StrategyType.CF_Loc_Picks_Jaccard, StrategyType.CF_Loc_Picks_Total,
-//					StrategyType.CF_Region_Network_Coocurred_Jaccard, StrategyType.CF_Loc_Common_Regions, StrategyType.CF_Loc_Common_Regions_Jaccard, 
-//					StrategyType.CF_Loc_Physical_Distance_in_Region, StrategyType.CF_Region_Network_Coocurred_Overlap, StrategyType.CF_Region_Network_Coocurred_CN,
-//					StrategyType.CF_Loc_Shared_Regions_Jaccard, StrategyType.CF_Loc_Days_Seen_In_Region, StrategyType.CF_Loc_Total_Regions,
-//					StrategyType.CF_Loc_Shared_Regions_Common, StrategyType.CF_Loc_Shared_Regions_Total,
-//					StrategyType.CF_Region_Network_Coocurred_PrefAtt, StrategyType.CF_Region_Network_Coocurred_Adar}));
+			jobs.add(new CommonTTWeightedSumHybridJob(userPartition, "WS_Hyb_Location", 67, new StrategyType[]{
+					StrategyType.CF_Loc_Picks_CN, StrategyType.CF_Loc_Picks_Jaccard, StrategyType.CF_Loc_Picks_Total,
+					StrategyType.CF_Region_Network_Coocurred_Jaccard, StrategyType.CF_Loc_Common_Regions, StrategyType.CF_Loc_Common_Regions_Jaccard, 
+					StrategyType.CF_Loc_Physical_Distance_in_Region, StrategyType.CF_Region_Network_Coocurred_Overlap, StrategyType.CF_Region_Network_Coocurred_CN,
+					StrategyType.CF_Loc_Shared_Regions_Jaccard, StrategyType.CF_Loc_Days_Seen_In_Region, StrategyType.CF_Loc_Total_Regions,
+					StrategyType.CF_Loc_Shared_Regions_Common, StrategyType.CF_Loc_Shared_Regions_Total,
+					StrategyType.CF_Region_Network_Coocurred_PrefAtt, StrategyType.CF_Region_Network_Coocurred_Adar}));
 //			
 //			jobs.add(new CommonMixedHybridStrategyJob(userPartition, "Mixed_Hyb_Location", 88, new StrategyType[]{
 //					StrategyType.CF_Loc_Picks_CN, StrategyType.CF_Loc_Picks_Jaccard, StrategyType.CF_Loc_Picks_Total,
