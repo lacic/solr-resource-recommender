@@ -68,7 +68,7 @@ public class SolrServiceContainer {
 	private boolean init() {
 		boolean initSuccess = false;
 		
-		int port = 8986;
+		int port = 8988;
 		String address = "kti-social";
 		
 		try {
@@ -96,7 +96,7 @@ public class SolrServiceContainer {
 			setPositionNetworkService(positionNetworkService);
 			setSharedLocationService(sharedLocationService);
 
-			int testPort = 8987;
+			int testPort = 8989;
 			
 			ResourceService testResourceService = new ResourceService(address, testPort, "resources");
 			ReviewService testReviewService = new ReviewService(address, testPort, "reviews");

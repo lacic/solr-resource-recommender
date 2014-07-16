@@ -53,7 +53,7 @@ public class TTSetEvaluator {
 		
 		initEvaluation();
 		
-		ExecutorService executor = Executors.newFixedThreadPool(29);
+		ExecutorService executor = Executors.newFixedThreadPool(31);
 		
 		List<Callable<List<MetricsExporter>>> jobs = new ArrayList<Callable<List<MetricsExporter>>>();
 		
@@ -71,7 +71,7 @@ public class TTSetEvaluator {
 			}
 			
 			List<String> userPartition= users.subList(i * partitionSize, offset);
-			/*
+			
 			jobs.add(new CommonTTStrategyJob(userPartition, "MP_"+ i, StrategyType.MostPopular_Review, 0));
 			jobs.add(new CommonTTStrategyJob(userPartition, "CF_Rev_" + i, StrategyType.CF_Review, 1));
 //			jobs.add(new CommonTTStrategyJob(userPartition, "Cat_" + i, StrategyType.CF_Categories, 3));
@@ -79,7 +79,7 @@ public class TTSetEvaluator {
 			jobs.add(new CommonTTStrategyJob(userPartition, "SellerCN" + i, StrategyType.CF_Market_Seller_CN, 2));
 			jobs.add(new CommonTTStrategyJob(userPartition, "SellerJaccard" + i, StrategyType.CF_Market_Seller_Jaccard, 3));
 			jobs.add(new CommonTTStrategyJob(userPartition, "SellerTotal" + i, StrategyType.CF_Market_Seller_Total, 4));
-			*/
+			
 			jobs.add(new CommonTTStrategyJob(userPartition, "Cat_CN" + i, StrategyType.CF_Categories_CN, 5));
 			jobs.add(new CommonTTStrategyJob(userPartition, "Cat_Jacc" + i, StrategyType.CF_Categories_Jacc, 6));
 			jobs.add(new CommonTTStrategyJob(userPartition, "Cat_Tot" + i, StrategyType.CF_Categories_Total, 7));
@@ -91,7 +91,7 @@ public class TTSetEvaluator {
 			jobs.add(new UB_CustomerGroups_Job(userPartition, "groups_" + i));
 			jobs.add(new CommonTTStrategyJob(userPartition, "GroupJaccard" + i, StrategyType.CF_Soc_Group_Jaccard, 10));
 			jobs.add(new CommonTTStrategyJob(userPartition, "GroupTotal" + i, StrategyType.CF_Soc_Group_Total, 11));
-/*
+
 			jobs.add(new CommonTTStrategyJob(userPartition, "Soc", StrategyType.CF_Social, 12));
 
 			jobs.add(new CommonTTStrategyJob(userPartition, "CommonN" + i, StrategyType.CF_Soc_Network_CN, 13));
@@ -100,7 +100,7 @@ public class TTSetEvaluator {
 			jobs.add(new CommonTTStrategyJob(userPartition, "AdamicAdar" + i, StrategyType.CF_Soc_Network_AdamicAdar, 16));
 			jobs.add(new CommonTTStrategyJob(userPartition, "PrefAttach" + i, StrategyType.CF_Soc_Network_PrefAttachment, 17));
 			
-			*/
+			
 			jobs.add(new CommonTTStrategyJob(userPartition, "Picks" + i, StrategyType.CF_Loc_Picks_CN, 18));
 			jobs.add(new CommonTTStrategyJob(userPartition, "PicksJaccard" + i, StrategyType.CF_Loc_Picks_Jaccard, 19));
 			jobs.add(new CommonTTStrategyJob(userPartition, "PicksTotal" + i, StrategyType.CF_Loc_Picks_Total, 20));
