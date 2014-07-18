@@ -67,7 +67,6 @@ public class NeighborhodOverlapBasedRec implements RecommendStrategy {
 				}
 			}
 			
-			System.out.println(query.getUser());
 			solrParams = getInteractions(query.getUser());
 
 			response = SolrServiceContainer.getInstance().getSocialActionService().getSolrServer().query(solrParams);
@@ -166,7 +165,6 @@ public class NeighborhodOverlapBasedRec implements RecommendStrategy {
 			}
 			
 			final Map<String, Double> commonNeighborMap = new HashMap<String, Double>();
-			System.out.println(otherUsersNeighbors.keySet());
 			for (String user : otherUsersNeighbors.keySet()) {
 				Set<String> intersectionNeighbors = new HashSet<String>(otherUsersNeighbors.get(user));
 				List<String> sumNeighbors = new ArrayList<String>(otherUsersNeighbors.get(user));
@@ -220,7 +218,6 @@ public class NeighborhodOverlapBasedRec implements RecommendStrategy {
 			searchResponse.setResultItems(recommendations);
 			searchResponse.setElapsedTime(-1);
 		}
-		System.out.println(searchResponse.getResultItems().size());
 		return searchResponse;
 	}
 

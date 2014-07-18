@@ -46,7 +46,7 @@ public class UserSimilarityTracker {
 			for (String content : contents) {
 				csvContent += content + ";";
 			}
-			fw.write(csvContent);
+			fw.write(csvContent + "\n");
 			fw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -58,7 +58,7 @@ public class UserSimilarityTracker {
 			File file = new File(PATH + "/" + fileName + "_user_sim.csv");
 			FileWriter fw = new FileWriter(file, true);
 			for (String neighbor : commonNeighborMap.keySet()) {
-				fw.write(user + ";" + neighbor + ";" + commonNeighborMap.get(neighbor) + ";");
+				fw.write(user + ";" + neighbor + ";" + commonNeighborMap.get(neighbor) + ";" + "\n");
 			}
 			fw.close();
 		} catch (IOException e) {
@@ -71,7 +71,7 @@ public class UserSimilarityTracker {
 			File file = new File(PATH + "/" + fileName + "_user_sim.csv");
 			FileWriter fw = new FileWriter(file, true);
 			for (String neighbor : commonNeighborMap.keySet()) {
-				fw.write(user + ";" + neighbor + ";" + commonNeighborMap.get(neighbor) + ";");
+				fw.write(user + ";" + neighbor + ";" + commonNeighborMap.get(neighbor) + ";" + "\n");
 			}
 			fw.close();
 		} catch (IOException e) {
@@ -88,7 +88,7 @@ public class UserSimilarityTracker {
 			
 			for (Count userOccurence : userOccurences) {
 				if ( ! userOccurence.getName().equals(currentUser)) {
-					fw.write(currentUser + ";" + userOccurence.getName() + ";" + (userOccurence.getCount() / weightDividor ) + ";");
+					fw.write(currentUser + ";" + userOccurence.getName() + ";" + (userOccurence.getCount() / weightDividor ) + ";" + "\n");
 				}
 			}
 			
