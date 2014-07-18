@@ -408,6 +408,9 @@ public class RecommenderEvaluator extends RecommenderEngine{
 		QueryResponse findElementById = 
 				SolrServiceContainer.getInstance().getResourceService().findElementsById(recommendations, SolrServiceContainer.getInstance().getResourceService().getSolrServer());
 		
+		QueryResponse removedResponse = 
+				SolrServiceContainer.getInstance().getResourceService().findElementsById(removedOwnProducts, SolrServiceContainer.getInstance().getResourceService().getSolrServer());
+		
 		
 		List<Resource> fetchedAlreadyBoughtItems = new ArrayList<Resource>();
 		if (alreadyBoughtProducts.size() <= 2500) {
@@ -435,6 +438,7 @@ public class RecommenderEvaluator extends RecommenderEngine{
 			}
 		}
 		List<Resource> recommendedResources = findElementById.getBeans(Resource.class);
+		List<Resource> removedResources = removedResponse.getBeans(Resource.class);
 		
 		List<String> recommendedCategories = new ArrayList<String>();
 		List<String> purchasedCategories = new ArrayList<String>();
@@ -468,7 +472,7 @@ public class RecommenderEvaluator extends RecommenderEngine{
 			}
 		}
 
-		for (Resource res : fetchedAlreadyBoughtItems) {
+		for (Resource res : removedResources) {
 			String cat1 = res.getCategory1();
 			String cat2 = res.getCategory2();
 			String cat3 = res.getCategory3();
@@ -496,8 +500,8 @@ public class RecommenderEvaluator extends RecommenderEngine{
 			}
 		}
 
-		PredictionCalculator pEval = new PredictionCalculator(userID, removedOwnProducts, recommendations, k);
-//		PredictionCalculator pEval = new PredictionCalculator(userID, purchasedCategories, recommendedCategories, k);
+//		PredictionCalculator pEval = new PredictionCalculator(userID, removedOwnProducts, recommendations, k);
+		PredictionCalculator pEval = new PredictionCalculator(userID, purchasedCategories, recommendedCategories, k);
 		SimilarityCalculator sEval = new SimilarityCalculator(fetchedAlreadyBoughtItems, recommendedResources, k);
 		
 		mCalc.appendMetrics(pEval, sEval);

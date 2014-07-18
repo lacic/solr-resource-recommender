@@ -26,6 +26,7 @@ import at.knowcenter.recommender.solrpowered.engine.strategy.StrategyType;
 import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.ReviewBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.utils.CFQueryBuilder;
 import at.knowcenter.recommender.solrpowered.engine.utils.RecommendationQueryUtils;
+import at.knowcenter.recommender.solrpowered.evaluation.UserSimilarityTracker;
 import at.knowcenter.recommender.solrpowered.model.CustomerAction;
 import at.knowcenter.recommender.solrpowered.model.Resource;
 import at.knowcenter.recommender.solrpowered.model.SocialAction;
@@ -66,6 +67,7 @@ public class NeighborhodOverlapBasedRec implements RecommendStrategy {
 				}
 			}
 			
+			System.out.println(query.getUser());
 			solrParams = getInteractions(query.getUser());
 
 			response = SolrServiceContainer.getInstance().getSocialActionService().getSolrServer().query(solrParams);
@@ -164,6 +166,7 @@ public class NeighborhodOverlapBasedRec implements RecommendStrategy {
 			}
 			
 			final Map<String, Double> commonNeighborMap = new HashMap<String, Double>();
+			System.out.println(otherUsersNeighbors.keySet());
 			for (String user : otherUsersNeighbors.keySet()) {
 				Set<String> intersectionNeighbors = new HashSet<String>(otherUsersNeighbors.get(user));
 				List<String> sumNeighbors = new ArrayList<String>(otherUsersNeighbors.get(user));
@@ -190,6 +193,14 @@ public class NeighborhodOverlapBasedRec implements RecommendStrategy {
 				
 			};
 			
+			final String user = query.getUser();
+			Thread t = new Thread() {
+				@Override public void run() {
+					UserSimilarityTracker.getInstance().writeToFile("soc_network_overlap", user, commonNeighborMap);
+				}
+			};
+			t.start();
+			
 	        TreeMap<String,Double> sorted_map = new TreeMap<String,Double>(interactionCountComparator);
 	        sorted_map.putAll(commonNeighborMap);
 	        solrParams = getSTEP2Params(query, maxReuslts, sorted_map);
@@ -209,7 +220,7 @@ public class NeighborhodOverlapBasedRec implements RecommendStrategy {
 			searchResponse.setResultItems(recommendations);
 			searchResponse.setElapsedTime(-1);
 		}
-		
+		System.out.println(searchResponse.getResultItems().size());
 		return searchResponse;
 	}
 

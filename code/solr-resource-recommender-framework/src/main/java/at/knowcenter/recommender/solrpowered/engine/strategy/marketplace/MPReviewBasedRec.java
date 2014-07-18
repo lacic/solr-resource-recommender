@@ -15,6 +15,7 @@ import at.knowcenter.recommender.solrpowered.engine.filtering.ContentFilter;
 import at.knowcenter.recommender.solrpowered.engine.strategy.RecommendStrategy;
 import at.knowcenter.recommender.solrpowered.engine.strategy.StrategyType;
 import at.knowcenter.recommender.solrpowered.engine.utils.RecommendationQueryUtils;
+import at.knowcenter.recommender.solrpowered.evaluation.UserSimilarityTracker;
 import at.knowcenter.recommender.solrpowered.model.CustomerAction;
 import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
 import at.knowcenter.recommender.solrpowered.services.impl.actions.RecommendQuery;
@@ -79,8 +80,17 @@ public class MPReviewBasedRec implements RecommendStrategy {
 
 		List<FacetField> facetFields = response.getFacetFields();
 		// get the first and only facet field -> users
-		FacetField userFacet = facetFields.get(0);
+		final FacetField userFacet = facetFields.get(0);
 		List<String> products = new ArrayList<String>();
+		
+		
+		final String user = query.getUser();
+		Thread t = new Thread() {
+			@Override public void run() {
+				UserSimilarityTracker.getInstance().writeToFile("MP", user, userFacet.getValues(), 1.0);
+			}
+		};
+		t.start();
 		
 		for(Count c : userFacet.getValues()) {
 			products.add(c.getName());

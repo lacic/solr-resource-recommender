@@ -53,7 +53,7 @@ public class TTSetEvaluator {
 		
 		initEvaluation();
 		
-		ExecutorService executor = Executors.newFixedThreadPool(31);
+		ExecutorService executor = Executors.newFixedThreadPool(1);
 		
 		List<Callable<List<MetricsExporter>>> jobs = new ArrayList<Callable<List<MetricsExporter>>>();
 		
@@ -71,7 +71,7 @@ public class TTSetEvaluator {
 			}
 			
 			List<String> userPartition= users.subList(i * partitionSize, offset);
-			
+			/*
 			jobs.add(new CommonTTStrategyJob(userPartition, "MP_"+ i, StrategyType.MostPopular_Review, 0));
 			jobs.add(new CommonTTStrategyJob(userPartition, "CF_Rev_" + i, StrategyType.CF_Review, 1));
 //			jobs.add(new CommonTTStrategyJob(userPartition, "Cat_" + i, StrategyType.CF_Categories, 3));
@@ -96,7 +96,9 @@ public class TTSetEvaluator {
 
 			jobs.add(new CommonTTStrategyJob(userPartition, "CommonN" + i, StrategyType.CF_Soc_Network_CN, 13));
 			jobs.add(new CommonTTStrategyJob(userPartition, "Jaccard" + i, StrategyType.CF_Soc_Network_Jaccard, 14));
+			*/
 			jobs.add(new CommonTTStrategyJob(userPartition, "NeighOv" + i, StrategyType.CF_Soc_Network_NeighOverlap, 15));
+			/*
 			jobs.add(new CommonTTStrategyJob(userPartition, "AdamicAdar" + i, StrategyType.CF_Soc_Network_AdamicAdar, 16));
 			jobs.add(new CommonTTStrategyJob(userPartition, "PrefAttach" + i, StrategyType.CF_Soc_Network_PrefAttachment, 17));
 			
@@ -118,7 +120,7 @@ public class TTSetEvaluator {
 			jobs.add(new CommonTTStrategyJob(userPartition, "RegCoAdar" + i, StrategyType.CF_Region_Network_Coocurred_Adar, 29));
 			jobs.add(new CommonTTStrategyJob(userPartition, "RegCoOverlap" + i, StrategyType.CF_Region_Network_Coocurred_Overlap, 30));
 			jobs.add(new CommonTTStrategyJob(userPartition, "RegCoPrefAtt" + i, StrategyType.CF_Region_Network_Coocurred_PrefAtt, 31));
-			
+			*/
 			
 
 //			jobs.add(new CommonTTStrategyJob(userPartition, "Wallposts_" + i, StrategyType.WallPostInteraction, 6));

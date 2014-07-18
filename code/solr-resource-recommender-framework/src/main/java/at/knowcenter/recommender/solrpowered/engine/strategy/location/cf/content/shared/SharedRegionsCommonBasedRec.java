@@ -20,6 +20,7 @@ import at.knowcenter.recommender.solrpowered.engine.strategy.RecommendStrategy;
 import at.knowcenter.recommender.solrpowered.engine.strategy.StrategyType;
 import at.knowcenter.recommender.solrpowered.engine.utils.CFQueryBuilder;
 import at.knowcenter.recommender.solrpowered.engine.utils.RecommendationQueryUtils;
+import at.knowcenter.recommender.solrpowered.evaluation.UserSimilarityTracker;
 import at.knowcenter.recommender.solrpowered.model.Position;
 import at.knowcenter.recommender.solrpowered.model.PositionNetwork;
 import at.knowcenter.recommender.solrpowered.model.Resource;
@@ -37,7 +38,7 @@ public class SharedRegionsCommonBasedRec implements RecommendStrategy{
 	public RecommendResponse recommend(RecommendQuery query, Integer maxReuslts) {
 		RecommendResponse searchResponse = new RecommendResponse();
 
-		String user = query.getUser();
+		final String user = query.getUser();
 		
 		if (user == null) {
 			searchResponse.setResultItems(new ArrayList<String>());
@@ -108,6 +109,14 @@ public class SharedRegionsCommonBasedRec implements RecommendStrategy{
 				}
 				
 			};
+			
+			Thread t = new Thread() {
+				@Override public void run() {
+					UserSimilarityTracker.getInstance().writeToFile("loc_content_shared_cn", user, commonNeighborMap);
+				}
+			};
+			t.start();
+			
 	        TreeMap<String,Double> sortedMap = new TreeMap<String,Double>(interactionCountComparator);
 	        sortedMap.putAll(commonNeighborMap);
 			

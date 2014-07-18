@@ -70,47 +70,58 @@ public class ConcurentAllExistingUsersEvaluator {
 			}
 			
 			List<String> userPartition= users.subList(i * partitionSize, offset);
-/*
-			jobs.add(new CommonStrategyJob(userPartition, "CF_Rev_" + i, StrategyType.CF_Review, 0));
-			jobs.add(new CommonStrategyJob(userPartition, "MP_"+ i, StrategyType.MostPopular_Review, 1));
-//			jobs.add(new CommonStrategyJob(userPartition, "Soc", StrategyType.CF_Social, 2));
-//			jobs.add(new C_Name_Job(userPartition));
-//			jobs.add(new C_Description_Job(userPartition));
+
+			
+			jobs.add(new CommonStrategyJob(userPartition, "MP_"+ i, StrategyType.MostPopular_Review, 0));
+			jobs.add(new CommonStrategyJob(userPartition, "CF_Rev_" + i, StrategyType.CF_Review, 1));
 //			jobs.add(new CommonStrategyJob(userPartition, "Cat_" + i, StrategyType.CF_Categories, 3));
- * */
-//			jobs.add(new CommonStrategyJob(userPartition, "Cat_CN" + i, StrategyType.CF_Categories_CN, 3));
-	/*
-			jobs.add(new CommonStrategyJob(userPartition, "Cat_Jacc" + i, StrategyType.CF_Categories_Jacc, 3));
-			jobs.add(new CommonStrategyJob(userPartition, "Cat_Tot" + i, StrategyType.CF_Categories_Total, 3));
+
+			jobs.add(new CommonStrategyJob(userPartition, "SellerCN" + i, StrategyType.CF_Market_Seller_CN, 2));
+			jobs.add(new CommonStrategyJob(userPartition, "SellerJaccard" + i, StrategyType.CF_Market_Seller_Jaccard, 3));
+			jobs.add(new CommonStrategyJob(userPartition, "SellerTotal" + i, StrategyType.CF_Market_Seller_Total, 4));
+			
+			jobs.add(new CommonStrategyJob(userPartition, "Cat_CN" + i, StrategyType.CF_Categories_CN, 5));
+			jobs.add(new CommonStrategyJob(userPartition, "Cat_Jacc" + i, StrategyType.CF_Categories_Jacc, 6));
+			jobs.add(new CommonStrategyJob(userPartition, "Cat_Tot" + i, StrategyType.CF_Categories_Total, 7));
+			
 			jobs.add(new UB_Interests_Job(userPartition, "interests_" + i));
+			jobs.add(new CommonStrategyJob(userPartition, "InterestsJaccard" + i, StrategyType.CF_Soc_Interests_Jaccard, 8));
+			jobs.add(new CommonStrategyJob(userPartition, "InterestTotal" + i, StrategyType.CF_Soc_Interests_Total, 9));
+			
 			jobs.add(new UB_CustomerGroups_Job(userPartition, "groups_" + i));
-			jobs.add(new CommonStrategyJob(userPartition, "CommonN" + i, StrategyType.CF_Soc_Network_CN, 9));
-			jobs.add(new CommonStrategyJob(userPartition, "Jaccard" + i, StrategyType.CF_Soc_Network_Jaccard, 10));
-			jobs.add(new CommonStrategyJob(userPartition, "NeighOv" + i, StrategyType.CF_Soc_Network_NeighOverlap, 11));
-			jobs.add(new CommonStrategyJob(userPartition, "AdamicAdar" + i, StrategyType.CF_Soc_Network_AdamicAdar, 12));
-			jobs.add(new CommonStrategyJob(userPartition, "PrefAttach" + i, StrategyType.CF_Soc_Network_PrefAttachment, 13));
-			jobs.add(new CommonStrategyJob(userPartition, "GroupJaccard" + i, StrategyType.CF_Soc_Group_Jaccard, 14));
-			jobs.add(new CommonStrategyJob(userPartition, "InterestsJaccard" + i, StrategyType.CF_Soc_Interests_Jaccard, 18));
-			jobs.add(new CommonStrategyJob(userPartition, "SellerCN" + i, StrategyType.CF_Market_Seller_CN, 20));
-			jobs.add(new CommonStrategyJob(userPartition, "SellerJaccard" + i, StrategyType.CF_Market_Seller_Jaccard, 21));
-			jobs.add(new CommonStrategyJob(userPartition, "Picks" + i, StrategyType.CF_Loc_Picks_CN, 26));
-			jobs.add(new CommonStrategyJob(userPartition, "PicksJaccard" + i, StrategyType.CF_Loc_Picks_Jaccard, 27));
-			jobs.add(new CommonStrategyJob(userPartition, "RegCoCN" + i, StrategyType.CF_Region_Network_Coocurred_CN, 31));
-			jobs.add(new CommonStrategyJob(userPartition, "RegCoJaccard" + i, StrategyType.CF_Region_Network_Coocurred_Jaccard, 35));
-			jobs.add(new CommonStrategyJob(userPartition, "RegCoAdar" + i, StrategyType.CF_Region_Network_Coocurred_Adar, 39));
-			jobs.add(new CommonStrategyJob(userPartition, "RegCoOverlap" + i, StrategyType.CF_Region_Network_Coocurred_Overlap, 40));
-			jobs.add(new CommonStrategyJob(userPartition, "RegCoPrefAtt" + i, StrategyType.CF_Region_Network_Coocurred_PrefAtt, 41));
-			jobs.add(new CommonStrategyJob(userPartition, "CommonRegion" + i, StrategyType.CF_Loc_Common_Regions, 46));*/
-			jobs.add(new CommonStrategyJob(userPartition, "CommonRegionJacc" + i, StrategyType.CF_Loc_Common_Regions_Jaccard, 47));/*
-			jobs.add(new CommonStrategyJob(userPartition, "SharedRegTotal" + i, StrategyType.CF_Loc_Shared_Regions_Total, 48));
-			jobs.add(new CommonStrategyJob(userPartition, "SharedRegJaccard" + i, StrategyType.CF_Loc_Shared_Regions_Jaccard, 49));
-			jobs.add(new CommonStrategyJob(userPartition, "SharedRegCommon" + i, StrategyType.CF_Loc_Shared_Regions_Common, 50));
-			jobs.add(new CommonStrategyJob(userPartition, "SellerTotal" + i, StrategyType.CF_Market_Seller_Total, 51));
-			jobs.add(new CommonStrategyJob(userPartition, "InterestTotal" + i, StrategyType.CF_Soc_Interests_Total, 52));
-			jobs.add(new CommonStrategyJob(userPartition, "GroupTotal" + i, StrategyType.CF_Soc_Group_Total, 53));
-			jobs.add(new CommonStrategyJob(userPartition, "PicksTotal" + i, StrategyType.CF_Loc_Picks_Total, 54));
-			jobs.add(new CommonStrategyJob(userPartition, "RegionTotal" + i, StrategyType.CF_Loc_Total_Regions, 55));
-			*/
+			jobs.add(new CommonStrategyJob(userPartition, "GroupJaccard" + i, StrategyType.CF_Soc_Group_Jaccard, 10));
+			jobs.add(new CommonStrategyJob(userPartition, "GroupTotal" + i, StrategyType.CF_Soc_Group_Total, 11));
+
+			jobs.add(new CommonStrategyJob(userPartition, "Soc", StrategyType.CF_Social, 12));
+
+			jobs.add(new CommonStrategyJob(userPartition, "CommonN" + i, StrategyType.CF_Soc_Network_CN, 13));
+			jobs.add(new CommonStrategyJob(userPartition, "Jaccard" + i, StrategyType.CF_Soc_Network_Jaccard, 14));
+			
+			jobs.add(new CommonStrategyJob(userPartition, "NeighOv" + i, StrategyType.CF_Soc_Network_NeighOverlap, 15));
+			
+			jobs.add(new CommonStrategyJob(userPartition, "AdamicAdar" + i, StrategyType.CF_Soc_Network_AdamicAdar, 16));
+			jobs.add(new CommonStrategyJob(userPartition, "PrefAttach" + i, StrategyType.CF_Soc_Network_PrefAttachment, 17));
+			
+			
+			jobs.add(new CommonStrategyJob(userPartition, "Picks" + i, StrategyType.CF_Loc_Picks_CN, 18));
+			jobs.add(new CommonStrategyJob(userPartition, "PicksJaccard" + i, StrategyType.CF_Loc_Picks_Jaccard, 19));
+			jobs.add(new CommonStrategyJob(userPartition, "PicksTotal" + i, StrategyType.CF_Loc_Picks_Total, 20));
+
+			jobs.add(new CommonStrategyJob(userPartition, "SharedRegTotal" + i, StrategyType.CF_Loc_Shared_Regions_Total, 21));
+			jobs.add(new CommonStrategyJob(userPartition, "SharedRegJaccard" + i, StrategyType.CF_Loc_Shared_Regions_Jaccard, 22));
+			jobs.add(new CommonStrategyJob(userPartition, "SharedRegCommon" + i, StrategyType.CF_Loc_Shared_Regions_Common, 23));
+
+			jobs.add(new CommonStrategyJob(userPartition, "CommonRegion" + i, StrategyType.CF_Loc_Common_Regions, 24));
+			jobs.add(new CommonStrategyJob(userPartition, "CommonRegionJacc" + i, StrategyType.CF_Loc_Common_Regions_Jaccard, 25));
+			jobs.add(new CommonStrategyJob(userPartition, "RegionTotal" + i, StrategyType.CF_Loc_Total_Regions, 26));
+
+			jobs.add(new CommonStrategyJob(userPartition, "RegCoCN" + i, StrategyType.CF_Region_Network_Coocurred_CN, 27));
+			jobs.add(new CommonStrategyJob(userPartition, "RegCoJaccard" + i, StrategyType.CF_Region_Network_Coocurred_Jaccard, 28));
+			jobs.add(new CommonStrategyJob(userPartition, "RegCoAdar" + i, StrategyType.CF_Region_Network_Coocurred_Adar, 29));
+			jobs.add(new CommonStrategyJob(userPartition, "RegCoOverlap" + i, StrategyType.CF_Region_Network_Coocurred_Overlap, 30));
+			jobs.add(new CommonStrategyJob(userPartition, "RegCoPrefAtt" + i, StrategyType.CF_Region_Network_Coocurred_PrefAtt, 31));
+			
+			
 //			jobs.add(new CommonStrategyJob(userPartition, "Bio_" + i, StrategyType.BiographyBasedMLT, 4));
 //			jobs.add(new CommonStrategyJob(userPartition, "Real_Bio" + i, StrategyType.RealBiographyBasedMLT, 5));
 //			jobs.add(new SocialStream_Job(userPartition, "soc_stream_job_" + i));
@@ -442,8 +453,8 @@ public class ConcurentAllExistingUsersEvaluator {
 	    
 	    for (List<MetricsExporter> metrics : metricExporterMap.values()) {
 	    	// for k = 10
-//	    	metrics.get(4).exportCalculatedMetricsFoAll(users.size(), 5);
-//	    	metrics.get(9).exportCalculatedMetricsFoAll(users.size(), 10);
+	    	metrics.get(4).exportCalculatedMetricsFoAll(users.size(), 5);
+	    	metrics.get(9).exportCalculatedMetricsFoAll(users.size(), 10);
 
 	    	for (int n = 1; n <= 10; n++) {
 				MetricsExporter mCalc = metrics.get(n-1);

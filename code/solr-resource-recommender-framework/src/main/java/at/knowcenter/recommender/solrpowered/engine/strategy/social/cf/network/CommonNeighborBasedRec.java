@@ -26,6 +26,7 @@ import at.knowcenter.recommender.solrpowered.engine.strategy.StrategyType;
 import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.ReviewBasedRec;
 import at.knowcenter.recommender.solrpowered.engine.utils.CFQueryBuilder;
 import at.knowcenter.recommender.solrpowered.engine.utils.RecommendationQueryUtils;
+import at.knowcenter.recommender.solrpowered.evaluation.UserSimilarityTracker;
 import at.knowcenter.recommender.solrpowered.model.CustomerAction;
 import at.knowcenter.recommender.solrpowered.model.Resource;
 import at.knowcenter.recommender.solrpowered.model.SocialAction;
@@ -186,6 +187,14 @@ public class CommonNeighborBasedRec implements RecommendStrategy {
 				}
 				
 			};
+			
+			final String user = query.getUser();
+			Thread t = new Thread() {
+				@Override public void run() {
+					UserSimilarityTracker.getInstance().writeToFileInt("soc_network_cn", user, commonNeighborMap);
+				}
+			};
+			t.start();
 			
 	        TreeMap<String,Integer> sorted_map = new TreeMap<String,Integer>(interactionCountComparator);
 	        sorted_map.putAll(commonNeighborMap);

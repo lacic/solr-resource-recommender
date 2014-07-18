@@ -19,6 +19,7 @@ import org.apache.solr.common.SolrDocument;
 import at.knowcenter.recommender.solrpowered.engine.filtering.ContentFilter;
 import at.knowcenter.recommender.solrpowered.engine.filtering.FriendsEvaluation;
 import at.knowcenter.recommender.solrpowered.engine.strategy.marketplace.cf.ReviewBasedRec;
+import at.knowcenter.recommender.solrpowered.evaluation.UserSimilarityTracker;
 import at.knowcenter.recommender.solrpowered.model.Customer;
 import at.knowcenter.recommender.solrpowered.model.CustomerAction;
 import at.knowcenter.recommender.solrpowered.model.Item;
@@ -119,12 +120,12 @@ public class RecommendationQueryUtils {
 	 * @param contentFilter 
 	 */
 	public static String createQueryToFindProdLikedBySimilarUsers(
-			List<Count> userOccurences, 
-			String currentUser, 
+			final List<Count> userOccurences, 
+			final String currentUser, 
 			ContentFilter contentFilter,
 			String usersFieldName,
 			int maxUserOccurence,
-			double weightDividor) {
+			final double weightDividor) {
 		StringBuilder queryBuilder = new StringBuilder();
 
 		queryBuilder.append(usersFieldName + ":(");
@@ -138,6 +139,12 @@ public class RecommendationQueryUtils {
 		long maxUserCount = 0;
 		long userCountSum = 0;
 		
+		Thread t = new Thread() {
+			@Override public void run() {
+				UserSimilarityTracker.getInstance().writeToFile("soc_market_rev", currentUser, userOccurences, weightDividor);
+			}
+		};
+		t.start();
 		
 		for (Count userOccurence : userOccurences) {
 			if ( ! userOccurence.getName().equals(currentUser)) {

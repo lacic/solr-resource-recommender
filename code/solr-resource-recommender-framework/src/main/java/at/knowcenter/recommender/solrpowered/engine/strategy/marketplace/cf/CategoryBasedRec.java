@@ -25,6 +25,7 @@ import at.knowcenter.recommender.solrpowered.engine.strategy.RecommendStrategy;
 import at.knowcenter.recommender.solrpowered.engine.strategy.StrategyType;
 import at.knowcenter.recommender.solrpowered.engine.utils.CFQueryBuilder;
 import at.knowcenter.recommender.solrpowered.engine.utils.RecommendationQueryUtils;
+import at.knowcenter.recommender.solrpowered.evaluation.UserSimilarityTracker;
 import at.knowcenter.recommender.solrpowered.model.Customer;
 import at.knowcenter.recommender.solrpowered.model.CustomerAction;
 import at.knowcenter.recommender.solrpowered.model.Item;
@@ -123,6 +124,14 @@ public class CategoryBasedRec implements RecommendStrategy {
 				}
 				
 			};
+			
+			final String user = query.getUser();
+			Thread t = new Thread() {
+				@Override public void run() {
+					UserSimilarityTracker.getInstance().writeToFile("soc_market_cat_cn", user, commonNeighborMap);
+				}
+			};
+			t.start();
 			
 	        TreeMap<String,Double> sortedMap = new TreeMap<String,Double>(interactionCountComparator);
 	        sortedMap.putAll(commonNeighborMap);
