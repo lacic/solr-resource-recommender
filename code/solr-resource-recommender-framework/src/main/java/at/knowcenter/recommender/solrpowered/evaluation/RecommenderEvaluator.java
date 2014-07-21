@@ -450,19 +450,19 @@ public class RecommenderEvaluator extends RecommenderEngine{
 			String cat3 = res.getCategory3();
 			String cat4 = res.getCategory4();
 			
-//			if (cat4 != null) {
-//				if (! recommendedCategories.contains(cat4)) {
-//					recommendedCategories.add(cat4);
-//				}
-//			} else if (cat3 != null) {
-//				if (! recommendedCategories.contains(cat3)) {
-//					recommendedCategories.add(cat3);
-//				}
-//			} else if (cat2 != null) {
-//				if (! recommendedCategories.contains(cat2)) {
-//					recommendedCategories.add(cat2);
-//				}
-//			} else 
+			if (cat4 != null) {
+				if (! recommendedCategories.contains(cat4)) {
+					recommendedCategories.add(cat4);
+				}
+			} else if (cat3 != null) {
+				if (! recommendedCategories.contains(cat3)) {
+					recommendedCategories.add(cat3);
+				}
+			} else if (cat2 != null) {
+				if (! recommendedCategories.contains(cat2)) {
+					recommendedCategories.add(cat2);
+				}
+			} else 
 			if (cat1 != null) {
 				if (! recommendedCategories.contains(cat1)) {
 					recommendedCategories.add(cat1);
@@ -478,19 +478,19 @@ public class RecommenderEvaluator extends RecommenderEngine{
 			String cat3 = res.getCategory3();
 			String cat4 = res.getCategory4();
 			
-//			if (cat4 != null) {
-//				if (! purchasedCategories.contains(cat4)) {
-//					purchasedCategories.add(cat4);
-//				}
-//			} else if (cat3 != null) {
-//				if (! purchasedCategories.contains(cat3)) {
-//					purchasedCategories.add(cat3);
-//				}
-//			} else if (cat2 != null) {
-//				if (! purchasedCategories.contains(cat2)) {
-//					purchasedCategories.add(cat2);
-//				}
-//			} else 
+			if (cat4 != null) {
+				if (! purchasedCategories.contains(cat4)) {
+					purchasedCategories.add(cat4);
+				}
+			} else if (cat3 != null) {
+				if (! purchasedCategories.contains(cat3)) {
+					purchasedCategories.add(cat3);
+				}
+			} else if (cat2 != null) {
+				if (! purchasedCategories.contains(cat2)) {
+					purchasedCategories.add(cat2);
+				}
+			} else 
 			if (cat1 != null) {
 				if (! purchasedCategories.contains(cat1)) {
 					purchasedCategories.add(cat1);
