@@ -83,20 +83,9 @@ public class MPReviewBasedRec implements RecommendStrategy {
 		final FacetField userFacet = facetFields.get(0);
 		List<String> products = new ArrayList<String>();
 		
-		
-		final String user = query.getUser();
-		Thread t = new Thread() {
-			@Override public void run() {
-				UserSimilarityTracker.getInstance().writeToFile("MP", user, userFacet.getValues(), 1.0);
-			}
-		};
-		t.start();
-		
 		for(Count c : userFacet.getValues()) {
 			products.add(c.getName());
 		}
-		
-		
 		searchResponse.setResultItems(products);
 		searchResponse.setElapsedTime(response.getElapsedTime());
 		SolrDocumentList docResults = response.getResults();

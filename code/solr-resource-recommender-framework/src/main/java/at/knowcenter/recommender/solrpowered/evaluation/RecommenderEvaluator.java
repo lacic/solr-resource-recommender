@@ -48,6 +48,8 @@ public class RecommenderEvaluator extends RecommenderEngine{
 	protected int userCount = -1;
 	protected int minimalPurchasedCount = 1;
 	protected String jobDescription = "";
+	
+	public static int miscCount = 0;
 
 	
 	@Override
@@ -443,6 +445,8 @@ public class RecommenderEvaluator extends RecommenderEngine{
 		List<String> recommendedCategories = new ArrayList<String>();
 		List<String> purchasedCategories = new ArrayList<String>();
 
+		
+		
 		String miscCategory = "MISC";
 		for (Resource res : recommendedResources) {
 			String cat1 = res.getCategory1();
@@ -499,9 +503,15 @@ public class RecommenderEvaluator extends RecommenderEngine{
 				purchasedCategories.add(miscCategory);
 			}
 		}
+		if (k == 10) {
+			if (purchasedCategories.contains(miscCategory)){
+				miscCount++;
+				System.out.println(miscCount);
+			}
+		}
 
-//		PredictionCalculator pEval = new PredictionCalculator(userID, removedOwnProducts, recommendations, k);
-		PredictionCalculator pEval = new PredictionCalculator(userID, purchasedCategories, recommendedCategories, k);
+		PredictionCalculator pEval = new PredictionCalculator(userID, removedOwnProducts, recommendations, k);
+//		PredictionCalculator pEval = new PredictionCalculator(userID, purchasedCategories, recommendedCategories, k);
 		SimilarityCalculator sEval = new SimilarityCalculator(fetchedAlreadyBoughtItems, recommendedResources, k);
 		
 		mCalc.appendMetrics(pEval, sEval);
