@@ -503,12 +503,6 @@ public class RecommenderEvaluator extends RecommenderEngine{
 				purchasedCategories.add(miscCategory);
 			}
 		}
-		if (k == 10) {
-			if (purchasedCategories.contains(miscCategory)){
-				miscCount++;
-				System.out.println(miscCount);
-			}
-		}
 
 		PredictionCalculator pEval = new PredictionCalculator(userID, removedOwnProducts, recommendations, k);
 //		PredictionCalculator pEval = new PredictionCalculator(userID, purchasedCategories, recommendedCategories, k);
