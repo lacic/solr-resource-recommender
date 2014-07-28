@@ -53,7 +53,7 @@ public class ConcurentAllExistingUsersEvaluator {
 		
 		initEvaluation();
 		
-		ExecutorService executor = Executors.newFixedThreadPool(1);
+		ExecutorService executor = Executors.newFixedThreadPool(31);
 		
 		List<Callable<List<MetricsExporter>>> jobs = new ArrayList<Callable<List<MetricsExporter>>>();
 		
@@ -71,7 +71,7 @@ public class ConcurentAllExistingUsersEvaluator {
 			}
 			
 			List<String> userPartition= users.subList(i * partitionSize, offset);
-/*
+
 			jobs.add(new CommonStrategyJob(userPartition, "MP_"+ i, StrategyType.MostPopular_Review, 0));
 			jobs.add(new CommonStrategyJob(userPartition, "CF_Rev_" + i, StrategyType.CF_Review, 1));
 //			jobs.add(new CommonStrategyJob(userPartition, "Cat_" + i, StrategyType.CF_Categories, 3));
@@ -120,11 +120,10 @@ public class ConcurentAllExistingUsersEvaluator {
 			jobs.add(new CommonStrategyJob(userPartition, "RegCoAdar" + i, StrategyType.CF_Region_Network_Coocurred_Adar, 29));
 			jobs.add(new CommonStrategyJob(userPartition, "RegCoOverlap" + i, StrategyType.CF_Region_Network_Coocurred_Overlap, 30));
 			jobs.add(new CommonStrategyJob(userPartition, "RegCoPrefAtt" + i, StrategyType.CF_Region_Network_Coocurred_PrefAtt, 31));
-			*/
 			
 			
 			// Weighted sum 
-			
+			/*
 			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Market", 59, new StrategyType[]{
 					StrategyType.CF_Market_Seller_Jaccard, StrategyType.CF_Market_Seller_CN, 
 					StrategyType.CF_Review, StrategyType.CF_Market_Seller_Total,
@@ -175,7 +174,7 @@ public class ConcurentAllExistingUsersEvaluator {
 			
 			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Social_Location_Market_Best3", 95, new StrategyType[]{
 					StrategyType.CF_Soc_Network_NeighOverlap, StrategyType.CF_Loc_Picks_Jaccard,StrategyType.CF_Market_Seller_Jaccard}));
-			
+			*/
 			
 //			jobs.add(new CommonStrategyJob(userPartition, "Bio_" + i, StrategyType.BiographyBasedMLT, 4));
 //			jobs.add(new CommonStrategyJob(userPartition, "Real_Bio" + i, StrategyType.RealBiographyBasedMLT, 5));
