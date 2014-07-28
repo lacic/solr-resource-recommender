@@ -446,12 +446,12 @@ public class RecommenderEvaluator extends RecommenderEngine{
 		List<Resource> recommendedResources = findElementById.getBeans(Resource.class);
 		List<Resource> removedResources = removedResponse.getBeans(Resource.class);
 		
-        boolean topLevelOnly = false;
+        boolean topLevelOnly = true;
 		List<String> recommendedCategories = extractCategories(recommendedResources, topLevelOnly);
 		List<String> purchasedCategories = extractCategories(removedResources, topLevelOnly);
 
-//		PredictionCalculator pEval = new PredictionCalculator(userID, removedOwnProducts, recommendations, k);
-		PredictionCalculator pEval = new PredictionCalculator(userID, purchasedCategories, recommendedCategories, k);
+		PredictionCalculator pEval = new PredictionCalculator(userID, removedOwnProducts, recommendations, k);
+//		PredictionCalculator pEval = new PredictionCalculator(userID, purchasedCategories, recommendedCategories, k);
 		SimilarityCalculator sEval = new SimilarityCalculator(fetchedAlreadyBoughtItems, recommendedResources, k);
 		
 		mCalc.appendMetrics(pEval, sEval);

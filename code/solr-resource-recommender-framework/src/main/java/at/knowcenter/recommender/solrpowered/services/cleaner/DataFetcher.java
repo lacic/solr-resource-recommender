@@ -79,7 +79,7 @@ public class DataFetcher {
 		solrParams.set("facet", "true");
 		solrParams.set("facet.field", "user");
 		solrParams.set("facet.limit", -1);
-		solrParams.set("facet.mincount", 1);
+		solrParams.set("facet.mincount", 10);
 	
 		try {
 			response = reviewService.getSolrServer().query(solrParams);

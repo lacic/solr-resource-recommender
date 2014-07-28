@@ -39,63 +39,63 @@ public class UserSimilarityTracker {
 	private static final String PATH = "/home/elacic/PhD/Projects/BlancNoir/evaluation/general_eval_data";
 	
 	public synchronized void writeToFile(String fileName, List<String> contents) {
-		try {
-			File file = new File(PATH + "/" + fileName + "_user_sim.csv");
-			FileWriter fw = new FileWriter(file, true);
-			String csvContent = "";
-			for (String content : contents) {
-				csvContent += content + ";";
-			}
-			fw.write(csvContent + "\n");
-			fw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			File file = new File(PATH + "/" + fileName + "_user_sim.csv");
+//			FileWriter fw = new FileWriter(file, true);
+//			String csvContent = "";
+//			for (String content : contents) {
+//				csvContent += content + ";";
+//			}
+//			fw.write(csvContent + "\n");
+//			fw.close();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 	
 	public synchronized void writeToFile(String fileName, String user, Map<String, Double> commonNeighborMap) {
-		try {
-			File file = new File(PATH + "/" + fileName + "_user_sim.csv");
-			FileWriter fw = new FileWriter(file, true);
-			for (String neighbor : commonNeighborMap.keySet()) {
-				fw.write(user + ";" + neighbor + ";" + commonNeighborMap.get(neighbor) + ";" + "\n");
-			}
-			fw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			File file = new File(PATH + "/" + fileName + "_user_sim.csv");
+//			FileWriter fw = new FileWriter(file, true);
+//			for (String neighbor : commonNeighborMap.keySet()) {
+//				fw.write(user + ";" + neighbor + ";" + commonNeighborMap.get(neighbor) + ";" + "\n");
+//			}
+//			fw.close();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 	
 	public synchronized void writeToFileInt(String fileName, String user, Map<String, Integer> commonNeighborMap) {
-		try {
-			File file = new File(PATH + "/" + fileName + "_user_sim.csv");
-			FileWriter fw = new FileWriter(file, true);
-			for (String neighbor : commonNeighborMap.keySet()) {
-				fw.write(user + ";" + neighbor + ";" + commonNeighborMap.get(neighbor) + ";" + "\n");
-			}
-			fw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			File file = new File(PATH + "/" + fileName + "_user_sim.csv");
+//			FileWriter fw = new FileWriter(file, true);
+//			for (String neighbor : commonNeighborMap.keySet()) {
+//				fw.write(user + ";" + neighbor + ";" + commonNeighborMap.get(neighbor) + ";" + "\n");
+//			}
+//			fw.close();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	public void writeToFile(String fileName, String currentUser,
 			List<Count> userOccurences, Double weightDividor) {
-		
-		try {
-			File file = new File(PATH + "/" + fileName + "_user_sim.csv");
-			FileWriter fw = new FileWriter(file, true);
-			
-			for (Count userOccurence : userOccurences) {
-				if ( ! userOccurence.getName().equals(currentUser)) {
-					fw.write(currentUser + ";" + userOccurence.getName() + ";" + (userOccurence.getCount() / weightDividor ) + ";" + "\n");
-				}
-			}
-			
-			fw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		
+//		try {
+//			File file = new File(PATH + "/" + fileName + "_user_sim.csv");
+//			FileWriter fw = new FileWriter(file, true);
+//			
+//			for (Count userOccurence : userOccurences) {
+//				if ( ! userOccurence.getName().equals(currentUser)) {
+//					fw.write(currentUser + ";" + userOccurence.getName() + ";" + (userOccurence.getCount() / weightDividor ) + ";" + "\n");
+//				}
+//			}
+//			
+//			fw.close();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 	
 	
