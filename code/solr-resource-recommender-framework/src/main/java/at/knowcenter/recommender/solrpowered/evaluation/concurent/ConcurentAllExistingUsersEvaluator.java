@@ -155,7 +155,7 @@ public class ConcurentAllExistingUsersEvaluator {
 					StrategyType.CF_Region_Network_Coocurred_PrefAtt, StrategyType.CF_Region_Network_Coocurred_Adar}));
 			
 			
-			/*
+			
 			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Social_Location_Market", 71, new StrategyType[]{
 					StrategyType.CF_Soc_Network_NeighOverlap, StrategyType.CF_Soc_Network_Jaccard, StrategyType.CF_Soc_Network_AdamicAdar, 
 					StrategyType.CF_Soc_Network_CN, StrategyType.CF_Social, StrategyType.CF_Market_Seller_Jaccard, 
@@ -173,7 +173,7 @@ public class ConcurentAllExistingUsersEvaluator {
 			
 			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Social_Location_Market_Best3", 95, new StrategyType[]{
 					StrategyType.CF_Soc_Network_NeighOverlap, StrategyType.CF_Loc_Picks_Jaccard,StrategyType.CF_Market_Seller_Jaccard}));
-			*/
+			
 //			jobs.add(new CommonStrategyJob(userPartition, "Bio_" + i, StrategyType.BiographyBasedMLT, 4));
 //			jobs.add(new CommonStrategyJob(userPartition, "Real_Bio" + i, StrategyType.RealBiographyBasedMLT, 5));
 //			jobs.add(new SocialStream_Job(userPartition, "soc_stream_job_" + i));
