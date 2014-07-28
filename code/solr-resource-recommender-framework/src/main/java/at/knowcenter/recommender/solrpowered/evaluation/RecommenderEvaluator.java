@@ -449,12 +449,17 @@ public class RecommenderEvaluator extends RecommenderEngine{
         boolean topLevelOnly = true;
 		List<String> recommendedCategories = extractCategories(recommendedResources, topLevelOnly);
 		List<String> purchasedCategories = extractCategories(removedResources, topLevelOnly);
+		PredictionCalculator topCatEval = new PredictionCalculator(userID, purchasedCategories, recommendedCategories, k);
+
+		topLevelOnly = false;
+		List<String> recommendedLowCategories = extractCategories(recommendedResources, topLevelOnly);
+		List<String> purchasedLowCategories = extractCategories(removedResources, topLevelOnly);
+		PredictionCalculator lowCatEval = new PredictionCalculator(userID, purchasedLowCategories, recommendedLowCategories, k);
 
 		PredictionCalculator pEval = new PredictionCalculator(userID, removedOwnProducts, recommendations, k);
-//		PredictionCalculator pEval = new PredictionCalculator(userID, purchasedCategories, recommendedCategories, k);
 		SimilarityCalculator sEval = new SimilarityCalculator(fetchedAlreadyBoughtItems, recommendedResources, k);
 		
-		mCalc.appendMetrics(pEval, sEval);
+		mCalc.appendMetrics(pEval, sEval, topCatEval, lowCatEval);
 	}
 
 	private List<String> extractCategories(List<Resource> removedResources, boolean topLevelOnly) {

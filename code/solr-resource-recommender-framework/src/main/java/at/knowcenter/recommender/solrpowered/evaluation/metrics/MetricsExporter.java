@@ -28,6 +28,30 @@ public class MetricsExporter {
 	private long duarationSum = 0;
 	private double listAt10CoverageSum = 0.0;
 	
+	// TOP LEVEL Category
+	
+	// used for averages
+	private double precisionSumTopCat = 0.0;
+	private double recallSumTopCat = 0.0;
+	private double fMeasureSumTopCat = 0.0;
+	private double mrrSumTopCat = 0.0;
+	private double mapSumTopCat = 0.0;
+	private double ndcgSumTopCat = 0.0;
+	private double userCoverageSumTopCat = 0.0;
+	private long duarationSumTopCat = 0;
+	
+	// LOW LEVEL Category
+	private double precisionSumLowCat = 0.0;
+	private double recallSumLowCat = 0.0;
+	private double fMeasureSumLowCat = 0.0;
+	private double mrrSumLowCat = 0.0;
+	private double mapSumLowCat = 0.0;
+	private double ndcgSumLowCat = 0.0;
+	private double userCoverageSumLowCat = 0.0;
+	private long duarationSumLowCat = 0;
+	
+	//
+	
 	private List<Double> precisions = new ArrayList<Double>();
 	private List<Double> recalls = new ArrayList<Double>();
 	private List<Double> fMeasures =new ArrayList<Double>();
@@ -73,11 +97,50 @@ public class MetricsExporter {
 		duarations.addAll(		metricsExporter.getDuarations());
 		userCoverages.addAll(	metricsExporter.getUserCoverages());
 		
+		// Categories
+		
+		mapSumTopCat += metricsExporter.getMapSumTopCat();
+		mrrSumTopCat += metricsExporter.getMrrSumTopCat();
+		fMeasureSumTopCat += metricsExporter.getfMeasureSumTopCat();
+		recallSumTopCat += metricsExporter.getRecallSumTopCat();
+		precisionSumTopCat += metricsExporter.getPrecisionSumTopCat();
+		ndcgSumTopCat += metricsExporter.getNdcgSumTopCat();
+		userCoverageSumTopCat += metricsExporter.getUserCoverageSumTopCat();
+		
+		mapSumLowCat += metricsExporter.getMapSumLowCat();
+		mrrSumLowCat += metricsExporter.getMrrSumLowCat();
+		fMeasureSumLowCat += metricsExporter.getfMeasureSumLowCat();
+		recallSumLowCat += metricsExporter.getRecallSumLowCat();
+		precisionSumLowCat += metricsExporter.getPrecisionSumLowCat();
+		ndcgSumLowCat += metricsExporter.getNdcgSumLowCat();
+		userCoverageSumLowCat += metricsExporter.getUserCoverageSumLowCat();
+		
 //		usersThatDidNotGetRecommended += metricsExporter.getUsersThatDidNotGetRecommended();
 	}
 	
 	private long getDuarationSum() {
 		return duarationSum;
+	}
+	
+	public void appendMetrics(PredictionCalculator predictionData, SimilarityCalculator similarityData, 
+			PredictionCalculator topCatPredictor, PredictionCalculator lowCatPredictor) {
+		appendMetrics(predictionData, similarityData);
+		
+		mapSumTopCat += topCatPredictor.getMAP();
+		mrrSumTopCat += topCatPredictor.getMRR();
+		fMeasureSumTopCat += topCatPredictor.getFMeasure();
+		recallSumTopCat += topCatPredictor.getRecall();
+		precisionSumTopCat += topCatPredictor.getPrecision();
+		ndcgSumTopCat += topCatPredictor.getNDCG();
+		userCoverageSumTopCat += topCatPredictor.getPredictionData().size() > 0 ? 1 : 0;
+		
+		mapSumLowCat += lowCatPredictor.getMAP();
+		mrrSumLowCat += lowCatPredictor.getMRR();
+		fMeasureSumLowCat += lowCatPredictor.getFMeasure();
+		recallSumLowCat += lowCatPredictor.getRecall();
+		precisionSumLowCat += lowCatPredictor.getPrecision();
+		ndcgSumLowCat += lowCatPredictor.getNDCG();
+		userCoverageSumLowCat += lowCatPredictor.getPredictionData().size() > 0 ? 1 : 0;
 	}
 
 	public void appendMetrics(PredictionCalculator predictionData, SimilarityCalculator similarityData) {
@@ -150,6 +213,49 @@ public class MetricsExporter {
 			bw.write(Long.toString(averageDuaration) + "\n");
 			bw.close();
 			
+			// write categories
+			file = new File("/home/elacic/PhD/Projects/BlancNoir/evaluation/general_eval_data/" + algName + "_avg_top_category.txt");
+			writer = new FileWriter(file, true);
+			
+			bw = new BufferedWriter(writer);		
+			bw.write(Double.toString((recallSumTopCat / size)) + ";");		
+			bw.write(Double.toString((precisionSumTopCat / size)) + ";");		
+			bw.write(Double.toString((fMeasureSumTopCat / size)) + ";");		
+			bw.write(Double.toString((mrrSumTopCat / size)) + ";");		
+			bw.write(Double.toString((mapSumTopCat / size)) + ";");
+			bw.write(Double.toString((ndcgSumTopCat / size)) + ";");
+			
+			bw.write(Double.toString((userCoverageSumTopCat / size)) + ";");
+			
+			bw.write(Double.toString((recallSumTopCat / userCoverageSumTopCat)) + ";");		
+			bw.write(Double.toString((precisionSumTopCat / userCoverageSumTopCat)) + ";");		
+			bw.write(Double.toString((fMeasureSumTopCat / userCoverageSumTopCat)) + ";");		
+			bw.write(Double.toString((mrrSumTopCat / userCoverageSumTopCat)) + ";");		
+			bw.write(Double.toString((mapSumTopCat / userCoverageSumTopCat)) + ";");
+			bw.write(Double.toString((ndcgSumTopCat / userCoverageSumTopCat)) + "\n");
+			bw.close();
+			
+			file = new File("/home/elacic/PhD/Projects/BlancNoir/evaluation/general_eval_data/" + algName + "_avg_low_category.txt");
+			writer = new FileWriter(file, true);
+			
+			bw = new BufferedWriter(writer);		
+			bw.write(Double.toString((recallSumLowCat / size)) + ";");		
+			bw.write(Double.toString((precisionSumLowCat / size)) + ";");		
+			bw.write(Double.toString((fMeasureSumLowCat / size)) + ";");		
+			bw.write(Double.toString((mrrSumLowCat / size)) + ";");		
+			bw.write(Double.toString((mapSumLowCat / size)) + ";");
+			bw.write(Double.toString((ndcgSumLowCat / size)) + ";");
+			
+			bw.write(Double.toString((userCoverageSumLowCat / size)) + ";");
+			
+			bw.write(Double.toString((recallSumLowCat / userCoverageSumLowCat)) + ";");		
+			bw.write(Double.toString((precisionSumLowCat / userCoverageSumLowCat)) + ";");		
+			bw.write(Double.toString((fMeasureSumLowCat / userCoverageSumLowCat)) + ";");		
+			bw.write(Double.toString((mrrSumLowCat / userCoverageSumLowCat)) + ";");		
+			bw.write(Double.toString((mapSumLowCat / userCoverageSumLowCat)) + ";");
+			bw.write(Double.toString((ndcgSumLowCat / userCoverageSumLowCat)) + "\n");
+			bw.close();
+			
 			resetMetrics();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -207,6 +313,26 @@ public class MetricsExporter {
 		duarationSum = 0;
 		usersThatDidNotGetRecommended = 0;
 		listAt10CoverageSum = 0.0;
+		
+		// TOP LEVEL Category
+		precisionSumTopCat = 0.0;
+		recallSumTopCat = 0.0;
+		fMeasureSumTopCat = 0.0;
+		mrrSumTopCat = 0.0;
+		mapSumTopCat = 0.0;
+		ndcgSumTopCat = 0.0;
+		userCoverageSumTopCat = 0.0;
+		duarationSumTopCat = 0;
+		
+		// LOW LEVEL Category
+		precisionSumLowCat = 0.0;
+		recallSumLowCat = 0.0;
+		fMeasureSumLowCat = 0.0;
+		mrrSumLowCat = 0.0;
+		mapSumLowCat = 0.0;
+		ndcgSumLowCat = 0.0;
+		userCoverageSumLowCat = 0.0;
+		duarationSumLowCat = 0;
 	}
 
 	public double getPrecisionSum() {
@@ -308,6 +434,74 @@ public class MetricsExporter {
 
 	public Double getListCoverage() {
 		return listAt10CoverageSum;
+	}
+
+	// Top and Low categories getters
+
+	
+	public double getPrecisionSumTopCat() {
+		return precisionSumTopCat;
+	}
+
+	public double getRecallSumTopCat() {
+		return recallSumTopCat;
+	}
+
+	public double getfMeasureSumTopCat() {
+		return fMeasureSumTopCat;
+	}
+
+	public double getMrrSumTopCat() {
+		return mrrSumTopCat;
+	}
+
+	public double getMapSumTopCat() {
+		return mapSumTopCat;
+	}
+
+
+	public double getNdcgSumTopCat() {
+		return ndcgSumTopCat;
+	}
+
+	public double getUserCoverageSumTopCat() {
+		return userCoverageSumTopCat;
+	}
+
+	public long getDuarationSumTopCat() {
+		return duarationSumTopCat;
+	}
+
+	public double getPrecisionSumLowCat() {
+		return precisionSumLowCat;
+	}
+
+	public double getRecallSumLowCat() {
+		return recallSumLowCat;
+	}
+
+	public double getfMeasureSumLowCat() {
+		return fMeasureSumLowCat;
+	}
+
+	public double getMrrSumLowCat() {
+		return mrrSumLowCat;
+	}
+
+	public double getMapSumLowCat() {
+		return mapSumLowCat;
+	}
+
+	public double getNdcgSumLowCat() {
+		return ndcgSumLowCat;
+	}
+
+	public double getUserCoverageSumLowCat() {
+		return userCoverageSumLowCat;
+	}
+
+	public long getDuarationSumLowCat() {
+		return duarationSumLowCat;
 	}
 	
 }
