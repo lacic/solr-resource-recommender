@@ -79,7 +79,7 @@ public class DataFetcher {
 		solrParams.set("facet", "true");
 		solrParams.set("facet.field", "user");
 		solrParams.set("facet.limit", -1);
-		solrParams.set("facet.mincount", 10);
+		solrParams.set("facet.mincount", 1);
 	
 		try {
 			response = reviewService.getSolrServer().query(solrParams);
@@ -93,7 +93,10 @@ public class DataFetcher {
 		List<String> users = new ArrayList<String>();
 		
 		for(Count c : userFacet.getValues()) {
-			users.add(c.getName());
+			// only cold start users
+			if (c.getCount() < 11) {
+				users.add(c.getName());
+			}
 		}
 		
 		return users;

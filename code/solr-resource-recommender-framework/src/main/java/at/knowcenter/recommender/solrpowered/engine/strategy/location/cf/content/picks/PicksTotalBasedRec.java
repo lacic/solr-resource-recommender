@@ -48,6 +48,13 @@ public class PicksTotalBasedRec implements RecommendStrategy{
 		try {
 			List<String> favoriteRegions = contentFilter.getCustomer().getFavoriteRegions();
 			
+			if (favoriteRegions == null) {
+				searchResponse.setNumFound(0);
+				searchResponse.setResultItems(new ArrayList<String>());
+				searchResponse.setElapsedTime(-1);
+				return searchResponse;
+			}
+
 			StringBuilder queryBuilder = new StringBuilder("favorite_regions:(");
 			
 			for (String region : favoriteRegions) {
