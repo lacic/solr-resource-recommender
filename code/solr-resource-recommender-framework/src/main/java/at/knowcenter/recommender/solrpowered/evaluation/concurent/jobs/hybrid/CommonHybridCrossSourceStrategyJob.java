@@ -23,6 +23,155 @@ public class CommonHybridCrossSourceStrategyJob extends AbstractHybridCrossSourc
 	
 	static {
 		definedStrategyWeights = new HashMap<StrategyType, Double>();
+/*
+		// min 20 purch
+		definedStrategyWeights.put(StrategyType.CF_Review, 						0.0068);
+		definedStrategyWeights.put(StrategyType.CF_Market_Seller_CN, 					0.0133);
+		definedStrategyWeights.put(StrategyType.CF_Market_Seller_Jaccard, 				0.0137);
+		definedStrategyWeights.put(StrategyType.CF_Market_Seller_Total, 				0.0086);
+	
+		definedStrategyWeights.put(StrategyType.CF_Categories_CN, 					0.0035);
+		definedStrategyWeights.put(StrategyType.CF_Categories_Jacc, 					0.0042);
+		definedStrategyWeights.put(StrategyType.CF_Categories_Total, 					0.0007);
+		
+		definedStrategyWeights.put(StrategyType.UB_WithOutMLTGroups, 					0.0049);
+		definedStrategyWeights.put(StrategyType.CF_Soc_Group_Jaccard, 					0.0050);
+		definedStrategyWeights.put(StrategyType.CF_Soc_Group_Total, 					0.0013);
+		definedStrategyWeights.put(StrategyType.UB_WithOutMLTInterests, 				0.0001);
+		definedStrategyWeights.put(StrategyType.CF_Soc_Interests_Jaccard, 				0.0003);
+		definedStrategyWeights.put(StrategyType.CF_Soc_Interests_Total, 				0.0004);
+		
+		definedStrategyWeights.put(StrategyType.CF_Social_Likes, 					0.0010);
+		definedStrategyWeights.put(StrategyType.CF_Social_Comments, 					0.0009);
+		definedStrategyWeights.put(StrategyType.WallPostInteraction, 					0.0010);
+		definedStrategyWeights.put(StrategyType.CF_Social, 						0.0263);
+	
+		definedStrategyWeights.put(StrategyType.CF_Soc_Network_CN, 					0.0745);
+		definedStrategyWeights.put(StrategyType.CF_Soc_Network_Jaccard, 				0.0928);
+		definedStrategyWeights.put(StrategyType.CF_Soc_Network_NeighOverlap, 				0.1072);
+		definedStrategyWeights.put(StrategyType.CF_Soc_Network_AdamicAdar, 				0.0699);
+		definedStrategyWeights.put(StrategyType.CF_Soc_Network_PrefAttachment, 				0.0218);
+		
+		definedStrategyWeights.put(StrategyType.CF_Loc_Picks_CN, 					0.0044);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Picks_Jaccard, 					0.0043);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Picks_Total, 					0.0036);
+		
+		definedStrategyWeights.put(StrategyType.CF_Loc_Common_Regions, 					0.0026);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Common_Regions_Jaccard, 				0.0027);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Total_Regions, 					0.0011);
+		
+		definedStrategyWeights.put(StrategyType.CF_Loc_Shared_Regions_Common, 				0.0004);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Shared_Regions_Jaccard, 				0.0005);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Shared_Regions_Total, 				0.0002);
+		
+		
+		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_CN, 			0.0021);
+		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_Jaccard, 			0.0024);
+		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_Overlap, 			0.0020);
+		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_Adar, 			0.0021);
+		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_PrefAtt, 			0.0004);
+*/
+		// min 20 purch - nomralized
+
+		definedStrategyWeights.put(StrategyType.CF_Review, 						0.0203);
+		definedStrategyWeights.put(StrategyType.CF_Market_Seller_CN, 					0.0246);
+		definedStrategyWeights.put(StrategyType.CF_Market_Seller_Jaccard, 				0.0253);
+		definedStrategyWeights.put(StrategyType.CF_Market_Seller_Total, 				0.0158);
+	
+		definedStrategyWeights.put(StrategyType.CF_Categories_CN, 					0.0066);
+		definedStrategyWeights.put(StrategyType.CF_Categories_Jacc, 					0.0077);
+		definedStrategyWeights.put(StrategyType.CF_Categories_Total, 					0.0013);
+		
+		definedStrategyWeights.put(StrategyType.UB_WithOutMLTGroups, 					0.0075);
+		definedStrategyWeights.put(StrategyType.CF_Soc_Group_Jaccard, 					0.0076);
+		definedStrategyWeights.put(StrategyType.CF_Soc_Group_Total, 					0.0020);
+		definedStrategyWeights.put(StrategyType.UB_WithOutMLTInterests, 				0.0004);
+		definedStrategyWeights.put(StrategyType.CF_Soc_Interests_Jaccard, 				0.0008);
+		definedStrategyWeights.put(StrategyType.CF_Soc_Interests_Total, 				0.0010);
+		
+		definedStrategyWeights.put(StrategyType.CF_Social_Likes, 					0.0049);
+		definedStrategyWeights.put(StrategyType.CF_Social_Comments, 					0.0056);
+		definedStrategyWeights.put(StrategyType.WallPostInteraction, 					0.0056);
+		definedStrategyWeights.put(StrategyType.CF_Social, 						0.0869);
+	
+		definedStrategyWeights.put(StrategyType.CF_Soc_Network_CN, 					0.1336);
+		definedStrategyWeights.put(StrategyType.CF_Soc_Network_Jaccard, 				0.1457);
+		definedStrategyWeights.put(StrategyType.CF_Soc_Network_NeighOverlap, 				0.1683);
+		definedStrategyWeights.put(StrategyType.CF_Soc_Network_AdamicAdar, 				0.1148);
+		definedStrategyWeights.put(StrategyType.CF_Soc_Network_PrefAttachment, 				0.0350);
+		
+		definedStrategyWeights.put(StrategyType.CF_Loc_Picks_CN, 					0.0046);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Picks_Jaccard, 					0.0045);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Picks_Total, 					0.0038);
+		
+		definedStrategyWeights.put(StrategyType.CF_Loc_Common_Regions, 					0.0026);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Common_Regions_Jaccard, 				0.0027);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Total_Regions, 					0.0011);
+		
+		definedStrategyWeights.put(StrategyType.CF_Loc_Shared_Regions_Common, 				0.0015);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Shared_Regions_Jaccard, 				0.0018);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Shared_Regions_Total, 				0.0008);
+		
+		
+		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_CN, 			0.0031);
+		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_Jaccard, 			0.0035);
+		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_Overlap, 			0.0029);
+		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_Adar, 			0.0031);
+		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_PrefAtt, 			0.0006);
+		
+		/*
+		// min 10 purch
+		definedStrategyWeights.put(StrategyType.CF_Review, 								0.0107);
+		definedStrategyWeights.put(StrategyType.CF_Market_Seller_CN, 					0.0147);
+		definedStrategyWeights.put(StrategyType.CF_Market_Seller_Jaccard, 				0.0160);
+		definedStrategyWeights.put(StrategyType.CF_Market_Seller_Total, 				0.0065);
+		
+		definedStrategyWeights.put(StrategyType.CF_Categories_CN, 						0.0051);
+		definedStrategyWeights.put(StrategyType.CF_Categories_Jacc, 					0.0058);
+		definedStrategyWeights.put(StrategyType.CF_Categories_Total, 					0.0008);
+		
+		definedStrategyWeights.put(StrategyType.UB_WithOutMLTGroups, 					0.0034);
+		definedStrategyWeights.put(StrategyType.CF_Soc_Group_Jaccard, 					0.0042);
+		definedStrategyWeights.put(StrategyType.CF_Soc_Group_Total, 					0.0010);
+		definedStrategyWeights.put(StrategyType.UB_WithOutMLTInterests, 				0.0010);
+		definedStrategyWeights.put(StrategyType.CF_Soc_Interests_Jaccard, 				0.0007);
+		definedStrategyWeights.put(StrategyType.CF_Soc_Interests_Total, 				0.0009);
+		
+		definedStrategyWeights.put(StrategyType.CF_Social_Likes, 						0.0053);
+		definedStrategyWeights.put(StrategyType.CF_Social_Comments, 					0.0063);
+		definedStrategyWeights.put(StrategyType.WallPostInteraction, 					0.0066);
+		definedStrategyWeights.put(StrategyType.CF_Social, 								0.0889);
+		
+		definedStrategyWeights.put(StrategyType.CF_Soc_Network_CN, 						0.1761);
+		definedStrategyWeights.put(StrategyType.CF_Soc_Network_Jaccard, 				0.1930);
+		definedStrategyWeights.put(StrategyType.CF_Soc_Network_NeighOverlap, 			0.2005);
+		definedStrategyWeights.put(StrategyType.CF_Soc_Network_AdamicAdar, 				0.1461);
+		definedStrategyWeights.put(StrategyType.CF_Soc_Network_PrefAttachment, 			0.0448);
+		
+		definedStrategyWeights.put(StrategyType.CF_Loc_Picks_CN, 						0.0019);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Picks_Jaccard, 					0.0029);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Picks_Total, 					0.0032);
+		
+		definedStrategyWeights.put(StrategyType.CF_Loc_Common_Regions, 					0.0010);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Common_Regions_Jaccard, 			0.0015);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Total_Regions, 					0.0000);
+		
+		definedStrategyWeights.put(StrategyType.CF_Loc_Shared_Regions_Common, 			0.0016);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Shared_Regions_Jaccard, 			0.0018);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Shared_Regions_Total, 			0.0011);
+		
+		definedStrategyWeights.put(StrategyType.CF_Loc_Days_Seen_In_Region, 			0.0016);
+		definedStrategyWeights.put(StrategyType.CF_Loc_Physical_Distance_in_Region, 	0.0025);
+		
+		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_CN, 		0.0022);
+		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_Jaccard, 	0.0024);
+		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_Overlap, 	0.0021);
+		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_Adar, 		0.0022);
+		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_PrefAtt, 	0.0005);
+		*/
+		// all 7029 eval
+
+		/*
 		definedStrategyWeights.put(StrategyType.CF_Review, 								0.0197);
 		definedStrategyWeights.put(StrategyType.CF_Market_Seller_Jaccard, 				0.0239);
 		definedStrategyWeights.put(StrategyType.CF_Market_Seller_CN, 					0.0197);
@@ -85,7 +234,7 @@ public class CommonHybridCrossSourceStrategyJob extends AbstractHybridCrossSourc
 		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_Overlap, 	0.0023);
 		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_Adar, 		0.0003);
 		definedStrategyWeights.put(StrategyType.CF_Region_Network_Coocurred_PrefAtt, 	0.0005);
-		
+		*/
 		// Pure Social Weights
 		
 //		definedStrategyWeights.put(StrategyType.CF_Loc_Picks_CN, 						0.0054);

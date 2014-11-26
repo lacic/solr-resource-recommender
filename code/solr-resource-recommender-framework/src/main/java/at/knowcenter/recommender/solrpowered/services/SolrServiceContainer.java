@@ -68,7 +68,7 @@ public class SolrServiceContainer {
 	private boolean init() {
 		boolean initSuccess = false;
 		
-		int port = 8984;
+		int port = 8983;
 		String address = "kti-social";
 		
 		try {

@@ -66,11 +66,13 @@ public class RecommenderEvaluator extends RecommenderEngine{
 		
 		removedOwnProducts = new ArrayList<String>();
 		if (alreadyBoughtProducts != null && alreadyBoughtProducts.size() > 0 ) {
+// was the size divided by 0 -> int startIndexToRemove = alreadyBoughtProducts.size() / 2;
 			int startIndexToRemove = alreadyBoughtProducts.size() / 2;
 			int productsToRemove = 10;
 			
 			if (alreadyBoughtProducts.size() < 20) {
-				productsToRemove = (int) Math.round((alreadyBoughtProducts.size() / 2.0));
+				// origina: productsToRemove = (int) Math.round((alreadyBoughtProducts.size() / 2.0));
+				productsToRemove = alreadyBoughtProducts.size();
 				startIndexToRemove = 0;
 			}
 			

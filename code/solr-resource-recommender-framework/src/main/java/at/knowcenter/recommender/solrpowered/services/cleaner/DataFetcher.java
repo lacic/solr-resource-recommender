@@ -292,7 +292,6 @@ public class DataFetcher {
 		solrParams.set("facet.field", "user");
 		solrParams.set("facet.limit", -1);
 		solrParams.set("facet.mincount", 1);
-
 		try {
 			response = reviewService.getSolrServer().query(solrParams);
 		} catch (SolrServerException e) {
@@ -305,7 +304,8 @@ public class DataFetcher {
 		List<String> users = new ArrayList<String>();
 
 		for(Count c : userFacet.getValues()) {
-			if (c.getCount() <= 10) {
+			// only cold start users
+			if (c.getCount() < 11) {
 				users.add(c.getName());
 			}
 		}
