@@ -68,11 +68,11 @@ public class SolrServiceContainer {
 	private boolean init() {
 		boolean initSuccess = false;
 		
-		int port = 8983;
+		int port = 8984;
 		String address = "kti-social";
 		
 		try {
-			UserService userService = new UserService(address, port, "profile");
+			UserService userService = new UserService(address, port, "profiles");
 			RecommendService recommenderService = new RecommendService(address, port, "collection2");
 			ItemService itemService = new ItemService(address, port, "collection1");
 			SocialActionService socialService = new SocialActionService(address, port, "social_action");

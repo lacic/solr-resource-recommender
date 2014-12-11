@@ -19,6 +19,7 @@ public class SolrDataPurger {
 		List<String> customersToDelete = new ArrayList<String>();
 		System.out.println(socialPurchasingUsers.size());
 		Collections.shuffle(socialPurchasingUsers);
+		
 		customersToDelete.addAll(socialPurchasingUsers.subList(0, (int)(socialPurchasingUsers.size() * 0.9)));
 		socialPurchasingUsers.removeAll(customersToDelete);
 		

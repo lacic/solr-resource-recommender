@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.PivotField;
@@ -141,11 +142,16 @@ public class DataFetcher {
 			long max = Integer.MIN_VALUE;
 			long sum = 0;
 			
+			DescriptiveStatistics interactionStatistics = new DescriptiveStatistics();
+
+			
 			for (String user : userInteractionCount.keySet()) {
 				if (! reviewingUsers.contains(user)) {
 					continue;
 				}
 				Long interactionCount = userInteractionCount.get(user);
+		
+				interactionStatistics.addValue(interactionCount);
 				
 				if (interactionCount >= minSocInteractionsInclusive) {
 					if (maxSocInteractionsExclusive == null || interactionCount < maxSocInteractionsExclusive) {
@@ -163,6 +169,29 @@ public class DataFetcher {
 					}
 				}
 			}
+			
+			
+			System.out.println("25. percentile is: " + interactionStatistics.getPercentile(25));
+			System.out.println("50. percentile is: " + interactionStatistics.getPercentile(50));
+			System.out.println("75. percentile is: " + interactionStatistics.getPercentile(75));
+			System.out.println("-------------");
+			System.out.println("20. percentile is: " + interactionStatistics.getPercentile(20));
+			System.out.println("40. percentile is: " + interactionStatistics.getPercentile(40));
+			System.out.println("60. percentile is: " + interactionStatistics.getPercentile(60));
+			System.out.println("80. percentile is: " + interactionStatistics.getPercentile(80));
+			System.out.println("-------------");
+			System.out.println("10. percentile is: " + interactionStatistics.getPercentile(10));
+			System.out.println("20. percentile is: " + interactionStatistics.getPercentile(20));
+			System.out.println("30. percentile is: " + interactionStatistics.getPercentile(30));
+			System.out.println("40. percentile is: " + interactionStatistics.getPercentile(40));
+			System.out.println("50. percentile is: " + interactionStatistics.getPercentile(50));
+			System.out.println("60. percentile is: " + interactionStatistics.getPercentile(60));
+			System.out.println("70. percentile is: " + interactionStatistics.getPercentile(70));
+			System.out.println("80. percentile is: " + interactionStatistics.getPercentile(80));
+			System.out.println("90. percentile is: " + interactionStatistics.getPercentile(90));
+
+			System.out.println("Skewnes is: " + interactionStatistics.getSkewness());
+
 			
 			System.out.println("MIN is: " + min);
 			System.out.println("MAX is: " + max);
@@ -230,11 +259,16 @@ public class DataFetcher {
 			long max = Integer.MIN_VALUE;
 			long sum = 0;
 			
+			DescriptiveStatistics interactionStatistics = new DescriptiveStatistics();
+
+			
 			for (String user : userInteractionCount.keySet()) {
 				if (! reviewingUsers.contains(user)) {
 					continue;
 				}
 				Long interactionCount = userInteractionCount.get(user);
+				
+				interactionStatistics.addValue(interactionCount);
 				
 				if (interactionCount >= minSocInteractionsInclusive) {
 					if (maxSocInteractionsExclusive == null || interactionCount < maxSocInteractionsExclusive) {
@@ -252,6 +286,27 @@ public class DataFetcher {
 					}
 				}
 			}
+			
+			System.out.println("25. percentile is: " + interactionStatistics.getPercentile(25));
+			System.out.println("50. percentile is: " + interactionStatistics.getPercentile(50));
+			System.out.println("75. percentile is: " + interactionStatistics.getPercentile(75));
+			System.out.println("-------------");
+			System.out.println("20. percentile is: " + interactionStatistics.getPercentile(20));
+			System.out.println("40. percentile is: " + interactionStatistics.getPercentile(40));
+			System.out.println("60. percentile is: " + interactionStatistics.getPercentile(60));
+			System.out.println("80. percentile is: " + interactionStatistics.getPercentile(80));
+			System.out.println("-------------");
+			System.out.println("10. percentile is: " + interactionStatistics.getPercentile(10));
+			System.out.println("20. percentile is: " + interactionStatistics.getPercentile(20));
+			System.out.println("30. percentile is: " + interactionStatistics.getPercentile(30));
+			System.out.println("40. percentile is: " + interactionStatistics.getPercentile(40));
+			System.out.println("50. percentile is: " + interactionStatistics.getPercentile(50));
+			System.out.println("60. percentile is: " + interactionStatistics.getPercentile(60));
+			System.out.println("70. percentile is: " + interactionStatistics.getPercentile(70));
+			System.out.println("80. percentile is: " + interactionStatistics.getPercentile(80));
+			System.out.println("90. percentile is: " + interactionStatistics.getPercentile(90));
+
+			System.out.println("Skewnes is: " + interactionStatistics.getSkewness());
 			
 			System.out.println("MIN is: " + min);
 			System.out.println("MAX is: " + max);
