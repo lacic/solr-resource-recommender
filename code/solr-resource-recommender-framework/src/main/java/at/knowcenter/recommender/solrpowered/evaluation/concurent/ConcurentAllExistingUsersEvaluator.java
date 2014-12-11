@@ -565,7 +565,7 @@ public class ConcurentAllExistingUsersEvaluator {
 //		DataFetcher.getReviewingUsers();
 		
 		//users = DataFetcher.getReviewingUsers();
-		users = DataFetcher.getReviewingUsersWithLocInteractions(0, null);
+		users = DataFetcher.getReviewingUsersWithMonitoredLocations(9, null);
 
 		//		List<String> socialUsers = recommenderEval.getAllSocialUsers();
 //		

@@ -24,6 +24,7 @@ import at.knowcenter.recommender.solrpowered.model.OwnSocialAction;
 import at.knowcenter.recommender.solrpowered.model.PositionNetwork;
 import at.knowcenter.recommender.solrpowered.model.Resource;
 import at.knowcenter.recommender.solrpowered.model.Review;
+import at.knowcenter.recommender.solrpowered.model.SharedLocation;
 import at.knowcenter.recommender.solrpowered.model.SocialAction;
 import at.knowcenter.recommender.solrpowered.model.SocialStream;
 import at.knowcenter.recommender.solrpowered.services.SolrServiceContainer;
@@ -335,6 +336,121 @@ public class DataFetcher {
 		}
 		
 		return returningSocialUsers;
+	}
+	
+	public static List<String> getReviewingUsersWithMonitoredLocations(int minMonitoredLocationsInclusive, Integer maxMonitoredLocationsExclusive) {
+		List<String> reviewingUsers = getReviewingUsers();
+		List<String> returningLocationUsers = new ArrayList<>();
+		try {
+
+			ModifiableSolrParams solrParams = new ModifiableSolrParams();
+
+			String queryString = "*:*";
+			solrParams.set("q", queryString);
+			solrParams.set("rows", 7030);
+			solrParams.set("fl", "id,monitored_event_region_id_count");
+
+			
+			QueryResponse qResult = SolrServiceContainer.getInstance().getSharedLocationService().getSolrServer().query(solrParams);
+
+			Map<String, Long> userMonitoredLocationCount = new HashMap<>();
+			
+			List<SharedLocation> sharedLocations = qResult.getBeans(SharedLocation.class);
+			
+			for (SharedLocation sa : sharedLocations) {
+				String user = sa.getUserId();
+				Integer monitoredLocationsCountCount = sa.getMonitoredRegionsCount();
+				
+				Long locationCount = (long)
+						monitoredLocationsCountCount;
+				
+				if (userMonitoredLocationCount.containsKey(user)) {
+					userMonitoredLocationCount.put(user, userMonitoredLocationCount.get(user) + locationCount);
+				} else {
+					userMonitoredLocationCount.put(user, locationCount);					
+				}
+			}
+			
+			long min = Integer.MAX_VALUE;
+			long max = Integer.MIN_VALUE;
+			long sum = 0;
+			
+			DescriptiveStatistics interactionStatistics = new DescriptiveStatistics();
+
+			
+			for (String user : userMonitoredLocationCount.keySet()) {
+				if (! reviewingUsers.contains(user)) {
+					continue;
+				}
+				Long locationCount = userMonitoredLocationCount.get(user);
+				
+				interactionStatistics.addValue(locationCount);
+				
+				if (locationCount >= minMonitoredLocationsInclusive) {
+					if (maxMonitoredLocationsExclusive == null || locationCount < maxMonitoredLocationsExclusive) {
+						returningLocationUsers.add(user);
+						
+						if (min > locationCount) {
+							min = locationCount;
+						}
+						
+						if (max < locationCount) {
+							max = locationCount;
+						}
+						
+						sum += locationCount;
+					}
+				}
+			}
+			
+			System.out.println("25. percentile is: " + interactionStatistics.getPercentile(25));
+			System.out.println("50. percentile is: " + interactionStatistics.getPercentile(50));
+			System.out.println("75. percentile is: " + interactionStatistics.getPercentile(75));
+			System.out.println("-------------");
+			System.out.println("20. percentile is: " + interactionStatistics.getPercentile(20));
+			System.out.println("40. percentile is: " + interactionStatistics.getPercentile(40));
+			System.out.println("60. percentile is: " + interactionStatistics.getPercentile(60));
+			System.out.println("80. percentile is: " + interactionStatistics.getPercentile(80));
+			System.out.println("-------------");
+			System.out.println("10. percentile is: " + interactionStatistics.getPercentile(10));
+			System.out.println("20. percentile is: " + interactionStatistics.getPercentile(20));
+			System.out.println("30. percentile is: " + interactionStatistics.getPercentile(30));
+			System.out.println("40. percentile is: " + interactionStatistics.getPercentile(40));
+			System.out.println("50. percentile is: " + interactionStatistics.getPercentile(50));
+			System.out.println("60. percentile is: " + interactionStatistics.getPercentile(60));
+			System.out.println("70. percentile is: " + interactionStatistics.getPercentile(70));
+			System.out.println("80. percentile is: " + interactionStatistics.getPercentile(80));
+			System.out.println("90. percentile is: " + interactionStatistics.getPercentile(90));
+
+			System.out.println("Skewnes is: " + interactionStatistics.getSkewness());
+			
+			System.out.println("MIN is: " + min);
+			System.out.println("MAX is: " + max);
+			double mean = (double)sum / returningLocationUsers.size();
+			System.out.println("MEAN: " + mean);
+			
+			double standardDeviation = 0;
+			
+			for (String user : returningLocationUsers) {
+				Long interactionCount = userMonitoredLocationCount.get(user);
+				standardDeviation += Math.pow( ( interactionCount - mean ), 2);
+			}
+			
+			
+			double realStandardDeviation = Math.sqrt( standardDeviation / ( returningLocationUsers.size() - 1 ) );
+			double populStandardDeviation = Math.sqrt( standardDeviation / ( returningLocationUsers.size() ) );
+
+			System.out.println("STD: " + realStandardDeviation);
+			System.out.println("PSTD: " + populStandardDeviation);
+			System.out.println("Variance: " + Math.pow(populStandardDeviation, 2));
+
+
+			
+		} catch (SolrServerException e) {
+			e.printStackTrace();
+		}
+		
+		return returningLocationUsers;
 	}
 
 	public static List<String> getReviewingUsers(ReviewService reviewService) {
