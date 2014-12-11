@@ -114,7 +114,9 @@ public class RegionCoocurredAdarBasedRec implements RecommendStrategy{
 				
 				Double aaSum = 0.0;
 				for (String intersectingUser : intersection) {
-					aaSum += 1.0 / Math.log(degreeMap.get(intersectingUser));
+					if (degreeMap.get(intersectingUser) != null) {
+						aaSum += 1.0 / Math.log(degreeMap.get(intersectingUser));
+					}
 				}
 				
 				commonNeighborMap.put(otherPosition.getUserId(), aaSum);
