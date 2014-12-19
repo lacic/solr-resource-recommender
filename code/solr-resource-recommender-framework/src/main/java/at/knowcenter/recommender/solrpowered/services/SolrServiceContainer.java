@@ -75,7 +75,7 @@ public class SolrServiceContainer {
 			UserService userService = new UserService(address, port, "profiles");
 			RecommendService recommenderService = new RecommendService(address, port, "collection2");
 			ItemService itemService = new ItemService(address, port, "collection1");
-			SocialActionService socialService = new SocialActionService(address, port, "social_action");
+			SocialActionService socialService = new SocialActionService(address, port, "social_action_pruned");
 			OwnSocialActionService ownSocialService = new OwnSocialActionService(address, port, "own_social_action");
 			SocialStreamService socialStreamService = new SocialStreamService(address, port, "social_stream");
 			ResourceService resourceService = new ResourceService(address, port, "resources");

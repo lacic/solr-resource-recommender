@@ -151,8 +151,10 @@ public class DataFetcher {
 					continue;
 				}
 				Long interactionCount = userInteractionCount.get(user);
-		
-				interactionStatistics.addValue(interactionCount);
+				if (interactionCount > 139) {
+					interactionCount = 139L;
+				}
+//				interactionStatistics.addValue(interactionCount);
 				
 				if (interactionCount >= minSocInteractionsInclusive) {
 					if (maxSocInteractionsExclusive == null || interactionCount < maxSocInteractionsExclusive) {
@@ -165,7 +167,8 @@ public class DataFetcher {
 						if (max < interactionCount) {
 							max = interactionCount;
 						}
-						
+						interactionStatistics.addValue(interactionCount);
+
 						sum += interactionCount;
 					}
 				}
@@ -192,7 +195,8 @@ public class DataFetcher {
 			System.out.println("90. percentile is: " + interactionStatistics.getPercentile(90));
 
 			System.out.println("Skewnes is: " + interactionStatistics.getSkewness());
-
+			System.out.println("Mean is : " + interactionStatistics.getMean());
+			System.out.println("Standard dev: " + interactionStatistics.getStandardDeviation());
 			
 			System.out.println("MIN is: " + min);
 			System.out.println("MAX is: " + max);

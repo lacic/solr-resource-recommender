@@ -54,7 +54,7 @@ public class ConcurentAllExistingUsersEvaluator {
 		
 		initEvaluation();
 		
-		ExecutorService executor = Executors.newFixedThreadPool(35);
+		ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() - 1);
 		
 		List<Callable<List<MetricsExporter>>> jobs = new ArrayList<Callable<List<MetricsExporter>>>();
 		
@@ -85,7 +85,7 @@ public class ConcurentAllExistingUsersEvaluator {
 			jobs.add(new CommonStrategyJob(userPartition, "Cat_Jacc" + i, StrategyType.CF_Categories_Jacc, 6));
 			jobs.add(new CommonStrategyJob(userPartition, "Cat_Tot" + i, StrategyType.CF_Categories_Total, 7));
 			
-*/
+
 			jobs.add(new UB_Interests_Job(userPartition, "interests_" + i));
 			jobs.add(new CommonStrategyJob(userPartition, "InterestsJaccard" + i, StrategyType.CF_Soc_Interests_Jaccard, 8));
 			jobs.add(new CommonStrategyJob(userPartition, "InterestTotal" + i, StrategyType.CF_Soc_Interests_Total, 9));
@@ -93,7 +93,7 @@ public class ConcurentAllExistingUsersEvaluator {
 			jobs.add(new UB_CustomerGroups_Job(userPartition, "groups_" + i));
 			jobs.add(new CommonStrategyJob(userPartition, "GroupJaccard" + i, StrategyType.CF_Soc_Group_Jaccard, 10));
 			jobs.add(new CommonStrategyJob(userPartition, "GroupTotal" + i, StrategyType.CF_Soc_Group_Total, 11));
-
+*/
 			jobs.add(new CommonStrategyJob(userPartition, "Soc", StrategyType.CF_Social, 12));
 
 			jobs.add(new CommonStrategyJob(userPartition, "CommonN" + i, StrategyType.CF_Soc_Network_CN, 13));
@@ -104,7 +104,7 @@ public class ConcurentAllExistingUsersEvaluator {
 			jobs.add(new CommonStrategyJob(userPartition, "AdamicAdar" + i, StrategyType.CF_Soc_Network_AdamicAdar, 16));
 			jobs.add(new CommonStrategyJob(userPartition, "PrefAttach" + i, StrategyType.CF_Soc_Network_PrefAttachment, 17));
 			
-			
+			/*
 			jobs.add(new CommonStrategyJob(userPartition, "Picks" + i, StrategyType.CF_Loc_Picks_CN, 18));
 			jobs.add(new CommonStrategyJob(userPartition, "PicksJaccard" + i, StrategyType.CF_Loc_Picks_Jaccard, 19));
 			jobs.add(new CommonStrategyJob(userPartition, "PicksTotal" + i, StrategyType.CF_Loc_Picks_Total, 20));
@@ -125,7 +125,7 @@ public class ConcurentAllExistingUsersEvaluator {
 			
 			
 			// Weighted sum 
-/*
+
 			jobs.add(new CommonHybridWeightedSumStrategyJob(userPartition, "WS_Hyb_Market", 59, new StrategyType[]{
 					StrategyType.CF_Market_Seller_Jaccard, StrategyType.CF_Market_Seller_CN, 
 					StrategyType.CF_Review, StrategyType.CF_Market_Seller_Total,
@@ -565,7 +565,7 @@ public class ConcurentAllExistingUsersEvaluator {
 //		DataFetcher.getReviewingUsers();
 		
 		//users = DataFetcher.getReviewingUsers();
-		users = DataFetcher.getReviewingUsersWithMonitoredLocations(9, null);
+		users = DataFetcher.getReviewingUsersWithSocInteractions(0, null);
 
 		//		List<String> socialUsers = recommenderEval.getAllSocialUsers();
 //		
